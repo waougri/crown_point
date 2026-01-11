@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <!-- Core -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CPC Pre-Audit Facility Assessment</title>
+
+    <!-- SEO (Form pages should not compete with marketing pages) -->
+    <meta
+      name="description"
+      content="Secure pre-audit facility assessment form for sterile processing and healthcare compliance audits conducted by Crown Point Consulting."
+    />
+    <meta
+      name="keywords"
+      content="pre-audit form, facility audit, sterile processing assessment, healthcare compliance, Crown Point Consulting"
+    />
+    <meta name="author" content="Crown Point Consulting" />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="canonical" href="https://crownpointconsult.com/pre-audit" />
+    <meta name="theme-color" content="#a855f7" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              display: ["Playfair Display", "serif"],
+              sans: ["Inter", "sans-serif"],
+            },
+            colors: {
+              crown: {
+                50: "#faf5ff",
+                100: "#f3e8ff",
+                200: "#e9d5ff",
+                300: "#d8b4fe",
+                400: "#c084fc",
+                500: "#a855f7",
+                600: "#9333ea",
+                700: "#7e22ce",
+                800: "#6b21a8",
+                900: "#581c87",
+                accent: "#ec4899",
+              },
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- Alpine / Mask -->
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/@alpinejs/mask@3.x.x/dist/cdn.min.js"
+    ></script>
+
+    <!-- Date Picker -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/airbnb.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <!-- Alerts -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Favicon -->
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="96x96"
+      href="/favicon/favicon-96x96.png"
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon/favicon.ico" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/favicon/apple-touch-icon.png"
+    />
+    <link rel="manifest" href="/favicon/site.webmanifest" />
+
+    <!-- Open Graph (Internal-safe) -->
+    <meta
+      property="og:title"
+      content="Crown Point Consulting | Pre-Audit Facility Assessment"
+    />
+    <meta
+      property="og:description"
+      content="Internal pre-audit assessment form for healthcare facilities."
+    />
+    <meta property="og:type" content="website" />
+  </head>
+
+  <body class="antialiased bg-slate-50 text-crown-900" x-data="auditForm()">
+    <div
+      class="flex flex-col lg:flex-row min-h-screen max-w-[1600px] mx-auto bg-white shadow-2xl my-0 lg:my-8 lg:rounded-3xl overflow-hidden"
+    >
+      <aside
+        class="w-full lg:w-72 bg-[#fcfcfc] border-r border-slate-100 flex flex-col relative z-20"
+      >
+        <div class="p-8 pb-4">
+          <div class="mb-8 text-center">
+            <h1 class="font-serif text-3xl font-bold text-crown-gold">
+              Crown Point
+            </h1>
+            <p class="text-sm tracking-wider text-slate-500">CONSULTING</p>
+          </div>
+          <div class="w-12 h-1 mx-auto mb-4 bg-crown-gold"></div>
+          <h1
+            class="font-serif text-2xl font-bold leading-tight text-center text-slate-800"
+          >
+            Sterile Processing<br /><span
+              class="italic font-normal text-slate-500"
+              >Facility Assessment</span
+            >
+          </h1>
+        </div>
+
+        <nav class="sticky flex-col hidden px-8 space-y-1 lg:flex top-8">
+          <template x-for="(label, id) in sections" :key="id">
+            <a
+              :href="'#' + id"
+              class="flex items-center py-3 text-sm transition-all duration-300 group"
+              :class="activeSection === id ? 'text-crown-gold font-bold translate-x-1' : 'text-slate-400 hover:text-slate-600'"
+            >
+              <span
+                class="w-6 text-[10px] uppercase tracking-widest mr-2"
+                x-text="'0' + (Object.keys(sections).indexOf(id) + 1)"
+              ></span>
+              <span x-text="label"></span>
+            </a>
+          </template>
+        </nav>
+
+        <div class="hidden p-8 mt-auto lg:block">
+          <p class="text-[10px] text-slate-400 uppercase tracking-widest mb-2">
+            Crown Point Consulting © 2024
+          </p>
+          <div class="h-0.5 w-full bg-slate-100 rounded-full overflow-hidden">
+            <div
+              class="h-full transition-all duration-700 ease-out bg-crown-gold"
+              :style="`width: ${progress}%`"
+            ></div>
+          </div>
+        </div>
+      </aside>
+
+      <main
+        class="relative flex-1 h-screen overflow-y-auto no-scrollbar scroll-smooth"
+      >
+        <form
+          id="auditForm"
+          name="facility-audit"
+          method="POST"
+          data-netlify="true"
+          netlify-honeypot="bot-field"
+          @submit.prevent="submitForm"
+          class="max-w-4xl p-6 pb-48 mx-auto md:p-16 lg:p-24"
+        >
+          <input type="hidden" name="form-name" value="facility-audit" />
+          <p class="hidden">
+            <label
+              >Don't fill this out if you're human: <input name="bot-field"
+            /></label>
+          </p>
+
+          <section
+            id="identity"
+            class="mb-24 scroll-mt-24"
+            @mouseenter="activeSection = 'identity'"
+          >
+            <span
+              class="block mb-3 text-xs font-bold tracking-widest uppercase text-crown-gold"
+              >Section 01</span
+            >
+            <h2 class="mb-12 font-serif text-4xl text-slate-900">
+              Facility Identity
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-x-8 gap-y-12">
+              <div class="md:col-span-4">
+                <label
+                  class="block mb-1 text-xs font-bold uppercase text-slate-400"
+                  >Date</label
+                >
+                <input
+                  x-date
+                  type="text"
+                  name="date"
+                  class="cursor-pointer cpc-input"
+                  placeholder="Select Date"
+                  required
+                />
+              </div>
+              <div class="md:col-span-8">
+                <label
+                  class="block mb-1 text-xs font-bold uppercase text-slate-400"
+                  >Facility Name</label
+                >
+                <input
+                  id="facility-search"
+                  type="text"
+                  name="facility_name"
+                  placeholder="Enter Facility Name"
+                  class="cpc-input"
+                  required
+                />
+              </div>
+
+              <div class="md:col-span-12">
+                <label
+                  class="block mb-1 text-xs font-bold uppercase text-slate-400"
+                  >Facility Address</label
+                >
+                <input
+                  id="facility-address"
+                  type="text"
+                  name="facility_address"
+                  placeholder="Street, City, State, Zip"
+                  class="cpc-input"
+                />
+              </div>
+
+              <div class="md:col-span-6">
+                <label
+                  class="block mb-1 text-xs font-bold uppercase text-slate-400"
+                  >Trauma Level</label
+                >
+                <div class="relative">
+                  <select
+                    name="trauma_level"
+                    class="bg-transparent appearance-none cursor-pointer cpc-input"
+                  >
+                    <option value="" disabled selected>
+                      Select Designation
+                    </option>
+                    <option>Level I</option>
+                    <option>Level II</option>
+                    <option>Level III</option>
+                    <option>Level IV</option>
+                    <option>None</option>
+                  </select>
+                  <div
+                    class="absolute right-0 pointer-events-none top-4 text-slate-400"
+                  >
+                    ▼
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="p-8 border md:col-span-12 bg-slate-50 rounded-xl border-slate-100"
+              >
+                <label class="block mb-4 font-serif text-lg text-slate-800"
+                  >Is the facility affiliated with a System Body?</label
+                >
+                <div class="flex gap-8 mb-4">
+                  <label class="flex items-center gap-3 cursor-pointer group">
+                    <input
+                      type="radio"
+                      x-model="affiliated"
+                      name="is_affiliated"
+                      value="y"
+                      class="crown-check"
+                    />
+                    <span class="transition-colors group-hover:text-crown-gold"
+                      >Yes</span
+                    >
+                  </label>
+                  <label class="flex items-center gap-3 cursor-pointer group">
+                    <input
+                      type="radio"
+                      x-model="affiliated"
+                      name="is_affiliated"
+                      value="n"
+                      class="crown-check"
+                    />
+                    <span class="transition-colors group-hover:text-crown-gold"
+                      >No</span
+                    >
+                  </label>
+                </div>
+                <div
+                  x-show="affiliated === 'y'"
+                  x-transition.opacity
+                  class="pt-6 mt-6 border-t border-slate-200"
+                >
+                  <label
+                    class="block mb-1 text-xs font-bold uppercase text-slate-500"
+                    >Name of Health System</label
+                  >
+                  <input
+                    type="text"
+                    name="system_name"
+                    class="cpc-input"
+                    placeholder="e.g. HCA, Ascension..."
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-12 mt-16 border-t border-slate-100">
+              <h3 class="mb-8 font-serif text-2xl text-slate-700">
+                Primary Contact
+              </h3>
+              <div class="grid grid-cols-1 gap-12 md:grid-cols-2">
+                <div>
+                  <label
+                    class="block mb-1 text-xs font-bold uppercase text-slate-400"
+                    >Name</label
+                  >
+                  <input type="text" name="contact_name" class="cpc-input" />
+                </div>
+                <div>
+                  <label
+                    class="block mb-1 text-xs font-bold uppercase text-slate-400"
+                    >Title</label
+                  >
+                  <input type="text" name="contact_title" class="cpc-input" />
+                </div>
+                <div>
+                  <label
+                    class="block mb-1 text-xs font-bold uppercase text-slate-400"
+                    >Best Contact Number</label
+                  >
+                  <input
+                    type="tel"
+                    name="contact_phone"
+                    x-mask="(999) 999-9999"
+                    placeholder="(555) 555-5555"
+                    class="cpc-input"
+                  />
+                </div>
+                <div>
+                  <label
+                    class="block mb-1 text-xs font-bold uppercase text-slate-400"
+                    >Email Address</label
+                  >
+                  <input type="email" name="contact_email" class="cpc-input" />
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section
+            id="compliance"
+            class="mb-24 scroll-mt-24"
+            @mouseenter="activeSection = 'compliance'"
+          >
+            <span
+              class="block mb-3 text-xs font-bold tracking-widest uppercase text-crown-gold"
+              >Section 02</span
+            >
+            <h2 class="mb-12 font-serif text-4xl text-slate-900">
+              Regulatory Compliance
+            </h2>
+
+            <div class="grid grid-cols-1 gap-12 mb-12 md:grid-cols-2">
+              <div>
+                <label
+                  class="block mb-1 text-xs font-bold uppercase text-slate-400"
+                  >Accrediting Organization</label
+                >
+                <input
+                  type="text"
+                  name="accrediting_org"
+                  placeholder="e.g. The Joint Commission"
+                  class="cpc-input"
+                />
+              </div>
+              <div>
+                <label
+                  class="block mb-1 text-xs font-bold uppercase text-slate-400"
+                  >Date of Last Audit</label
+                >
+                <input
+                  x-date
+                  type="text"
+                  name="last_audit_date"
+                  class="cpc-input"
+                  placeholder="Select Date"
+                />
+              </div>
+            </div>
+
+            <div class="p-8 mb-12 text-white shadow-lg bg-slate-900 rounded-xl">
+              <label class="block mb-6 font-serif text-lg"
+                >Were there findings specifically for SPD?</label
+              >
+              <div class="flex gap-8 mb-6">
+                <label class="flex items-center gap-3 cursor-pointer">
+                  <input
+                    type="radio"
+                    x-model="findings"
+                    name="has_findings"
+                    value="y"
+                    class="crown-check border-slate-500"
+                  />
+                  <span class="text-slate-200">Yes</span>
+                </label>
+                <label class="flex items-center gap-3 cursor-pointer">
+                  <input
+                    type="radio"
+                    x-model="findings"
+                    name="has_findings"
+                    value="n"
+                    class="crown-check border-slate-500"
+                  />
+                  <span class="text-slate-200">No</span>
+                </label>
+              </div>
+
+              <div
+                x-show="findings === 'y'"
+                x-transition
+                class="pt-6 mt-6 border-t border-slate-700"
+              >
+                <p class="mb-4 text-xs font-bold uppercase text-crown-gold">
+                  Please list the top 4 findings:
+                </p>
+                <div class="grid gap-4">
+                  <template x-for="i in 4">
+                    <div class="flex items-end gap-4">
+                      <span
+                        class="font-serif italic text-slate-500"
+                        x-text="i + '.'"
+                      ></span>
+                      <input
+                        type="text"
+                        :name="'finding_' + i"
+                        class="w-full pb-2 transition-colors bg-transparent border-b outline-none border-slate-700 focus:border-crown-gold"
+                      />
+                    </div>
+                  </template>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label
+                class="block mb-1 text-xs font-bold uppercase text-slate-400"
+                >Direct Reporting Line</label
+              >
+              <input
+                type="text"
+                name="reporting_structure"
+                placeholder="Who does SPD report to?"
+                class="cpc-input"
+              />
+            </div>
+          </section>
+
+          <section
+            id="staffing"
+            class="mb-24 scroll-mt-24"
+            @mouseenter="activeSection = 'staffing'"
+          >
+            <span
+              class="block mb-3 text-xs font-bold tracking-widest uppercase text-crown-gold"
+              >Section 03</span
+            >
+            <h2 class="mb-12 font-serif text-4xl text-slate-900">
+              Staffing & Scope
+            </h2>
+
+            <div
+              class="mb-12 overflow-hidden bg-white border shadow-sm border-slate-200 rounded-xl"
+            >
+              <div class="p-4 border-b bg-slate-50 border-slate-200">
+                <h3
+                  class="text-sm font-bold tracking-wider uppercase text-slate-700"
+                >
+                  Department Headcount
+                </h3>
+              </div>
+              <div
+                class="grid grid-cols-1 divide-y md:grid-cols-2 md:divide-y-0 md:divide-x border-slate-200"
+              >
+                <div class="p-6">
+                  <label
+                    class="block text-[10px] font-bold text-slate-400 uppercase mb-2"
+                    >Full Time (Including FMLA)</label
+                  >
+                  <input
+                    type="number"
+                    name="ft_fmla"
+                    class="w-full font-serif text-3xl bg-transparent outline-none text-slate-900 placeholder-slate-200"
+                    placeholder="0"
+                  />
+                </div>
+                <div class="p-6">
+                  <label
+                    class="block text-[10px] font-bold text-slate-400 uppercase mb-2"
+                    >Full Time (Active)</label
+                  >
+                  <input
+                    type="number"
+                    name="ft_active"
+                    class="w-full font-serif text-3xl bg-transparent outline-none text-slate-900 placeholder-slate-200"
+                    placeholder="0"
+                  />
+                </div>
+                <div class="p-6 border-t md:border-t-0 border-slate-200">
+                  <label
+                    class="block text-[10px] font-bold text-slate-400 uppercase mb-2"
+                    >Part Time</label
+                  >
+                  <input
+                    type="number"
+                    name="pt"
+                    class="w-full font-serif text-3xl bg-transparent outline-none text-slate-900 placeholder-slate-200"
+                    placeholder="0"
+                  />
+                </div>
+                <div class="p-6 border-t md:border-t-0 border-slate-200">
+                  <label
+                    class="block text-[10px] font-bold text-slate-400 uppercase mb-2"
+                    >Per Diem</label
+                  >
+                  <input
+                    type="number"
+                    name="per_diem"
+                    class="w-full font-serif text-3xl bg-transparent outline-none text-slate-900 placeholder-slate-200"
+                    placeholder="0"
+                  />
+                </div>
+              </div>
+              <div class="p-6 border-t bg-crown-gold/10 border-slate-200">
+                <label
+                  class="block text-[10px] font-bold text-crown-gold uppercase mb-2"
+                  >Travelers / Agency</label
+                >
+                <input
+                  type="number"
+                  name="travelers"
+                  class="w-full font-serif text-3xl bg-transparent outline-none text-slate-900 placeholder-slate-300"
+                  placeholder="0"
+                />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-12 md:grid-cols-2">
+              <div class="md:col-span-2">
+                <label
+                  class="block mb-1 text-xs font-bold uppercase text-slate-400"
+                  >Hours of Operation</label
+                >
+                <input
+                  type="text"
+                  name="hours_operation"
+                  class="cpc-input"
+                  placeholder="e.g. Mon-Fri 0700-2300"
+                />
+              </div>
+              <div>
+                <label
+                  class="block mb-1 text-xs font-bold uppercase text-slate-400"
+                  >Operating Rooms</label
+                >
+                <input type="number" name="or_count" class="cpc-input" />
+              </div>
+              <div>
+                <label
+                  class="block mb-1 text-xs font-bold uppercase text-slate-400"
+                  >Clinics Supported</label
+                >
+                <input type="number" name="clinic_count" class="cpc-input" />
+              </div>
+            </div>
+          </section>
+
+          <section
+            id="processing"
+            class="mb-24 scroll-mt-24"
+            @mouseenter="activeSection = 'processing'"
+          >
+            <span
+              class="block mb-3 text-xs font-bold tracking-widest uppercase text-crown-gold"
+              >Section 04</span
+            >
+            <h2 class="mb-12 font-serif text-4xl text-slate-900">
+              Processing Capabilities
+            </h2>
+
+            <div class="py-2 pl-8 border-l-2 border-crown-gold">
+              <p class="mb-8 font-serif text-xl italic text-slate-600">
+                Indicate which of the following items are processed within the
+                SPD:
+              </p>
+
+              <div class="space-y-2">
+                <template
+                  x-for="item in ['Endoscopes', 'Vascular / Open Heart', 'Arthroscopic', 'Robotic Instruments', 'TEE Probes']"
+                >
+                  <label
+                    class="flex items-center justify-between p-4 transition-all bg-white border rounded shadow-sm cursor-pointer border-slate-100 hover:shadow-md group"
+                  >
+                    <span
+                      class="font-medium transition-colors text-slate-700 group-hover:text-crown-gold"
+                      x-text="item"
+                    ></span>
+                    <input
+                      type="checkbox"
+                      :name="'proc_' + item.toLowerCase().replace(/\s+/g, '_').replace('/', '')"
+                      class="crown-check"
+                    />
+                  </label>
+                </template>
+              </div>
+            </div>
+          </section>
+
+          <section
+            id="narrative"
+            class="mb-24 scroll-mt-24"
+            @mouseenter="activeSection = 'narrative'"
+          >
+            <span
+              class="block mb-3 text-xs font-bold tracking-widest uppercase text-crown-gold"
+              >Section 05</span
+            >
+            <h2 class="mb-12 font-serif text-4xl text-slate-900">
+              Analysis & Narrative
+            </h2>
+
+            <div class="mb-16">
+              <label class="block mb-4 text-sm font-bold text-slate-700"
+                >Is an electronic tracking system utilized?</label
+              >
+              <div class="flex flex-col gap-6 sm:flex-row sm:items-center">
+                <div class="flex gap-8">
+                  <label class="flex items-center gap-3 cursor-pointer">
+                    <input
+                      type="radio"
+                      x-model="tracking"
+                      name="has_tracking"
+                      value="y"
+                      class="crown-check"
+                    />
+                    <span>Yes</span>
+                  </label>
+                  <label class="flex items-center gap-3 cursor-pointer">
+                    <input
+                      type="radio"
+                      x-model="tracking"
+                      name="has_tracking"
+                      value="n"
+                      class="crown-check"
+                    />
+                    <span>No</span>
+                  </label>
+                </div>
+                <div x-show="tracking === 'y'" x-transition class="flex-1">
+                  <input
+                    type="text"
+                    name="tracking_system_name"
+                    placeholder="Name of System (e.g. CensiTrac, SPM)"
+                    class="cpc-input"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="space-y-16">
+              <div>
+                <label class="block mb-2 font-serif text-2xl text-slate-800"
+                  >Operational Pain Points</label
+                >
+                <p class="max-w-2xl mb-6 text-sm text-slate-500">
+                  Please detail the major challenges the department is currently
+                  facing.
+                </p>
+                <textarea
+                  name="pain_points"
+                  x-data="{ resize() { $el.style.height = 'auto'; $el.style.height = $el.scrollHeight + 'px' } }"
+                  @input="resize()"
+                  class="w-full p-6 overflow-hidden leading-relaxed transition-all border bg-slate-50 border-slate-200 rounded-xl focus:outline-none focus:border-crown-gold focus:bg-white text-slate-700"
+                  placeholder="Type here..."
+                  rows="4"
+                ></textarea>
+              </div>
+
+              <div>
+                <label class="block mb-2 font-serif text-2xl text-slate-800"
+                  >Additional Information</label
+                >
+                <textarea
+                  name="additional_info"
+                  x-data="{ resize() { $el.style.height = 'auto'; $el.style.height = $el.scrollHeight + 'px' } }"
+                  @input="resize()"
+                  class="w-full p-6 overflow-hidden leading-relaxed transition-all border bg-slate-50 border-slate-200 rounded-xl focus:outline-none focus:border-crown-gold focus:bg-white text-slate-700"
+                  placeholder="Any other context..."
+                  rows="4"
+                ></textarea>
+              </div>
+            </div>
+          </section>
+
+          <div
+            class="fixed bottom-0 left-0 right-0 z-40 flex items-center justify-between p-6 transition-transform duration-300 border-t bg-white/95 backdrop-blur-md border-slate-200 lg:pl-80"
+          >
+            <div class="hidden md:block">
+              <p class="text-xs tracking-widest uppercase text-slate-400">
+                Crown Point Consulting
+              </p>
+            </div>
+            <button
+              type="submit"
+              class="w-full px-10 py-4 text-sm font-medium tracking-wide text-white uppercase transition-all duration-300 rounded shadow-xl md:w-auto bg-slate-900 hover:bg-crown-gold hover:shadow-2xl"
+            >
+              Submit Assessment
+            </button>
+          </div>
+        </form>
+      </main>
+    </div>
+
+    <script>
+      function auditForm() {
+        return {
+          activeSection: "identity",
+          affiliated: false,
+          findings: "No Findings",
+          tracking: "No Tracking",
+          sections: {
+            identity: "Identity",
+            compliance: "Compliance",
+            staffing: "Staffing",
+            processing: "Processing",
+            narrative: "Narrative",
+          },
+          get progress() {
+            const keys = Object.keys(this.sections);
+            const index = keys.indexOf(this.activeSection);
+            return ((index + 1) / keys.length) * 100;
+          },
+          submitForm() {
+            const form = document.getElementById("auditForm");
+            const formData = new FormData(form);
+            console.log(formData);
+            const json = JSON.stringify(Object.fromEntries(formData));
+            console.log(json);
+
+            // Submit to Netlify
+            // fetch("/", {
+            //   method: "POST",
+            //   headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            //   body: new URLSearchParams(formData).toString(),
+            // })
+            //   .then(() => {
+            //     Swal.fire({
+            //       title: "Assessment Submitted",
+            //       text: "The audit data has been securely recorded.",
+            //       icon: "success",
+            //       confirmButtonColor: "#1e293b",
+            //       confirmButtonText: "Return to Main Page",
+            //     }).then(() => {
+            //       form.reset();
+            //       this.affiliated = "n";
+            //       this.findings = "n";
+            //       this.tracking = "n";
+            //       window.location.href = "/";
+            //     });
+            //   })
+            //   .catch((error) => {
+            //     Swal.fire({
+            //       title: "Error",
+            //       text: "There was a problem submitting the form. Please try again.",
+            //       icon: "error",
+            //       confirmButtonColor: "#1e293b",
+            //     });
+            //     console.error("Form submission error:", error);
+            //   });
+          },
+        };
+      }
+
+      document.addEventListener("alpine:init", () => {
+        Alpine.directive("date", (el) => {
+          flatpickr(el, {
+            dateFormat: "F j, Y",
+            altInput: true,
+            altFormat: "F j, Y",
+            allowInput: true,
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,20 @@
+backend:
+  name: git-gateway
+  branch: master # or master, depending on your repo\
+  repo: waougri/cpspd
+
+media_folder: "assets/uploads" # where uploaded images go
+public_folder: "/assets/uploads"
+
+collections:
+  - name: "news"
+    label: "News & Updates"
+    folder: "content/news"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Date", name: "date", widget: "datetime" }
+      - { label: "Background Image", name: "image", widget: "image", required: false}
+      - { label: "Summary", name: "summary", widget: "text" }
+      - { label: "Body", name: "body", widget: "markdown" }

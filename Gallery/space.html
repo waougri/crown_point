@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Starlith Labs</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: 'Montserrat', sans-serif;
+      color: #fff;
+      height: 100%;
+      background: radial-gradient(circle at top, #0d0d2b, #000010);
+      overflow-x: hidden;
+    }
+    nav {
+      display: flex;
+      justify-content: flex-end;
+      padding: 20px 50px;
+      gap: 30px;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 100;
+    }
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: 0.3s;
+    }
+    nav a:hover {
+      color: #9b59b6;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+      padding: 0 20px;
+      z-index: 1;
+      position: relative;
+    }
+    .hero-title {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    .hero-text {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin-bottom: 40px;
+      color: #ccc;
+    }
+    .hero-button {
+      background: linear-gradient(90deg, #9b59b6, #8e44ad);
+      border: none;
+      padding: 15px 40px;
+      border-radius: 50px;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .hero-button:hover {
+      transform: scale(1.05);
+    }
+    .planet {
+      width: 250px;
+      height: 250px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #3b9cff, #6a00ff);
+      box-shadow: 0 0 50px #9b59b6, 0 0 100px #3b9cff;
+      margin-top: 50px;
+      position: relative;
+      animation: rotate 20s linear infinite;
+    }
+    .planet::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 300px;
+      height: 300px;
+      border: 2px solid #9b59b6;
+      border-radius: 50%;
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="#">Hales</a>
+    <a href="#">Surfest</a>
+    <a href="#">Absurca</a>
+    <a href="#">Contents</a>
+    <a href="#">Logiy</a>
+    <a href="#" style="border: 1px solid #fff; padding: 5px 15px; border-radius: 50px;">Adow</a>
+  </nav>
+
+  <div class="container">
+    <h1 class="hero-title">Starlith Labs</h1>
+    <p class="hero-text">That creative space for your projects, connecting ideas across the cosmos.</p>
+    <button class="hero-button">Search Now</button>
+    <div class="planet"></div>
+  </div>
+</body>
+</html>

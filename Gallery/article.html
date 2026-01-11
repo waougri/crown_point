@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Article - Crown Point Consulting</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap"
+            rel="stylesheet"
+    />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg"/>
+    <link
+            rel="icon"
+            type="image/png"
+            href="favicon/favicon-96x96.png"
+            sizes="96x96"
+    />
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: "#faf5ff",
+                            100: "#f3e8ff",
+                            500: "#a855f7",
+                            600: "#9333ea",
+                            700: "#7e22ce",
+                        },
+                        accent: {
+                            400: "#f472b6",
+                            500: "#ec4899",
+                            600: "#db2777",
+                        },
+                    },
+                    fontFamily: {
+                        display: ["Playfair Display", "serif"],
+                        sans: ["Inter", "sans-serif"],
+                    },
+                },
+            },
+        };
+    </script>
+
+    <!-- Marked.js for Markdown parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="static/style.css"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .orbitron {
+            font-family: 'Orbitron', sans-serif;
+        }
+    </style>
+    <style>
+        /* Article-specific styles */
+        .article-content {
+            line-height: 1.8;
+            font-size: 1.125rem;
+        }
+
+        .article-content h1 {
+            font-family: "Playfair Display", serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+            color: #1f2937;
+            line-height: 1.2;
+        }
+
+        .article-content h2 {
+            font-family: "Playfair Display", serif;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            color: #374151;
+            line-height: 1.3;
+        }
+
+        .article-content h3 {
+            font-family: "Playfair Display", serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+            color: #4b5563;
+        }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+            color: #374151;
+        }
+
+        .article-content ul,
+        .article-content ol {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+        }
+
+        .article-content li {
+            margin-bottom: 0.75rem;
+            color: #4b5563;
+        }
+
+        .article-content ul li {
+            list-style-type: disc;
+        }
+
+        .article-content ol li {
+            list-style-type: decimal;
+        }
+
+        .article-content a {
+            color: #9333ea;
+            text-decoration: underline;
+            transition: color 0.2s;
+        }
+
+        .article-content a:hover {
+            color: #ec4899;
+        }
+
+        .article-content blockquote {
+            border-left: 4px solid #a855f7;
+            padding-left: 1.5rem;
+            margin: 2rem 0;
+            font-style: italic;
+            color: #6b7280;
+            background: #f3e8ff;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+        }
+
+        .article-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 1rem;
+            margin: 2rem 0;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .article-content code {
+            background-color: #f3f4f6;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+            font-family: "Monaco", "Courier New", monospace;
+            font-size: 0.9em;
+            color: #ec4899;
+        }
+
+        .article-content pre {
+            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+            color: #f9fafb;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            overflow-x: auto;
+            margin: 2rem 0;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+
+        .article-content pre code {
+            background-color: transparent;
+            color: inherit;
+            padding: 0;
+        }
+
+        .article-content strong {
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .article-content em {
+            font-style: italic;
+        }
+
+        .skeleton {
+            animation: skeleton-loading 1.5s infinite ease-in-out;
+            background: linear-gradient(
+                    90deg,
+                    #f0f0f0 25%,
+                    #e0e0e0 50%,
+                    #f0f0f0 75%
+            );
+            background-size: 200% 100%;
+        }
+
+        @keyframes skeleton-loading {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+    </style>
+
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta
+            name="description"
+            content="Crown Point Consulting provides sterile processing audits, compliance consulting, and operational excellence for healthcare facilities."
+    />
+    <meta
+            name="keywords"
+            content="Crown Point Consulting, sterile processing, healthcare audits, compliance consulting, operational excellence, healthcare consulting, sterile processing standards"
+    />
+    <meta name="author" content="Crown Point Consulting"/>
+    <meta name="robots" content="index, follow"/>
+    <meta name="language" content="English"/>
+    <meta name="revisit-after" content="7 days"/>
+    <meta name="rating" content="general"/>
+    <link rel="canonical" href="https://crownpointconsult.com/article"/>
+    <meta name="theme-color" content="#a855f7"/>
+
+    <!-- Favicon -->
+    <link
+            rel="icon"
+            type="image/png"
+            href="/favicon/favicon-96x96.png"
+            sizes="96x96"
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg"/>
+    <link rel="shortcut icon" href="/favicon/favicon.ico"/>
+    <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="/favicon/apple-touch-icon.png"
+    />
+    <link rel="manifest" href="/favicon/site.webmanifest"/>
+
+    <!-- Open Graph -->
+    <meta
+            property="og:title"
+            content="Crown Point Consulting – Sterile Processing Auditing Excellence"
+    />
+    <meta
+            property="og:description"
+            content="Professional sterile processing audits and compliance services."
+    />
+    <meta property="og:url" content="https://crownpointconsult.com/"/>
+    <meta property="og:type" content="website"/>
+    <meta
+            property="og:image"
+            content="https://crownpointconsult.com/favicon/lol.png"
+    />
+    <meta property="og:site_name" content="Crown Point Consulting"/>
+    <meta property="og:locale" content="en_US"/>
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta
+            name="twitter:title"
+            content="Crown Point Consulting – Sterile Processing Auditing Excellence"
+    />
+    <meta
+            name="twitter:description"
+            content="Professional sterile processing audits and compliance services."
+    />
+    <meta
+            name="twitter:image"
+            content="https://crownpointconsult.com/favicon/lol.png"
+    />
+    <meta name="twitter:site" content="@CrownPointConsult"/>
+    <meta name="twitter:creator" content="@CrownPointConsult"/>
+</head>
+
+<body class="bg-gradient-to-br from-gray-50 via-purple-50/30 to-pink-50/20">
+<!-- Decorative Background -->
+<div class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+    <div
+            class="absolute top-0 bg-purple-300 rounded-full -left-4 w-96 h-96 mix-blend-multiply filter blur-3xl opacity-20 animate-blob"
+    ></div>
+    <div
+            class="absolute top-0 bg-pink-300 rounded-full -right-4 w-96 h-96 mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"
+    ></div>
+    <div
+            class="absolute bg-indigo-300 rounded-full -bottom-8 left-20 w-96 h-96 mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"
+    ></div>
+</div>
+
+<div x-data="articleData()">
+    <!-- Navigation -->
+    <nav
+            class="fixed z-50 w-full border-b border-purple-100 shadow-lg bg-white/80 backdrop-blur-md"
+    >
+        <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <a href="index.html" class="flex items-center space-x-3 group">
+                    <img
+                            src="assets/logo.svg"
+                            alt="Crown Point Consulting Logo"
+                            class="w-12 h-12 transition-transform group-hover:scale-110"
+                            onerror="this.style.display='none'"
+                    />
+                    <span
+                            class="text-2xl font-bold text-transparent font-display bg-gradient-to-r from-purple-600 via-purple-500 to-pink-600 bg-clip-text"
+                    >
+                Crown Point
+              </span>
+                </a>
+                <a
+                        href="index.html#news"
+                        class="flex items-center font-medium text-gray-700 space-x-2 hover:text-purple-600 transition-colors group"
+                >
+                    <svg
+                            class="w-5 h-5 group-hover:-translate-x-1 transition-transform"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                    >
+                        <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M15 19l-7-7 7-7"
+                        ></path>
+                    </svg>
+                    <span>Back to News</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Loading State -->
+    <div x-show="loading" class="relative z-10 pt-32 pb-16">
+        <div class="max-w-4xl px-4 mx-auto sm:px-6 lg:px-8">
+            <div class="w-3/4 h-12 mb-6 rounded-lg skeleton"></div>
+            <div class="w-48 h-6 mb-8 rounded-lg skeleton"></div>
+            <div class="w-full mb-8 skeleton h-96 rounded-2xl"></div>
+            <div class="space-y-4">
+                <div class="w-full h-5 rounded skeleton"></div>
+                <div class="w-full h-5 rounded skeleton"></div>
+                <div class="w-5/6 h-5 rounded skeleton"></div>
+                <div class="w-full h-5 rounded skeleton"></div>
+                <div class="w-4/6 h-5 rounded skeleton"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Article Content -->
+    <article x-show="!loading && article" class="relative z-10 pt-32 pb-20">
+        <div class="max-w-4xl px-4 mx-auto sm:px-6 lg:px-8">
+            <!-- Article Header -->
+            <header class="mb-12">
+                <div
+                        class="inline-flex items-center px-4 py-2 mb-6 text-purple-700 bg-purple-100 rounded-full space-x-2"
+                >
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                                d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"
+                        ></path>
+                    </svg>
+                    <span class="text-sm font-bold tracking-wide uppercase"
+                    >Industry Update</span
+                    >
+                </div>
+
+                <h1
+                        class="mb-6 text-4xl font-bold leading-tight text-gray-900 sm:text-5xl lg:text-6xl font-display"
+                        x-text="article.title"
+                ></h1>
+
+                <div class="flex flex-wrap items-center text-gray-600 gap-6">
+                    <div class="flex items-center space-x-2">
+                        <div
+                                class="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500"
+                        >
+                            <svg
+                                    class="w-6 h-6 text-white"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                            >
+                                <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                ></path>
+                            </svg>
+                        </div>
+                        <span class="font-medium" x-text="article.formattedDate"></span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Featured Image -->
+            <div x-show="article.image" class="mb-16 group">
+                <div class="relative overflow-hidden shadow-2xl rounded-3xl">
+                    <img
+                            :src="article.image"
+                            :alt="article.title"
+                            class="w-full h-auto transform group-hover:scale-105 transition-transform duration-700"
+                    />
+                    <div
+                            class="absolute inset-0 opacity-0 bg-gradient-to-t from-black/20 to-transparent group-hover:opacity-100 transition-opacity duration-300"
+                    ></div>
+                </div>
+            </div>
+
+            <!-- Article Summary -->
+            <div class="relative mb-16">
+                <div
+                        class="absolute top-0 bottom-0 w-1 rounded-full -left-4 bg-gradient-to-b from-purple-600 to-pink-600"
+                ></div>
+                <div
+                        class="p-8 border border-purple-100 bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl"
+                >
+                    <svg
+                            class="w-10 h-10 mb-4 text-purple-600"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                    >
+                        <path
+                                fill-rule="evenodd"
+                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                                clip-rule="evenodd"
+                        />
+                    </svg>
+                    <p
+                            class="text-xl font-medium leading-relaxed text-gray-700"
+                            x-text="article.summary"
+                    ></p>
+                </div>
+            </div>
+
+            <!-- Article Body -->
+            <div class="prose prose-lg max-w-none">
+                <div
+                        class="p-8 border border-purple-100 shadow-xl article-content bg-white/50 backdrop-blur-sm rounded-3xl lg:p-12"
+                        x-html="renderedContent"
+                ></div>
+            </div>
+
+            <!-- Tags Section -->
+            <div class="pt-8 mt-12 border-t border-gray-200">
+                <div class="flex flex-wrap gap-2">
+              <span
+                      class="px-4 py-2 text-sm font-semibold text-purple-700 bg-purple-100 rounded-full"
+              >Sterile Processing</span
+              >
+                    <span
+                            class="px-4 py-2 text-sm font-semibold text-pink-700 bg-pink-100 rounded-full"
+                    >Healthcare</span
+                    >
+                    <span
+                            class="px-4 py-2 text-sm font-semibold text-indigo-700 bg-indigo-100 rounded-full"
+                    >Compliance</span
+                    >
+                </div>
+            </div>
+
+            <!-- Share Section -->
+            <div class="pt-8 mt-12 border-t border-gray-200">
+                <h3
+                        class="flex items-center mb-6 text-2xl font-bold text-gray-900 font-display"
+                >
+                    <svg
+                            class="w-6 h-6 mr-3 text-purple-600"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                    >
+                        <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
+                        />
+                    </svg>
+                    Share this article
+                </h3>
+                <div class="flex flex-wrap gap-4">
+                    <button
+                            @click="shareArticle('twitter')"
+                            class="flex items-center px-6 py-3 text-white group space-x-3 bg-gradient-to-r from-blue-400 to-blue-500 rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-300"
+                    >
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                    d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"
+                            ></path>
+                        </svg>
+                        <span class="font-semibold">Twitter</span>
+                    </button>
+
+                    <button
+                            @click="shareArticle('facebook')"
+                            class="flex items-center px-6 py-3 text-white group space-x-3 bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-300"
+                    >
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                    d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"
+                            ></path>
+                        </svg>
+                        <span class="font-semibold">Facebook</span>
+                    </button>
+
+                    <button
+                            @click="shareArticle('linkedin')"
+                            class="flex items-center px-6 py-3 text-white group space-x-3 bg-gradient-to-r from-blue-700 to-blue-800 rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-300"
+                    >
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
+                            ></path>
+                        </svg>
+                        <span class="font-semibold">LinkedIn</span>
+                    </button>
+
+                    <button
+                            @click="copyLink()"
+                            class="flex items-center px-6 py-3 text-white group space-x-3 bg-gradient-to-r from-gray-600 to-gray-700 rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-300"
+                    >
+                        <svg
+                                class="w-5 h-5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                        >
+                            <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                            />
+                        </svg>
+                        <span class="font-semibold">Copy Link</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Back to News -->
+            <div class="mt-16 text-center">
+                <a
+                        href="index.html#news"
+                        class="inline-flex items-center px-8 py-4 text-lg font-bold text-white rounded-full space-x-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:shadow-2xl hover:scale-105 transition-all duration-300"
+                >
+                    <svg
+                            class="w-6 h-6"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                    >
+                        <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M15 19l-7-7 7-7"
+                        ></path>
+                    </svg>
+                    <span>Back to All News</span>
+                </a>
+            </div>
+        </div>
+    </article>
+
+    <!-- Error State -->
+    <div x-show="!loading && !article" class="relative z-10 pt-32 pb-20">
+        <div class="max-w-2xl px-4 mx-auto text-center sm:px-6 lg:px-8">
+            <div
+                    class="p-12 border border-purple-100 shadow-2xl bg-white/80 backdrop-blur-sm rounded-3xl"
+            >
+                <div
+                        class="inline-flex items-center justify-center w-24 h-24 mb-6 rounded-full bg-gradient-to-br from-red-500 to-pink-500"
+                >
+                    <svg
+                            class="w-12 h-12 text-white"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                    >
+                        <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                        ></path>
+                    </svg>
+                </div>
+                <h2 class="mb-4 text-4xl font-bold text-gray-900 font-display">
+                    Article Not Found
+                </h2>
+                <p class="mb-8 text-xl text-gray-600">
+                    The article you're looking for doesn't exist or may have been
+                    removed.
+                </p>
+                <a
+                        href="index.html#news"
+                        class="inline-flex items-center px-8 py-4 font-bold text-white rounded-full space-x-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:shadow-xl hover:scale-105 transition-all duration-300"
+                >
+                    <svg
+                            class="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                    >
+                        <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M15 19l-7-7 7-7"
+                        ></path>
+                    </svg>
+                    <span>Back to News</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="relative z-10 py-12 text-white bg-gray-900">
+    <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+        <div class="mb-8 grid md:grid-cols-3 gap-8">
+            <div>
+                <div class="flex items-center mb-4 space-x-3">
+                    <img
+                            src="assets/logo.svg"
+                            alt="Crown Point Logo"
+                            class="w-10 h-10"
+                            onerror="this.style.display='none'"
+                    />
+                    <span class="text-xl font-bold font-display">Crown Point</span>
+                </div>
+                <p class="text-gray-400">Elevating sterile processing standards.</p>
+            </div>
+
+            <div>
+                <h3 class="mb-4 text-lg font-bold font-display">Quick Links</h3>
+                <ul class="space-y-2">
+                    <li>
+                        <a
+                                href="index.html#about"
+                                class="text-gray-400 hover:text-purple-400 transition"
+                        >About</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                                href="index.html#services"
+                                class="text-gray-400 hover:text-purple-400 transition"
+                        >Services</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                                href="index.html#news"
+                                class="text-gray-400 hover:text-purple-400 transition"
+                        >News</a
+                        >
+                    </li>
+                </ul>
+            </div>
+
+            <div>
+                <h3 class="mb-4 text-lg font-bold font-display">Contact</h3>
+                <ul class="space-y-3">
+                    <li>
+                        <a
+                                href="mailto:crownpointspd@gmail.com"
+                                class="text-gray-400 break-all hover:text-purple-400 transition"
+                        >crownpointspd@gmail.com</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                                href="tel:919-522-2345"
+                                class="text-gray-400 hover:text-purple-400 transition"
+                        >919-522-2345</a
+                        >
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="pt-8 text-center border-t border-gray-800">
+            <p class="text-gray-400">
+                &copy;
+                <span x-data x-text="new Date().getFullYear()">2025</span> Crown
+                Point Consulting. All rights reserved.
+            </p>
+        </div>
+    </div>
+</footer>
+
+<!-- Scripts -->
+<script src="static/article.js"></script>
+<script
+        defer
+        src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+></script>
+
+<footer class="py-6 text-gray-400 bg-black">
+    <a href="https://starlithlabs.com/">
+        <div class="container px-4 mx-auto text-center">
+            <p class="text-sm orbitron md:text-base">
+                Made with <span class="text-white">♥</span> by <span class="font-semibold text-white">Starlith</span>
+            </p>
+        </div>
+    </a>
+</footer>
+</body>
+</html>
