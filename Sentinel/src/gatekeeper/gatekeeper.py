@@ -1,6 +1,6 @@
 import pprint
 
-from fastapi import FastAPI, HTTPException, APIRouter
+from fastapi import FastAPI, HTTPException, APIRouter, BackgroundTasks
 from pydantic import BaseModel, EmailStr
 from typing import List, Optional
 from fastapi.middleware.cors import CORSMiddleware
@@ -261,10 +261,11 @@ def generate_html_email(data: AuditData):
     """
 
 @gatekeeper_router.post("/api/gatekeeper", status_code=201)
-async def submit_audit(data: AuditData):
+async def submit_audit(data: AuditData, background_tasks: BackgroundTasks):
 
     try:
-        send_audit_confirmation("aaougri@gmail.com", data.facility_name, generate_html_email(data))
+        email_str = generate_html_email(data)
+        background_tasks.add_task(send_audit_confirmation, SENDER_EMAIL, data.facility_name, email_str )
         return {"status": "success", "message": "Email sent successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=e)
