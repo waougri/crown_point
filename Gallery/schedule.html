@@ -1,805 +1,1156 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
   <head>
-    <!-- Core -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CPC Pre-Audit Facility Assessment</title>
-
-    <!-- SEO (Form pages should not compete with marketing pages) -->
+    <meta
+      name="title"
+      content="SPD Pre-Audit Assessment | Crown Point Consulting"
+    />
     <meta
       name="description"
-      content="Secure pre-audit facility assessment form for sterile processing and healthcare compliance audits conducted by Crown Point Consulting."
+      content="Professional SPD operational review and pre-audit tool. Streamlines sterile processing data collection for facility identity, staffing, and regulatory compliance."
+    />
+    <meta name="author" content="CrownPointConsulting" />
+    <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg" />
+    <link
+      rel="icon"
+      type="image/png"
+      href="favicon/favicon-96x96.png"
+      sizes="96x96"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="favicon/apple-touch-icon.png"
+    />
+    <link rel="manifest" href="favicon/site.webmanifest" />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:url"
+      content="https://crownpointconsulting.com/schedule"
     />
     <meta
-      name="keywords"
-      content="pre-audit form, facility audit, sterile processing assessment, healthcare compliance, Crown Point Consulting"
+      property="og:title"
+      content="SPD Pre-Audit Assessment | Crown Point Consulting"
     />
-    <meta name="author" content="Crown Point Consulting" />
-    <meta name="robots" content="noindex, nofollow" />
-    <link rel="canonical" href="https://crownpointconsult.com/pre-audit" />
-    <meta name="theme-color" content="#a855f7" />
-
-    <!-- Fonts -->
+    <meta
+      property="og:description"
+      content="Evaluate SPD operational efficiency and survey readiness with our digital pre-audit tool."
+    />
+    <meta property="og:image" content="assets/cleanroom.png" />
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:title" content="SPD Pre-Audit Assessment" />
+    <meta property="twitter:image" content="assets/bg_less_logo.png" />
+    <title>Pre-Audit Assessment | Crown Point Consulting</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
       rel="stylesheet"
     />
-
-    <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/zod@3.21.4/lib/index.umd.js"></script>
+    <!-- PDF libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
       tailwind.config = {
         theme: {
           extend: {
+            colors: {
+              primary: {
+                50: "#faf5ff",
+                100: "#f3e8ff",
+                500: "#a855f7",
+                600: "#9333ea",
+                700: "#7e22ce",
+              },
+              accent: {
+                400: "#f472b6",
+                500: "#ec4899",
+                600: "#db2777",
+              },
+            },
             fontFamily: {
               display: ["Playfair Display", "serif"],
               sans: ["Inter", "sans-serif"],
             },
-            colors: {
-              crown: {
-                50: "#faf5ff",
-                100: "#f3e8ff",
-                200: "#e9d5ff",
-                300: "#d8b4fe",
-                400: "#c084fc",
-                500: "#a855f7",
-                600: "#9333ea",
-                700: "#7e22ce",
-                800: "#6b21a8",
-                900: "#581c87",
-                accent: "#ec4899",
-              },
+            boxShadow: {
+              soft: "0 18px 45px -18px rgba(15,23,42,0.35)",
             },
           },
         },
       };
     </script>
-
-    <!-- Alpine / Mask -->
-    <script
-      defer
-      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
-    ></script>
-    <script
-      defer
-      src="https://cdn.jsdelivr.net/npm/@alpinejs/mask@3.x.x/dist/cdn.min.js"
-    ></script>
-
-    <!-- Date Picker -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/airbnb.css"
-    />
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
-    <!-- Alerts -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <!-- Favicon -->
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="96x96"
-      href="/favicon/favicon-96x96.png"
-    />
-    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
-    <link rel="shortcut icon" href="/favicon/favicon.ico" />
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="/favicon/apple-touch-icon.png"
-    />
-    <link rel="manifest" href="/favicon/site.webmanifest" />
-
-    <!-- Open Graph (Internal-safe) -->
-    <meta
-      property="og:title"
-      content="Crown Point Consulting | Pre-Audit Facility Assessment"
-    />
-    <meta
-      property="og:description"
-      content="Internal pre-audit assessment form for healthcare facilities."
-    />
-    <meta property="og:type" content="website" />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background: radial-gradient(
+          circle at top,
+          #faf5ff 0%,
+          #f8fafc 45%,
+          #eef2ff 100%
+        );
+      }
+      .form-card {
+        background: white;
+        border-radius: 1.5rem;
+        box-shadow: 0 20px 40px -24px rgba(15, 23, 42, 0.4);
+      }
+      .hp-field {
+        position: absolute;
+        left: -5000px;
+        top: -5000px;
+      }
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      /* Autocomplete override */
+      input:-webkit-autofill,
+      input:-webkit-autofill:hover,
+      input:-webkit-autofill:focus,
+      input:-webkit-autofill:active {
+        -webkit-box-shadow: 0 0 0 30px #f8fafc inset !important;
+        box-shadow: 0 0 0 30px #f8fafc inset !important;
+        -webkit-text-fill-color: #475569 !important;
+        transition: background-color 5000s ease-in-out 0s;
+      }
+    </style>
   </head>
-
-  <body class="antialiased bg-slate-50 text-crown-900" x-data="auditForm()">
-    <div
-      class="flex flex-col lg:flex-row min-h-screen max-w-[1600px] mx-auto bg-white shadow-2xl my-0 lg:my-8 lg:rounded-3xl overflow-hidden"
-    >
-      <aside
-        class="w-full lg:w-72 bg-[#fcfcfc] border-r border-slate-100 flex flex-col relative z-20"
+  <body class="min-h-screen text-slate-900">
+    <div class="relative overflow-hidden">
+      <!-- decorative gradient blob -->
+      <div
+        class="pointer-events-none fixed inset-x-0 top-0 z-10 flex justify-center opacity-50"
       >
-        <div class="p-8 pb-4">
-          <div class="mb-8 text-center">
-            <h1 class="font-serif text-3xl font-bold text-crown-gold">
-              Crown Point
-            </h1>
-            <p class="text-sm tracking-wider text-slate-500">CONSULTING</p>
+        <div class="h-64 w-[32rem] bg-primary-100 blur-3xl"></div>
+      </div>
+      <div id="root" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10"></div>
+    </div>
+    <script type="text/babel">
+      const { useState, useRef, useCallback } = React;
+      const z = Zod;
+      const today = new Date().toISOString().split("T")[0];
+
+      const auditSchema = z.object({
+        date: z.string().min(1, "Date is required"),
+        facility_name: z.string().min(2, "Facility name is required"),
+        facility_address: z.string().min(5, "Full address is required"),
+        is_affiliated: z.boolean(),
+        system_name: z.string().optional(),
+        trauma_level: z.string().min(1, "Required"),
+        contact_name: z.string().min(2, "Name required"),
+        contact_title: z.string().min(1, "Title required"),
+        contact_phone: z.string().min(7, "Valid phone required"),
+        contact_email: z.string().email("Invalid email"),
+        accrediting_name: z.string().min(1, "Org name required"),
+        last_audit_date: z.string().min(1, "Audit date required"),
+        has_findings: z.boolean(),
+        findings: z.array(z.string()).max(4),
+        reporting_to: z.string().min(1, "Required"),
+        staff_ft_w_fmla: z.string().min(1, "Required"),
+        staff_ft_no_fmla: z.string().min(1, "Required"),
+        staff_pt: z.string().min(1, "Required"),
+        staff_pd: z.string().min(1, "Required"),
+        staff_travelers: z.string().min(1, "Required"),
+        hours_operation: z.string().min(1, "Required"),
+        or_count: z.string().min(1, "Required"),
+        clinic_count: z.string().min(1, "Required"),
+        proc_endoscopes: z.boolean(),
+        proc_vascular: z.boolean(),
+        proc_arthroscopic: z.boolean(),
+        proc_robotic: z.boolean(),
+        proc_tee: z.boolean(),
+        has_tracking: z.boolean(),
+        tracking_system_name: z.string().optional(),
+        pain_points: z.string().min(1, "Please describe the pain points"),
+        additional_info: z.string().optional(),
+        bot_check: z.string().max(0),
+      });
+
+      const SectionShell = ({ kicker, title, children, description }) => (
+        <section className="space-y-6">
+          <div className="flex flex-col gap-1">
+            {kicker && (
+              <p className="text-[11px] font-semibold tracking-[0.2em] uppercase text-primary-600">
+                {kicker}
+              </p>
+            )}
+            {title && (
+              <h2 className="font-semibold text-lg text-slate-900">{title}</h2>
+            )}
+            {description && (
+              <p className="text-sm text-slate-500 max-w-2xl">{description}</p>
+            )}
           </div>
-          <div class="w-12 h-1 mx-auto mb-4 bg-crown-gold"></div>
-          <h1
-            class="font-serif text-2xl font-bold leading-tight text-center text-slate-800"
-          >
-            Sterile Processing<br /><span
-              class="italic font-normal text-slate-500"
-              >Facility Assessment</span
-            >
-          </h1>
-        </div>
+          <div className="grid gap-6">{children}</div>
+        </section>
+      );
 
-        <nav class="sticky flex-col hidden px-8 space-y-1 lg:flex top-8">
-          <template x-for="(label, id) in sections" :key="id">
-            <a
-              :href="'#' + id"
-              class="flex items-center py-3 text-sm transition-all duration-300 group"
-              :class="activeSection === id ? 'text-crown-gold font-bold translate-x-1' : 'text-slate-400 hover:text-slate-600'"
-            >
-              <span
-                class="w-6 text-[10px] uppercase tracking-widest mr-2"
-                x-text="'0' + (Object.keys(sections).indexOf(id) + 1)"
-              ></span>
-              <span x-text="label"></span>
-            </a>
-          </template>
-        </nav>
-
-        <div class="hidden p-8 mt-auto lg:block">
-          <p class="text-[10px] text-slate-400 uppercase tracking-widest mb-2">
-            Crown Point Consulting © 2024
-          </p>
-          <div class="h-0.5 w-full bg-slate-100 rounded-full overflow-hidden">
-            <div
-              class="h-full transition-all duration-700 ease-out bg-crown-gold"
-              :style="`width: ${progress}%`"
-            ></div>
+      const Field = ({ label, error, children, helper, className = "" }) => (
+        <div className={`space-y-1.5 ${className}`}>
+          <div className="flex items-baseline justify-between gap-3">
+            <label className="text-xs font-semibold text-slate-600 tracking-wide">
+              {label}
+            </label>
+            {helper && (
+              <span className="text-[11px] text-slate-400">{helper}</span>
+            )}
           </div>
+          {children}
+          {error && (
+            <p className="text-rose-500 text-xs font-medium">{error}</p>
+          )}
         </div>
-      </aside>
+      );
 
-      <main
-        class="relative flex-1 h-screen overflow-y-auto no-scrollbar scroll-smooth"
-      >
-        <form
-          id="auditForm"
-          name="facility-audit"
-          method="POST"
-          data-netlify="true"
-          netlify-honeypot="bot-field"
-          @submit.prevent="submitForm"
-          class="max-w-4xl p-6 pb-48 mx-auto md:p-16 lg:p-24"
-        >
-          <input type="hidden" name="form-name" value="facility-audit" />
-          <p class="hidden">
-            <label
-              >Don't fill this out if you're human: <input name="bot-field"
-            /></label>
-          </p>
+      const Input = (props) => (
+        <input
+          {...props}
+          autoComplete="on"
+          className={`w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 transition-all ${
+            props.className || ""
+          }`}
+        />
+      );
 
-          <section
-            id="identity"
-            class="mb-24 scroll-mt-24"
-            @mouseenter="activeSection = 'identity'"
+      const RadioGroup = ({
+        value,
+        onChange,
+        yesLabel = "Yes",
+        noLabel = "No",
+      }) => (
+        <div className="inline-flex rounded-full bg-slate-100 p-1 border border-slate-200">
+          <button
+            type="button"
+            onClick={() => onChange(true)}
+            className={`px-4 py-1.5 text-xs font-semibold rounded-full transition-all ${
+              value
+                ? "bg-primary-600 text-white shadow-sm"
+                : "text-slate-500 hover:text-slate-700"
+            }`}
           >
-            <span
-              class="block mb-3 text-xs font-bold tracking-widest uppercase text-crown-gold"
-              >Section 01</span
-            >
-            <h2 class="mb-12 font-serif text-4xl text-slate-900">
-              Facility Identity
-            </h2>
+            {yesLabel}
+          </button>
+          <button
+            type="button"
+            onClick={() => onChange(false)}
+            className={`px-4 py-1.5 text-xs font-semibold rounded-full transition-all ${
+              !value
+                ? "bg-rose-500 text-white shadow-sm"
+                : "text-slate-500 hover:text-slate-700"
+            }`}
+          >
+            {noLabel}
+          </button>
+        </div>
+      );
 
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-x-8 gap-y-12">
-              <div class="md:col-span-4">
-                <label
-                  class="block mb-1 text-xs font-bold uppercase text-slate-400"
-                  >Date</label
-                >
-                <input
-                  x-date
-                  type="text"
-                  name="date"
-                  class="cursor-pointer cpc-input"
-                  placeholder="Select Date"
-                  required
-                />
-              </div>
-              <div class="md:col-span-8">
-                <label
-                  class="block mb-1 text-xs font-bold uppercase text-slate-400"
-                  >Facility Name</label
-                >
-                <input
-                  id="facility-search"
-                  type="text"
-                  name="facility_name"
-                  placeholder="Enter Facility Name"
-                  class="cpc-input"
-                  required
-                />
-              </div>
+      const Checkbox = ({ label, checked, onChange }) => (
+        <label className="flex items-center gap-3 p-3 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer hover:border-primary-400 hover:bg-primary-50/50 transition-colors text-sm">
+          <input
+            type="checkbox"
+            checked={checked}
+            onChange={(e) => onChange(e.target.checked)}
+            className="w-4 h-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500"
+          />
+          <span className="font-medium text-slate-700">{label}</span>
+        </label>
+      );
 
-              <div class="md:col-span-12">
-                <label
-                  class="block mb-1 text-xs font-bold uppercase text-slate-400"
-                  >Facility Address</label
-                >
-                <input
-                  id="facility-address"
-                  type="text"
-                  name="facility_address"
-                  placeholder="Street, City, State, Zip"
-                  class="cpc-input"
-                />
-              </div>
+      const Select = ({ options, ...props }) => (
+        <div className="relative">
+          <select
+            {...props}
+            autoComplete="off"
+            className={`w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 appearance-none ${
+              props.className || ""
+            }`}
+          >
+            <option value="">Select level...</option>
+            {options.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+          <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-slate-400 text-xs">
+            ▼
+          </span>
+        </div>
+      );
 
-              <div class="md:col-span-6">
-                <label
-                  class="block mb-1 text-xs font-bold uppercase text-slate-400"
-                  >Trauma Level</label
-                >
-                <div class="relative">
-                  <select
-                    name="trauma_level"
-                    class="bg-transparent appearance-none cursor-pointer cpc-input"
-                  >
-                    <option value="" disabled selected>
-                      Select Designation
-                    </option>
-                    <option>Level I</option>
-                    <option>Level II</option>
-                    <option>Level III</option>
-                    <option>Level IV</option>
-                    <option>None</option>
-                  </select>
-                  <div
-                    class="absolute right-0 pointer-events-none top-4 text-slate-400"
-                  >
-                    ▼
+      const PreAuditForm = () => {
+        const [formData, setFormData] = useState({
+          date: today,
+          facility_name: "",
+          facility_address: "",
+          is_affiliated: false,
+          system_name: "",
+          trauma_level: "",
+          contact_name: "",
+          contact_title: "",
+          contact_phone: "",
+          contact_email: "",
+          accrediting_name: "",
+          last_audit_date: "",
+          has_findings: false,
+          findings: ["", "", "", ""],
+          reporting_to: "",
+          staff_ft_w_fmla: "",
+          staff_ft_no_fmla: "",
+          staff_pt: "",
+          staff_pd: "",
+          staff_travelers: "",
+          hours_operation: "",
+          or_count: "",
+          clinic_count: "",
+          proc_endoscopes: false,
+          proc_vascular: false,
+          proc_arthroscopic: false,
+          proc_robotic: false,
+          proc_tee: false,
+          has_tracking: false,
+          tracking_system_name: "",
+          pain_points: "",
+          additional_info: "",
+          bot_check: "",
+        });
+        const [errors, setErrors] = useState({});
+        const [submittedData, setSubmittedData] = useState(null);
+        const [isSubmitting, setIsSubmitting] = useState(false);
+        const summaryRef = useRef(null);
+        const formRef = useRef(null);
+        const autosaveTimer = useRef(null);
+
+        React.useEffect(() => {
+          try {
+            const draft = localStorage.getItem("preAuditDraft");
+            if (draft) {
+              setFormData((prev) => ({ ...prev, ...JSON.parse(draft) }));
+            }
+          } catch (e) {
+            console.warn("No draft found", e);
+          }
+        }, []);
+
+        React.useEffect(() => {
+          if (autosaveTimer.current) {
+            clearTimeout(autosaveTimer.current);
+          }
+          autosaveTimer.current = setTimeout(() => {
+            try {
+              localStorage.setItem("preAuditDraft", JSON.stringify(formData));
+            } catch (e) {
+              console.warn("Cannot save draft:", e);
+            }
+          }, 600);
+          return () => {
+            if (autosaveTimer.current) {
+              clearTimeout(autosaveTimer.current);
+            }
+          };
+        }, [formData]);
+
+        const saveDraftNow = useCallback(() => {
+          try {
+            localStorage.setItem("preAuditDraft", JSON.stringify(formData));
+            alert("Draft saved locally.");
+          } catch (e) {
+            alert("Failed to save draft.");
+          }
+        }, [formData]);
+
+        const clearDraft = useCallback(() => {
+          localStorage.removeItem("preAuditDraft");
+          setFormData({
+            date: today,
+            facility_name: "",
+            facility_address: "",
+            is_affiliated: false,
+            system_name: "",
+            trauma_level: "",
+            contact_name: "",
+            contact_title: "",
+            contact_phone: "",
+            contact_email: "",
+            accrediting_name: "",
+            last_audit_date: "",
+            has_findings: false,
+            findings: ["", "", "", ""],
+            reporting_to: "",
+            staff_ft_w_fmla: "",
+            staff_ft_no_fmla: "",
+            staff_pt: "",
+            staff_pd: "",
+            staff_travelers: "",
+            hours_operation: "",
+            or_count: "",
+            clinic_count: "",
+            proc_endoscopes: false,
+            proc_vascular: false,
+            proc_arthroscopic: false,
+            proc_robotic: false,
+            proc_tee: false,
+            has_tracking: false,
+            tracking_system_name: "",
+            pain_points: "",
+            additional_info: "",
+            bot_check: "",
+          });
+        }, []);
+
+        const exportElementToPdf = async (
+          element,
+          filenameBase = "pre-audit-form"
+        ) => {
+          if (!element) return;
+          try {
+            const canvas = await html2canvas(element, {
+              scale: 2,
+              useCORS: true,
+              allowTaint: true,
+              backgroundColor: "#ffffff",
+            });
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF("p", "pt", "a4");
+            const pageWidth = pdf.internal.pageSize.getWidth();
+            const pageHeight = pdf.internal.pageSize.getHeight();
+            const imgWidth = pageWidth - 48;
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+            let position = 24;
+            let remainingHeight = imgHeight;
+
+            pdf.addImage(
+              canvas.toDataURL("image/png"),
+              "PNG",
+              24,
+              position,
+              imgWidth,
+              imgHeight
+            );
+            remainingHeight -= pageHeight - 48;
+
+            while (remainingHeight > 0) {
+              pdf.addPage();
+              position = 24;
+              pdf.addImage(
+                canvas.toDataURL("image/png"),
+                "PNG",
+                24,
+                position - remainingHeight,
+                imgWidth,
+                imgHeight
+              );
+              remainingHeight -= pageHeight - 48;
+            }
+
+            const filenameSafeFacility = (
+              formData?.facility_name || filenameBase
+            )
+              .replace(/[^a-z0-9]+/gi, "-")
+              .toLowerCase();
+            pdf.save(`${filenameSafeFacility}-pre-audit.pdf`);
+          } catch (error) {
+            console.error("PDF generation failed:", error);
+            alert("Failed to generate PDF. Please try again.");
+          }
+        };
+
+        const handleDownloadPdf = async () => {
+          if (!formRef.current) return;
+          console.log(formRef, formRef.current);
+          await exportElementToPdf(
+            formRef.current,
+            submittedData?.facility_name || "spd-assessment"
+          );
+        };
+
+        const handleSubmit = async (e) => {
+          e.preventDefault();
+          setIsSubmitting(true);
+
+          const result = auditSchema.safeParse(formData);
+          if (!result.success) {
+            const fieldErrors = {};
+            result.error.issues.forEach((i) => {
+              const key = i.path[0];
+              if (!fieldErrors[key]) fieldErrors[key] = i.message;
+            });
+            setErrors(fieldErrors);
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            setIsSubmitting(false);
+            return;
+          }
+
+          setErrors({});
+
+          try {
+            // Send to backend endpoint
+            const response = await fetch(
+              "http://localhost:8000/api/spd-preaudit",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+              }
+            );
+
+            if (response.ok) {
+              setSubmittedData(formData);
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            } else {
+              throw new Error("Submission failed");
+            }
+          } catch (error) {
+            console.error("Submission error:", error);
+            alert("Submission failed. PDF has been generated locally instead.");
+            setSubmittedData(formData);
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          } finally {
+            setIsSubmitting(false);
+          }
+        };
+
+        if (submittedData) {
+          return (
+            <div className="py-6">
+              <div
+                ref={summaryRef}
+                className="bg-white/90 backdrop-blur rounded-3xl shadow-soft border border-primary-100 p-8 md:p-10 space-y-8"
+              >
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                  <div className="flex items-center gap-4">
+                    <div className="h-14 w-14 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center">
+                      <svg
+                        className="w-9 h-9"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2.5"
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold tracking-[0.2em] uppercase text-primary-600">
+                        Assessment captured
+                      </p>
+                      <h1 className="mt-1 text-2xl md:text-3xl font-semibold text-slate-900 font-display">
+                        SPD Operational Review Logged
+                      </h1>
+                      <p className="text-sm text-slate-500 mt-1">
+                        Facility:{" "}
+                        <span className="font-medium text-slate-700">
+                          {submittedData.facility_name}
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-3 md:items-end">
+                    <button
+                      onClick={() => window.location.reload()}
+                      className="inline-flex items-center justify-center px-3 py-2 rounded-xl text-xs font-semibold border border-slate-200 text-slate-600 hover:bg-slate-50"
+                    >
+                      Start new assessment
+                    </button>
                   </div>
                 </div>
-              </div>
-
-              <div
-                class="p-8 border md:col-span-12 bg-slate-50 rounded-xl border-slate-100"
-              >
-                <label class="block mb-4 font-serif text-lg text-slate-800"
-                  >Is the facility affiliated with a System Body?</label
-                >
-                <div class="flex gap-8 mb-4">
-                  <label class="flex items-center gap-3 cursor-pointer group">
-                    <input
-                      type="radio"
-                      x-model="affiliated"
-                      name="is_affiliated"
-                      value="y"
-                      class="crown-check"
-                    />
-                    <span class="transition-colors group-hover:text-crown-gold"
-                      >Yes</span
-                    >
-                  </label>
-                  <label class="flex items-center gap-3 cursor-pointer group">
-                    <input
-                      type="radio"
-                      x-model="affiliated"
-                      name="is_affiliated"
-                      value="n"
-                      class="crown-check"
-                    />
-                    <span class="transition-colors group-hover:text-crown-gold"
-                      >No</span
-                    >
-                  </label>
+                <div className="grid md:grid-cols-3 gap-6 text-sm text-slate-600">
+                  <div className="space-y-1">
+                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide">
+                      Assessment
+                    </p>
+                    <p>{submittedData.date}</p>
+                    <p>{submittedData.hours_operation} hours</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide">
+                      Contact
+                    </p>
+                    <p>{submittedData.contact_name}</p>
+                    <p>{submittedData.contact_title}</p>
+                    <p>{submittedData.contact_email}</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide">
+                      Accreditation
+                    </p>
+                    <p>{submittedData.accrediting_name}</p>
+                    <p>Last survey: {submittedData.last_audit_date}</p>
+                  </div>
                 </div>
-                <div
-                  x-show="affiliated === 'y'"
-                  x-transition.opacity
-                  class="pt-6 mt-6 border-t border-slate-200"
-                >
-                  <label
-                    class="block mb-1 text-xs font-bold uppercase text-slate-500"
-                    >Name of Health System</label
-                  >
-                  <input
-                    type="text"
-                    name="system_name"
-                    class="cpc-input"
-                    placeholder="e.g. HCA, Ascension..."
-                  />
+                <div className="border-t border-dashed border-slate-200 pt-6">
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-2">
+                    Major operational pain points
+                  </p>
+                  <p className="text-sm text-slate-700 whitespace-pre-line">
+                    {submittedData.pain_points}
+                  </p>
                 </div>
               </div>
             </div>
+          );
+        }
 
-            <div class="pt-12 mt-16 border-t border-slate-100">
-              <h3 class="mb-8 font-serif text-2xl text-slate-700">
-                Primary Contact
-              </h3>
-              <div class="grid grid-cols-1 gap-12 md:grid-cols-2">
-                <div>
-                  <label
-                    class="block mb-1 text-xs font-bold uppercase text-slate-400"
-                    >Name</label
-                  >
-                  <input type="text" name="contact_name" class="cpc-input" />
-                </div>
-                <div>
-                  <label
-                    class="block mb-1 text-xs font-bold uppercase text-slate-400"
-                    >Title</label
-                  >
-                  <input type="text" name="contact_title" class="cpc-input" />
-                </div>
-                <div>
-                  <label
-                    class="block mb-1 text-xs font-bold uppercase text-slate-400"
-                    >Best Contact Number</label
-                  >
-                  <input
-                    type="tel"
-                    name="contact_phone"
-                    x-mask="(999) 999-9999"
-                    placeholder="(555) 555-5555"
-                    class="cpc-input"
-                  />
-                </div>
-                <div>
-                  <label
-                    class="block mb-1 text-xs font-bold uppercase text-slate-400"
-                    >Email Address</label
-                  >
-                  <input type="email" name="contact_email" class="cpc-input" />
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section
-            id="compliance"
-            class="mb-24 scroll-mt-24"
-            @mouseenter="activeSection = 'compliance'"
-          >
-            <span
-              class="block mb-3 text-xs font-bold tracking-widest uppercase text-crown-gold"
-              >Section 02</span
-            >
-            <h2 class="mb-12 font-serif text-4xl text-slate-900">
-              Regulatory Compliance
-            </h2>
-
-            <div class="grid grid-cols-1 gap-12 mb-12 md:grid-cols-2">
-              <div>
-                <label
-                  class="block mb-1 text-xs font-bold uppercase text-slate-400"
-                  >Accrediting Organization</label
-                >
-                <input
-                  type="text"
-                  name="accrediting_org"
-                  placeholder="e.g. The Joint Commission"
-                  class="cpc-input"
-                />
-              </div>
-              <div>
-                <label
-                  class="block mb-1 text-xs font-bold uppercase text-slate-400"
-                  >Date of Last Audit</label
-                >
-                <input
-                  x-date
-                  type="text"
-                  name="last_audit_date"
-                  class="cpc-input"
-                  placeholder="Select Date"
-                />
-              </div>
-            </div>
-
-            <div class="p-8 mb-12 text-white shadow-lg bg-slate-900 rounded-xl">
-              <label class="block mb-6 font-serif text-lg"
-                >Were there findings specifically for SPD?</label
-              >
-              <div class="flex gap-8 mb-6">
-                <label class="flex items-center gap-3 cursor-pointer">
-                  <input
-                    type="radio"
-                    x-model="findings"
-                    name="has_findings"
-                    value="y"
-                    class="crown-check border-slate-500"
-                  />
-                  <span class="text-slate-200">Yes</span>
-                </label>
-                <label class="flex items-center gap-3 cursor-pointer">
-                  <input
-                    type="radio"
-                    x-model="findings"
-                    name="has_findings"
-                    value="n"
-                    class="crown-check border-slate-500"
-                  />
-                  <span class="text-slate-200">No</span>
-                </label>
-              </div>
-
-              <div
-                x-show="findings === 'y'"
-                x-transition
-                class="pt-6 mt-6 border-t border-slate-700"
-              >
-                <p class="mb-4 text-xs font-bold uppercase text-crown-gold">
-                  Please list the top 4 findings:
-                </p>
-                <div class="grid gap-4">
-                  <template x-for="i in 4">
-                    <div class="flex items-end gap-4">
-                      <span
-                        class="font-serif italic text-slate-500"
-                        x-text="i + '.'"
-                      ></span>
-                      <input
-                        type="text"
-                        :name="'finding_' + i"
-                        class="w-full pb-2 transition-colors bg-transparent border-b outline-none border-slate-700 focus:border-crown-gold"
-                      />
-                    </div>
-                  </template>
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <label
-                class="block mb-1 text-xs font-bold uppercase text-slate-400"
-                >Direct Reporting Line</label
-              >
-              <input
-                type="text"
-                name="reporting_structure"
-                placeholder="Who does SPD report to?"
-                class="cpc-input"
-              />
-            </div>
-          </section>
-
-          <section
-            id="staffing"
-            class="mb-24 scroll-mt-24"
-            @mouseenter="activeSection = 'staffing'"
-          >
-            <span
-              class="block mb-3 text-xs font-bold tracking-widest uppercase text-crown-gold"
-              >Section 03</span
-            >
-            <h2 class="mb-12 font-serif text-4xl text-slate-900">
-              Staffing & Scope
-            </h2>
-
-            <div
-              class="mb-12 overflow-hidden bg-white border shadow-sm border-slate-200 rounded-xl"
-            >
-              <div class="p-4 border-b bg-slate-50 border-slate-200">
-                <h3
-                  class="text-sm font-bold tracking-wider uppercase text-slate-700"
-                >
-                  Department Headcount
-                </h3>
-              </div>
-              <div
-                class="grid grid-cols-1 divide-y md:grid-cols-2 md:divide-y-0 md:divide-x border-slate-200"
-              >
-                <div class="p-6">
-                  <label
-                    class="block text-[10px] font-bold text-slate-400 uppercase mb-2"
-                    >Full Time (Including FMLA)</label
-                  >
-                  <input
-                    type="number"
-                    name="ft_fmla"
-                    class="w-full font-serif text-3xl bg-transparent outline-none text-slate-900 placeholder-slate-200"
-                    placeholder="0"
-                  />
-                </div>
-                <div class="p-6">
-                  <label
-                    class="block text-[10px] font-bold text-slate-400 uppercase mb-2"
-                    >Full Time (Active)</label
-                  >
-                  <input
-                    type="number"
-                    name="ft_active"
-                    class="w-full font-serif text-3xl bg-transparent outline-none text-slate-900 placeholder-slate-200"
-                    placeholder="0"
-                  />
-                </div>
-                <div class="p-6 border-t md:border-t-0 border-slate-200">
-                  <label
-                    class="block text-[10px] font-bold text-slate-400 uppercase mb-2"
-                    >Part Time</label
-                  >
-                  <input
-                    type="number"
-                    name="pt"
-                    class="w-full font-serif text-3xl bg-transparent outline-none text-slate-900 placeholder-slate-200"
-                    placeholder="0"
-                  />
-                </div>
-                <div class="p-6 border-t md:border-t-0 border-slate-200">
-                  <label
-                    class="block text-[10px] font-bold text-slate-400 uppercase mb-2"
-                    >Per Diem</label
-                  >
-                  <input
-                    type="number"
-                    name="per_diem"
-                    class="w-full font-serif text-3xl bg-transparent outline-none text-slate-900 placeholder-slate-200"
-                    placeholder="0"
-                  />
-                </div>
-              </div>
-              <div class="p-6 border-t bg-crown-gold/10 border-slate-200">
-                <label
-                  class="block text-[10px] font-bold text-crown-gold uppercase mb-2"
-                  >Travelers / Agency</label
-                >
-                <input
-                  type="number"
-                  name="travelers"
-                  class="w-full font-serif text-3xl bg-transparent outline-none text-slate-900 placeholder-slate-300"
-                  placeholder="0"
-                />
-              </div>
-            </div>
-
-            <div class="grid grid-cols-1 gap-12 md:grid-cols-2">
-              <div class="md:col-span-2">
-                <label
-                  class="block mb-1 text-xs font-bold uppercase text-slate-400"
-                  >Hours of Operation</label
-                >
-                <input
-                  type="text"
-                  name="hours_operation"
-                  class="cpc-input"
-                  placeholder="e.g. Mon-Fri 0700-2300"
-                />
-              </div>
-              <div>
-                <label
-                  class="block mb-1 text-xs font-bold uppercase text-slate-400"
-                  >Operating Rooms</label
-                >
-                <input type="number" name="or_count" class="cpc-input" />
-              </div>
-              <div>
-                <label
-                  class="block mb-1 text-xs font-bold uppercase text-slate-400"
-                  >Clinics Supported</label
-                >
-                <input type="number" name="clinic_count" class="cpc-input" />
-              </div>
-            </div>
-          </section>
-
-          <section
-            id="processing"
-            class="mb-24 scroll-mt-24"
-            @mouseenter="activeSection = 'processing'"
-          >
-            <span
-              class="block mb-3 text-xs font-bold tracking-widest uppercase text-crown-gold"
-              >Section 04</span
-            >
-            <h2 class="mb-12 font-serif text-4xl text-slate-900">
-              Processing Capabilities
-            </h2>
-
-            <div class="py-2 pl-8 border-l-2 border-crown-gold">
-              <p class="mb-8 font-serif text-xl italic text-slate-600">
-                Indicate which of the following items are processed within the
-                SPD:
-              </p>
-
-              <div class="space-y-2">
-                <template
-                  x-for="item in ['Endoscopes', 'Vascular / Open Heart', 'Arthroscopic', 'Robotic Instruments', 'TEE Probes']"
-                >
-                  <label
-                    class="flex items-center justify-between p-4 transition-all bg-white border rounded shadow-sm cursor-pointer border-slate-100 hover:shadow-md group"
-                  >
-                    <span
-                      class="font-medium transition-colors text-slate-700 group-hover:text-crown-gold"
-                      x-text="item"
-                    ></span>
-                    <input
-                      type="checkbox"
-                      :name="'proc_' + item.toLowerCase().replace(/\s+/g, '_').replace('/', '')"
-                      class="crown-check"
-                    />
-                  </label>
-                </template>
-              </div>
-            </div>
-          </section>
-
-          <section
-            id="narrative"
-            class="mb-24 scroll-mt-24"
-            @mouseenter="activeSection = 'narrative'"
-          >
-            <span
-              class="block mb-3 text-xs font-bold tracking-widest uppercase text-crown-gold"
-              >Section 05</span
-            >
-            <h2 class="mb-12 font-serif text-4xl text-slate-900">
-              Analysis & Narrative
-            </h2>
-
-            <div class="mb-16">
-              <label class="block mb-4 text-sm font-bold text-slate-700"
-                >Is an electronic tracking system utilized?</label
-              >
-              <div class="flex flex-col gap-6 sm:flex-row sm:items-center">
-                <div class="flex gap-8">
-                  <label class="flex items-center gap-3 cursor-pointer">
-                    <input
-                      type="radio"
-                      x-model="tracking"
-                      name="has_tracking"
-                      value="y"
-                      class="crown-check"
-                    />
-                    <span>Yes</span>
-                  </label>
-                  <label class="flex items-center gap-3 cursor-pointer">
-                    <input
-                      type="radio"
-                      x-model="tracking"
-                      name="has_tracking"
-                      value="n"
-                      class="crown-check"
-                    />
-                    <span>No</span>
-                  </label>
-                </div>
-                <div x-show="tracking === 'y'" x-transition class="flex-1">
-                  <input
-                    type="text"
-                    name="tracking_system_name"
-                    placeholder="Name of System (e.g. CensiTrac, SPM)"
-                    class="cpc-input"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div class="space-y-16">
-              <div>
-                <label class="block mb-2 font-serif text-2xl text-slate-800"
-                  >Operational Pain Points</label
-                >
-                <p class="max-w-2xl mb-6 text-sm text-slate-500">
-                  Please detail the major challenges the department is currently
-                  facing.
-                </p>
-                <textarea
-                  name="pain_points"
-                  x-data="{ resize() { $el.style.height = 'auto'; $el.style.height = $el.scrollHeight + 'px' } }"
-                  @input="resize()"
-                  class="w-full p-6 overflow-hidden leading-relaxed transition-all border bg-slate-50 border-slate-200 rounded-xl focus:outline-none focus:border-crown-gold focus:bg-white text-slate-700"
-                  placeholder="Type here..."
-                  rows="4"
-                ></textarea>
-              </div>
-
-              <div>
-                <label class="block mb-2 font-serif text-2xl text-slate-800"
-                  >Additional Information</label
-                >
-                <textarea
-                  name="additional_info"
-                  x-data="{ resize() { $el.style.height = 'auto'; $el.style.height = $el.scrollHeight + 'px' } }"
-                  @input="resize()"
-                  class="w-full p-6 overflow-hidden leading-relaxed transition-all border bg-slate-50 border-slate-200 rounded-xl focus:outline-none focus:border-crown-gold focus:bg-white text-slate-700"
-                  placeholder="Any other context..."
-                  rows="4"
-                ></textarea>
-              </div>
-            </div>
-          </section>
-
-          <div
-            class="fixed bottom-0 left-0 right-0 z-40 flex items-center justify-between p-6 transition-transform duration-300 border-t bg-white/95 backdrop-blur-md border-slate-200 lg:pl-80"
-          >
-            <div class="hidden md:block">
-              <p class="text-xs tracking-widest uppercase text-slate-400">
+        return (
+          <div className="space-y-8" ref={formRef}>
+            <header className="text-center space-y-4">
+              <p className="text-xs font-semibold tracking-[0.35em] uppercase text-primary-600">
                 Crown Point Consulting
               </p>
-            </div>
-            <button
-              type="submit"
-              class="w-full px-10 py-4 text-sm font-medium tracking-wide text-white uppercase transition-all duration-300 rounded shadow-xl md:w-auto bg-slate-900 hover:bg-crown-gold hover:shadow-2xl"
+              <h1 className="text-3xl md:text-4xl font-semibold text-slate-900 font-display tracking-tight">
+                SPD Pre‑Audit Operational Review
+              </h1>
+              <p className="max-w-2xl mx-auto text-sm text-slate-500">
+                Capture a concise snapshot of sterile processing operations,
+                staffing, and survey readiness in a single structured
+                assessment.
+              </p>
+            </header>
+            <form
+              onSubmit={handleSubmit}
+              className="form-card p-6 md:p-10 space-y-10 border border-primary-50"
             >
-              Submit Assessment
-            </button>
+              <input
+                type="text"
+                className="hp-field"
+                value={formData.bot_check}
+                onChange={(e) =>
+                  setFormData({ ...formData, bot_check: e.target.value })
+                }
+                tabIndex="-1"
+              />
+
+              <SectionShell
+                kicker="Section 1"
+                title="Facility identity"
+                description="Confirm basic identifying information for the facility and trauma designation."
+              >
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <Field label="Assessment date" error={errors.date}>
+                    <Input
+                      type="date"
+                      value={formData.date}
+                      onChange={(e) =>
+                        setFormData({ ...formData, date: e.target.value })
+                      }
+                    />
+                  </Field>
+                  <Field
+                    label="Facility name"
+                    error={errors.facility_name}
+                    helper="As it appears on accreditation documents"
+                  >
+                    <Input
+                      placeholder="e.g. Cedars-Sinai Medical Center"
+                      value={formData.facility_name}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          facility_name: e.target.value,
+                        })
+                      }
+                    />
+                  </Field>
+                </div>
+                <Field
+                  label="Facility Address"
+                  error={errors.facility_address}
+                  helper="Street, city, state, zip"
+                >
+                  <Input
+                    placeholder="123 Medical Plaza, City, ST 00000"
+                    name="address"
+                    value={formData.facility_address}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        facility_address: e.target.value,
+                      })
+                    }
+                  />
+                </Field>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end bg-slate-50/80 p-5 rounded-2xl border border-slate-200">
+                  <Field label="Health system affiliation?">
+                    <RadioGroup
+                      value={formData.is_affiliated}
+                      onChange={(v) =>
+                        setFormData({ ...formData, is_affiliated: v })
+                      }
+                    />
+                  </Field>
+                  {formData.is_affiliated && (
+                    <Field
+                      label="System name"
+                      error={errors.system_name}
+                      className="md:col-span-2"
+                    >
+                      <Input
+                        placeholder="e.g. HCA Healthcare, Ascension, Tenet"
+                        value={formData.system_name}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            system_name: e.target.value,
+                          })
+                        }
+                      />
+                    </Field>
+                  )}
+                  <Field
+                    label="Trauma level"
+                    error={errors.trauma_level}
+                    className={!formData.is_affiliated ? "md:col-span-2" : ""}
+                  >
+                    <Select
+                      value={formData.trauma_level}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          trauma_level: e.target.value,
+                        })
+                      }
+                      options={[
+                        { value: "Level I", label: "Level I (Comprehensive)" },
+                        { value: "Level II", label: "Level II (Major)" },
+                        { value: "Level III", label: "Level III (General)" },
+                        { value: "Level IV", label: "Level IV (Basic)" },
+                        {
+                          value: "Level V",
+                          label: "Level V (Critical Access)",
+                        },
+                        { value: "N/A", label: "None/Non-Trauma Center" },
+                      ]}
+                    />
+                  </Field>
+                </div>
+              </SectionShell>
+
+              <SectionShell
+                kicker="Section 2"
+                title="Point of contact"
+                description="Identify the primary leader who will coordinate the SPD review."
+              >
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <Field label="Name" error={errors.contact_name}>
+                    <Input
+                      placeholder="Jane Doe"
+                      value={formData.contact_name}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          contact_name: e.target.value,
+                        })
+                      }
+                    />
+                  </Field>
+                  <Field label="Title" error={errors.contact_title}>
+                    <Input
+                      placeholder="SPD Manager/Director of Sterile Processing"
+                      value={formData.contact_title}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          contact_title: e.target.value,
+                        })
+                      }
+                    />
+                  </Field>
+                  <Field label="Phone" error={errors.contact_phone}>
+                    <Input
+                      type="tel"
+                      placeholder="(555) 000-0000"
+                      value={formData.contact_phone}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          contact_phone: e.target.value,
+                        })
+                      }
+                    />
+                  </Field>
+                  <Field label="Email" error={errors.contact_email}>
+                    <Input
+                      type="email"
+                      placeholder="manager@hospital.org"
+                      value={formData.contact_email}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          contact_email: e.target.value,
+                        })
+                      }
+                    />
+                  </Field>
+                </div>
+              </SectionShell>
+
+              <SectionShell
+                kicker="Section 3"
+                title="Regulatory context"
+                description="Summarize accreditation and recent survey history related to sterile processing."
+              >
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <Field
+                    label="Accrediting body"
+                    error={errors.accrediting_name}
+                  >
+                    <Input
+                      placeholder="e.g. The Joint Commission (TJC), DNV, AAAHC"
+                      value={formData.accrediting_name}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          accrediting_name: e.target.value,
+                        })
+                      }
+                    />
+                  </Field>
+                  <Field
+                    label="Last survey/audit date"
+                    error={errors.last_audit_date}
+                  >
+                    <Input
+                      type="date"
+                      max={today}
+                      value={formData.last_audit_date}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          last_audit_date: e.target.value,
+                        })
+                      }
+                    />
+                  </Field>
+                </div>
+                <div className="bg-slate-900 p-6 rounded-2xl space-y-4 border border-slate-700">
+                  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <div>
+                      <p className="text-xs font-semibold tracking-[0.2em] uppercase text-slate-400">
+                        Recent SPD findings
+                      </p>
+                      <p className="mt-1 text-sm text-slate-200">
+                        Indicate if the most recent accreditation or regulatory
+                        survey cited sterile processing.
+                      </p>
+                    </div>
+                    <div className="md:w-auto">
+                      <RadioGroup
+                        value={formData.has_findings}
+                        onChange={(v) =>
+                          setFormData({ ...formData, has_findings: v })
+                        }
+                        yesLabel="Yes, cited"
+                        noLabel="No findings"
+                      />
+                    </div>
+                  </div>
+                  {formData.has_findings && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {[0, 1, 2, 3].map((i) => (
+                        <input
+                          key={i}
+                          placeholder={`Finding ${
+                            i + 1
+                          } (e.g. Bioburden on trays)`}
+                          className="bg-slate-800/80 border border-slate-600 text-slate-50 placeholder:text-slate-400 p-3 rounded-lg text-sm focus:outline-none focus:border-primary-300 focus:ring-1 focus:ring-primary-400/60"
+                          value={formData.findings[i]}
+                          onChange={(e) => {
+                            const newFindings = [...formData.findings];
+                            newFindings[i] = e.target.value;
+                            setFormData({ ...formData, findings: newFindings });
+                          }}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </div>
+                <Field
+                  label="Direct reporting line"
+                  error={errors.reporting_to}
+                  helper="Role or department SPD reports into"
+                >
+                  <Input
+                    name="reporting-line"
+                    autoComplete="organization-title"
+                    placeholder="e.g. Perioperative Director, Chief Nursing Officer"
+                    value={formData.reporting_to}
+                    onChange={(e) =>
+                      setFormData({ ...formData, reporting_to: e.target.value })
+                    }
+                  />
+                </Field>
+              </SectionShell>
+
+              <SectionShell
+                kicker="Section 4"
+                title="Staffing & scope"
+                description="Outline current personnel mix and perioperative footprint."
+              >
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                  <Field label="FT w/FMLA" error={errors.staff_ft_w_fmla}>
+                    <Input
+                      type="number"
+                      value={formData.staff_ft_w_fmla}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          staff_ft_w_fmla: e.target.value,
+                        })
+                      }
+                    />
+                  </Field>
+                  <Field label="FT no FMLA" error={errors.staff_ft_no_fmla}>
+                    <Input
+                      type="number"
+                      value={formData.staff_ft_no_fmla}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          staff_ft_no_fmla: e.target.value,
+                        })
+                      }
+                    />
+                  </Field>
+                  <Field label="Part time" error={errors.staff_pt}>
+                    <Input
+                      type="number"
+                      value={formData.staff_pt}
+                      onChange={(e) =>
+                        setFormData({ ...formData, staff_pt: e.target.value })
+                      }
+                    />
+                  </Field>
+                  <Field label="Per diem" error={errors.staff_pd}>
+                    <Input
+                      type="number"
+                      value={formData.staff_pd}
+                      onChange={(e) =>
+                        setFormData({ ...formData, staff_pd: e.target.value })
+                      }
+                    />
+                  </Field>
+                  <Field label="Travelers" error={errors.staff_travelers}>
+                    <Input
+                      type="number"
+                      value={formData.staff_travelers}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          staff_travelers: e.target.value,
+                        })
+                      }
+                    />
+                  </Field>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <Field
+                    label="Hours of operation"
+                    error={errors.hours_operation}
+                    helper="e.g. 24/7 or 06:30–23:00"
+                  >
+                    <Input
+                      placeholder="e.g. 24/7 or 06:30–23:00"
+                      value={formData.hours_operation}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          hours_operation: e.target.value,
+                        })
+                      }
+                    />
+                  </Field>
+                  <Field label="Main OR count" error={errors.or_count}>
+                    <Input
+                      type="number"
+                      placeholder="12"
+                      value={formData.or_count}
+                      onChange={(e) =>
+                        setFormData({ ...formData, or_count: e.target.value })
+                      }
+                    />
+                  </Field>
+                  <Field
+                    label="Clinic/satellite areas"
+                    error={errors.clinic_count}
+                  >
+                    <Input
+                      type="number"
+                      placeholder="4"
+                      value={formData.clinic_count}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          clinic_count: e.target.value,
+                        })
+                      }
+                    />
+                  </Field>
+                </div>
+              </SectionShell>
+
+              <SectionShell
+                kicker="Section 5"
+                title="Processing scope & tracking"
+                description="Identify high-complexity items processed in SPD and current tracking tools."
+              >
+                <Field label="Specialized items processed in SPD">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-1">
+                    <Checkbox
+                      label="Flexible endoscopes"
+                      checked={formData.proc_endoscopes}
+                      onChange={(v) =>
+                        setFormData({ ...formData, proc_endoscopes: v })
+                      }
+                    />
+                    <Checkbox
+                      label="Vascular/open heart"
+                      checked={formData.proc_vascular}
+                      onChange={(v) =>
+                        setFormData({ ...formData, proc_vascular: v })
+                      }
+                    />
+                    <Checkbox
+                      label="Arthroscopic"
+                      checked={formData.proc_arthroscopic}
+                      onChange={(v) =>
+                        setFormData({ ...formData, proc_arthroscopic: v })
+                      }
+                    />
+                    <Checkbox
+                      label="Robotic (da Vinci)"
+                      checked={formData.proc_robotic}
+                      onChange={(v) =>
+                        setFormData({ ...formData, proc_robotic: v })
+                      }
+                    />
+                    <Checkbox
+                      label="TEE probes"
+                      checked={formData.proc_tee}
+                      onChange={(v) =>
+                        setFormData({ ...formData, proc_tee: v })
+                      }
+                    />
+                  </div>
+                </Field>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
+                  <Field label="Instrument tracking system?">
+                    <RadioGroup
+                      value={formData.has_tracking}
+                      onChange={(v) =>
+                        setFormData({ ...formData, has_tracking: v })
+                      }
+                    />
+                  </Field>
+                  {formData.has_tracking && (
+                    <Field label="Tracking system name">
+                      <Input
+                        placeholder="e.g. Censis, SPM, T-DOC, CaseTrack"
+                        value={formData.tracking_system_name}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            tracking_system_name: e.target.value,
+                          })
+                        }
+                      />
+                    </Field>
+                  )}
+                </div>
+              </SectionShell>
+
+              <SectionShell
+                kicker="Section 6"
+                title="Narrative context"
+                description="Highlight pain points and strategic considerations that should shape the review."
+              >
+                <Field
+                  label="Major operational pain points"
+                  error={errors.pain_points}
+                >
+                  <textarea
+                    className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl min-h-[150px] focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 outline-none transition-all text-sm placeholder:text-slate-400"
+                    placeholder="e.g. High turnover, backlogged sterilization, outdated washer-disinfectors..."
+                    value={formData.pain_points}
+                    onChange={(e) =>
+                      setFormData({ ...formData, pain_points: e.target.value })
+                    }
+                  />
+                </Field>
+                <Field label="Additional strategic information">
+                  <textarea
+                    className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl min-h-[100px] focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 outline-none transition-all text-sm placeholder:text-slate-400"
+                    placeholder="Upcoming renovations, new service lines, capital planning, etc."
+                    value={formData.additional_info}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        additional_info: e.target.value,
+                      })
+                    }
+                  />
+                </Field>
+              </SectionShell>
+
+              <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={saveDraftNow}
+                  className="flex-1 py-3 px-4 border border-slate-200 rounded-2xl font-semibold text-sm text-slate-700 hover:bg-slate-50 transition-all"
+                >
+                  Save Draft
+                </button>
+                <button
+                  type="button"
+                  onClick={clearDraft}
+                  className="px-4 py-3 border border-rose-200 rounded-2xl font-semibold text-sm text-rose-600 hover:bg-rose-50 transition-all"
+                >
+                  Clear Form
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="flex-1 py-3.5 bg-primary-600 text-white rounded-2xl font-semibold text-sm tracking-wide shadow-soft hover:bg-primary-700 hover:-translate-y-[1px] transition-all active:translate-y-0 active:shadow-md flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none"
+                >
+                  <span>
+                    {isSubmitting
+                      ? "Submitting..."
+                      : "Submit operational review"}
+                  </span>
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M13 5l7 7m0 0l-7 7m7-7H6"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </form>
           </div>
-        </form>
-      </main>
-    </div>
+        );
+      };
 
-    <script>
-      function auditForm() {
-        return {
-          activeSection: "identity",
-          affiliated: false,
-          findings: "No Findings",
-          tracking: "No Tracking",
-          sections: {
-            identity: "Identity",
-            compliance: "Compliance",
-            staffing: "Staffing",
-            processing: "Processing",
-            narrative: "Narrative",
-          },
-          get progress() {
-            const keys = Object.keys(this.sections);
-            const index = keys.indexOf(this.activeSection);
-            return ((index + 1) / keys.length) * 100;
-          },
-          submitForm() {
-            const form = document.getElementById("auditForm");
-            const formData = new FormData(form);
-            console.log(formData);
-            const json = JSON.stringify(Object.fromEntries(formData));
-            console.log(json);
-
-            // Submit to Netlify
-            // fetch("/", {
-            //   method: "POST",
-            //   headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            //   body: new URLSearchParams(formData).toString(),
-            // })
-            //   .then(() => {
-            //     Swal.fire({
-            //       title: "Assessment Submitted",
-            //       text: "The audit data has been securely recorded.",
-            //       icon: "success",
-            //       confirmButtonColor: "#1e293b",
-            //       confirmButtonText: "Return to Main Page",
-            //     }).then(() => {
-            //       form.reset();
-            //       this.affiliated = "n";
-            //       this.findings = "n";
-            //       this.tracking = "n";
-            //       window.location.href = "/";
-            //     });
-            //   })
-            //   .catch((error) => {
-            //     Swal.fire({
-            //       title: "Error",
-            //       text: "There was a problem submitting the form. Please try again.",
-            //       icon: "error",
-            //       confirmButtonColor: "#1e293b",
-            //     });
-            //     console.error("Form submission error:", error);
-            //   });
-          },
-        };
-      }
-
-      document.addEventListener("alpine:init", () => {
-        Alpine.directive("date", (el) => {
-          flatpickr(el, {
-            dateFormat: "F j, Y",
-            altInput: true,
-            altFormat: "F j, Y",
-            allowInput: true,
-          });
-        });
-      });
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<PreAuditForm />);
     </script>
   </body>
 </html>
