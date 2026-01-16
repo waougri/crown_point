@@ -8,6 +8,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "https://crownpointconsult.com",
+        "https://www.crownpointconsult.com",
     ],
     allow_credentials=True,
     allow_methods=["*"],
