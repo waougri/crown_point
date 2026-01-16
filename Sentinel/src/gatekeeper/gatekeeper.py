@@ -260,13 +260,8 @@ def generate_html_email(data: AuditData):
     </html>
     """
 
-@gatekeeper_router.post("/api/spd-preaudit")
+@gatekeeper_router.post("/api/gatekeeper", status_code=201)
 async def submit_audit(data: AuditData):
-    # EMAIL CONFIGURATION
-    # SENDER_EMAIL = "your-reporting@gmail.com"
-    # SENDER_PASSWORD = "your-app-password" # Use App Passwords for Gmail
-    # RECEIVER_EMAIL = "company-inbox@crownpointconsulting.com"
-    #
 
     try:
         send_audit_confirmation("aaougri@gmail.com", data.facility_name, generate_html_email(data))
