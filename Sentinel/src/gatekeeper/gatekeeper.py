@@ -260,7 +260,8 @@ async def submit_audit(data: AuditData, background_tasks: BackgroundTasks):
 
     try:
         email_str = generate_html_email(data)
-        background_tasks.add_task(send_audit_confirmation, SENDER_EMAIL, data.facility_name, email_str )
+        # background_tasks.add_task(send_audit_confirmation, SENDER_EMAIL, data.facility_name, email_str )
+        send_audit_confirmation(SENDER_EMAIL, data.facility_name, email_str)
         return {"status": "success", "message": "Email sent successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=e)

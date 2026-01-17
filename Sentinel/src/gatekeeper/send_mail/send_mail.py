@@ -23,7 +23,7 @@ def send_audit_confirmation(recipient_email: str, facility_name: str, email_cont
                         "Email": recipient_email
                     }
                 ],
-                "Subject": f"Audit Received: {facility_name}",
+                "Subject": f"New Audit Request from {facility_name}",
                 "HTMLPart": email_content
             }
         ]
@@ -38,3 +38,4 @@ def send_audit_confirmation(recipient_email: str, facility_name: str, email_cont
             print(f"Failed to send email to {recipient_email}")
     except Exception as e:
         print(f"Failed to send email to {recipient_email}")
+        raise e
