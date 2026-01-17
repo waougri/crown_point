@@ -1,14 +1,9 @@
-import pprint
-
-from fastapi import FastAPI, HTTPException, APIRouter, BackgroundTasks
-from pydantic import BaseModel, EmailStr
 from typing import List, Optional
-from fastapi.middleware.cors import CORSMiddleware
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 
-from src.gatekeeper.send_mail.send_mail import SENDER_EMAIL, SENDER_PASSWORD, send_audit_confirmation
+from fastapi import HTTPException, APIRouter, BackgroundTasks
+from pydantic import BaseModel, EmailStr
+
+from src.gatekeeper.send_mail.send_mail import SENDER_EMAIL, send_audit_confirmation
 
 gatekeeper_router = APIRouter()
 # Allow your frontend to communicate with the backend

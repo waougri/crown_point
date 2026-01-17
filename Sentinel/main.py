@@ -9,6 +9,8 @@ app.add_middleware(
     allow_origins=[
         "https://crownpointconsult.com",
         "https://www.crownpointconsult.com",
+        "http://localhost:8000",
+        "http://127.0.0.1:5500"
     ],
     allow_credentials=True,
     allow_methods=["*"],

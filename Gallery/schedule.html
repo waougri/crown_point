@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -407,7 +407,7 @@
 
         const exportElementToPdf = async (
           element,
-          filenameBase = "pre-audit-form"
+          filenameBase = "pre-audit-form",
         ) => {
           if (!element) return;
           try {
@@ -432,7 +432,7 @@
               24,
               position,
               imgWidth,
-              imgHeight
+              imgHeight,
             );
             remainingHeight -= pageHeight - 48;
 
@@ -445,7 +445,7 @@
                 24,
                 position - remainingHeight,
                 imgWidth,
-                imgHeight
+                imgHeight,
               );
               remainingHeight -= pageHeight - 48;
             }
@@ -467,7 +467,7 @@
           console.log(formRef, formRef.current);
           await exportElementToPdf(
             formRef.current,
-            submittedData?.facility_name || "spd-assessment"
+            submittedData?.facility_name || "spd-assessment",
           );
         };
 
@@ -500,7 +500,7 @@
                   "Content-Type": "application/json",
                 },
                 body: JSON.stringify(formData),
-              }
+              },
             );
 
             if (response.ok) {
