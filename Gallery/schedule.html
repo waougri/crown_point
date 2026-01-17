@@ -278,7 +278,6 @@
       const Input = (props) => (
         <input
           {...props}
-          autoComplete="on"
           className={`w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 transition-all ${props.className || ""}`}
         />
       );
@@ -465,6 +464,7 @@
             showSuccessToast("Form cleared — ready for new assessment");
           }
           // If closed → form remains as submitted (useful for review)
+          window.location.href = "/";
         };
         React.useEffect(() => {
           try {
@@ -584,7 +584,7 @@
           } catch (error) {
             console.error("Submission error:", error);
             setSubmittedData(formData);
-            window.scrollTo({ top: 0, behavior: "smooth" });
+            window.location.href = "/";
             // Offer the user to download the local PDF since the server submission failed
           } finally {
             setIsSubmitting(false);
@@ -660,7 +660,8 @@
                   helper="Street, city, state, zip"
                 >
                   <Input
-                    placeholder="123 Medical Plaza, City, ST 00000"
+                    placeholder="Enter your address"
+                    autoComplete="address"
                     name="address"
                     value={formData.facility_address}
                     onChange={(e) =>
@@ -737,6 +738,7 @@
                   <Field label="Name" error={errors.contact_name}>
                     <Input
                       placeholder="Jane Doe"
+                      autoComplete="name"
                       value={formData.contact_name}
                       onChange={(e) =>
                         setFormData({
@@ -761,6 +763,7 @@
                   <Field label="Phone" error={errors.contact_phone}>
                     <Input
                       type="tel"
+                      autoComplete="tel"
                       placeholder="(555) 000-0000"
                       value={formData.contact_phone}
                       onChange={(e) =>
@@ -775,6 +778,7 @@
                     <Input
                       type="email"
                       placeholder="manager@hospital.org"
+                      autoComplete="email"
                       value={formData.contact_email}
                       onChange={(e) =>
                         setFormData({
