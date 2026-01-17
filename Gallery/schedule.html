@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="title"
-      content="SPD Pre-Audit Assessment | Crown Point Consulting"
+      content="SPD Pre-Audit Assessment | CrownPoint Consulting"
     />
     <meta
       name="description"
@@ -32,7 +32,7 @@
     />
     <meta
       property="og:title"
-      content="SPD Pre-Audit Assessment | Crown Point Consulting"
+      content="SPD Pre-Audit Assessment | CrownPoint Consulting"
     />
     <meta
       property="og:description"
@@ -42,20 +42,29 @@
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:title" content="SPD Pre-Audit Assessment" />
     <meta property="twitter:image" content="assets/bg_less_logo.png" />
-    <title>Pre-Audit Assessment | Crown Point Consulting</title>
+    <title>Pre-Audit Assessment | CrownPoint Consulting</title>
+
+    <!-- Fonts + Tailwind -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
       rel="stylesheet"
     />
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- React + Babel + Zod -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://unpkg.com/zod@3.21.4/lib/index.umd.js"></script>
+
     <!-- PDF libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- SWEETALERT2 (Swal) -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
       tailwind.config = {
         theme: {
@@ -85,6 +94,7 @@
         },
       };
     </script>
+
     <style>
       body {
         font-family: "Inter", sans-serif;
@@ -115,28 +125,83 @@
       input:-webkit-autofill:hover,
       input:-webkit-autofill:focus,
       input:-webkit-autofill:active {
-        -webkit-box-shadow: 0 0 0 30px #f8fafc inset !important;
-        box-shadow: 0 0 0 30px #f8fafc inset !important;
+        -webkit-box-shadow: 0 0 30px #f8fafc inset !important;
+        box-shadow: 0 0 30px #f8fafc inset !important;
         -webkit-text-fill-color: #475569 !important;
         transition: background-color 5000s ease-in-out 0s;
       }
     </style>
   </head>
+
   <body class="min-h-screen text-slate-900">
     <div class="relative overflow-hidden">
       <!-- decorative gradient blob -->
-      <div
-        class="pointer-events-none fixed inset-x-0 top-0 z-10 flex justify-center opacity-50"
-      >
-        <div class="h-64 w-[32rem] bg-primary-100 blur-3xl"></div>
-      </div>
+
       <div id="root" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10"></div>
     </div>
+
     <script type="text/babel">
       const { useState, useRef, useCallback } = React;
       const z = Zod;
       const today = new Date().toISOString().split("T")[0];
 
+      /* ---------- Swal Helpers ---------- */
+      function createToast() {
+        return Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 2000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener("mouseenter", Swal.stopTimer);
+            toast.addEventListener("mouseleave", Swal.resumeTimer);
+          },
+        });
+      }
+
+      const toast = createToast();
+
+      function showSuccessToast(title = "Saved") {
+        toast.fire({ icon: "success", title });
+      }
+
+      function showErrorToast(title = "Something went wrong") {
+        toast.fire({ icon: "error", title });
+      }
+
+      async function showSubmissionModal({ facilityName, onDownload, onNew }) {
+        const { isConfirmed, isDenied } = await Swal.fire({
+          title: "Assessment captured",
+          html: `<div class="text-left"><p class="mb-2">Facility: <strong>${facilityName || ""}</strong></p><p class="text-sm text-slate-600">Your assessment was recorded. You can download a PDF copy or start a new assessment.</p></div>`,
+          icon: "success",
+          showDenyButton: true,
+          showCancelButton: true,
+          confirmButtonText: "Download PDF",
+          denyButtonText: "Start new assessment",
+          cancelButtonText: "Close",
+          customClass: { popup: "rounded-xl" },
+        });
+
+        if (isConfirmed && typeof onDownload === "function") onDownload();
+        if (isDenied && typeof onNew === "function") onNew();
+      }
+
+      async function showSubmissionErrorModal({ message = "", onDownload }) {
+        const { isConfirmed } = await Swal.fire({
+          title: "Submission failed",
+          html: `<p class="text-sm">${message || "Submission to server failed."}</p>`,
+          icon: "error",
+          showCancelButton: true,
+          confirmButtonText: "Download PDF",
+          cancelButtonText: "Close",
+          customClass: { popup: "rounded-xl" },
+        });
+
+        if (isConfirmed && typeof onDownload === "function") onDownload();
+      }
+
+      /* ---------- Schema (unchanged) ---------- */
       const auditSchema = z.object({
         date: z.string().min(1, "Date is required"),
         facility_name: z.string().min(2, "Facility name is required"),
@@ -173,6 +238,7 @@
         bot_check: z.string().max(0),
       });
 
+      /* ---------- UI primitives (unchanged) ---------- */
       const SectionShell = ({ kicker, title, children, description }) => (
         <section className="space-y-6">
           <div className="flex flex-col gap-1">
@@ -213,9 +279,7 @@
         <input
           {...props}
           autoComplete="on"
-          className={`w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 transition-all ${
-            props.className || ""
-          }`}
+          className={`w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 transition-all ${props.className || ""}`}
         />
       );
 
@@ -229,22 +293,14 @@
           <button
             type="button"
             onClick={() => onChange(true)}
-            className={`px-4 py-1.5 text-xs font-semibold rounded-full transition-all ${
-              value
-                ? "bg-primary-600 text-white shadow-sm"
-                : "text-slate-500 hover:text-slate-700"
-            }`}
+            className={`px-4 py-1.5 text-xs font-semibold rounded-full transition-all ${value ? "bg-primary-600 text-white shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
           >
             {yesLabel}
           </button>
           <button
             type="button"
             onClick={() => onChange(false)}
-            className={`px-4 py-1.5 text-xs font-semibold rounded-full transition-all ${
-              !value
-                ? "bg-rose-500 text-white shadow-sm"
-                : "text-slate-500 hover:text-slate-700"
-            }`}
+            className={`px-4 py-1.5 text-xs font-semibold rounded-full transition-all ${!value ? "bg-rose-500 text-white shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
           >
             {noLabel}
           </button>
@@ -268,9 +324,7 @@
           <select
             {...props}
             autoComplete="off"
-            className={`w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 appearance-none ${
-              props.className || ""
-            }`}
+            className={`w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 appearance-none ${props.className || ""}`}
           >
             <option value="">Select level...</option>
             {options.map((opt) => (
@@ -285,6 +339,7 @@
         </div>
       );
 
+      /* ---------- Main form component w/ Swal integration ---------- */
       const PreAuditForm = () => {
         const [formData, setFormData] = useState({
           date: today,
@@ -321,6 +376,7 @@
           additional_info: "",
           bot_check: "",
         });
+
         const [errors, setErrors] = useState({});
         const [submittedData, setSubmittedData] = useState(null);
         const [isSubmitting, setIsSubmitting] = useState(false);
@@ -328,11 +384,94 @@
         const formRef = useRef(null);
         const autosaveTimer = useRef(null);
 
+        const showSuccessModal = async () => {
+          const result = await Swal.fire({
+            title: "Assessment Submitted!",
+            html: `
+        <div class="text-center space-y-5 mt-5">
+          <p class="text-slate-700 text-base">
+            Your SPD Pre-Audit Assessment for
+            <br><strong>${formData.facility_name || "the facility"}</strong>
+            has been successfully recorded.
+          </p>
+          <p class="text-sm text-slate-500">
+            Thank you for your submission.<br>
+            What would you like to do next?
+          </p>
+        </div>
+      `,
+            icon: "success",
+            iconColor: "#a855f7",
+            showConfirmButton: false,
+            showDenyButton: true,
+            denyButtonText: "Start New Assessment",
+            denyButtonColor: "#6b7280",
+            showCancelButton: true,
+            cancelButtonText: "Close",
+            cancelButtonColor: "#9333ea",
+            reverseButtons: true,
+            customClass: {
+              popup: "rounded-2xl shadow-2xl max-w-lg",
+              title: "text-2xl font-display font-semibold text-slate-800 pt-4",
+              htmlContainer: "text-base",
+              actions: "gap-4 mt-8",
+              denyButton: "px-7 py-3.5 text-sm font-medium rounded-xl",
+              cancelButton:
+                "px-7 py-3.5 text-sm font-medium rounded-xl bg-primary-600 text-white hover:bg-primary-700",
+            },
+            backdrop: "rgba(15,23,42,0.65)",
+          });
+
+          if (result.isDenied) {
+            // Reset form
+            setFormData({
+              date: today,
+              facility_name: "",
+              facility_address: "",
+              is_affiliated: false,
+              system_name: "",
+              trauma_level: "",
+              contact_name: "",
+              contact_title: "",
+              contact_phone: "",
+              contact_email: "",
+              accrediting_name: "",
+              last_audit_date: "",
+              has_findings: false,
+              findings: ["", "", "", ""],
+              reporting_to: "",
+              staff_ft_w_fmla: "",
+              staff_ft_no_fmla: "",
+              staff_pt: "",
+              staff_pd: "",
+              staff_travelers: "",
+              hours_operation: "",
+              or_count: "",
+              clinic_count: "",
+              proc_endoscopes: false,
+              proc_vascular: false,
+              proc_arthroscopic: false,
+              proc_robotic: false,
+              proc_tee: false,
+              has_tracking: false,
+              tracking_system_name: "",
+              pain_points: "",
+              additional_info: "",
+              bot_check: "",
+            });
+            setErrors({});
+            localStorage.removeItem("preAuditDraft"); // optional: clear draft too
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            showSuccessToast("Form cleared — ready for new assessment");
+          }
+          // If closed → form remains as submitted (useful for review)
+        };
         React.useEffect(() => {
           try {
             const draft = localStorage.getItem("preAuditDraft");
             if (draft) {
               setFormData((prev) => ({ ...prev, ...JSON.parse(draft) }));
+              showSuccessToast("Draft loaded");
             }
           } catch (e) {
             console.warn("No draft found", e);
@@ -351,18 +490,17 @@
             }
           }, 600);
           return () => {
-            if (autosaveTimer.current) {
-              clearTimeout(autosaveTimer.current);
-            }
+            if (autosaveTimer.current) clearTimeout(autosaveTimer.current);
           };
         }, [formData]);
 
         const saveDraftNow = useCallback(() => {
           try {
             localStorage.setItem("preAuditDraft", JSON.stringify(formData));
-            alert("Draft saved locally.");
+            showSuccessToast("Draft saved locally");
           } catch (e) {
-            alert("Failed to save draft.");
+            console.error(e);
+            showErrorToast("Failed to save draft");
           }
         }, [formData]);
 
@@ -403,78 +541,12 @@
             additional_info: "",
             bot_check: "",
           });
+          showToast("Draft cleared");
         }, []);
-
-        const exportElementToPdf = async (
-          element,
-          filenameBase = "pre-audit-form",
-        ) => {
-          if (!element) return;
-          try {
-            const canvas = await html2canvas(element, {
-              scale: 2,
-              useCORS: true,
-              allowTaint: true,
-              backgroundColor: "#ffffff",
-            });
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF("p", "pt", "a4");
-            const pageWidth = pdf.internal.pageSize.getWidth();
-            const pageHeight = pdf.internal.pageSize.getHeight();
-            const imgWidth = pageWidth - 48;
-            const imgHeight = (canvas.height * imgWidth) / canvas.width;
-            let position = 24;
-            let remainingHeight = imgHeight;
-
-            pdf.addImage(
-              canvas.toDataURL("image/png"),
-              "PNG",
-              24,
-              position,
-              imgWidth,
-              imgHeight,
-            );
-            remainingHeight -= pageHeight - 48;
-
-            while (remainingHeight > 0) {
-              pdf.addPage();
-              position = 24;
-              pdf.addImage(
-                canvas.toDataURL("image/png"),
-                "PNG",
-                24,
-                position - remainingHeight,
-                imgWidth,
-                imgHeight,
-              );
-              remainingHeight -= pageHeight - 48;
-            }
-
-            const filenameSafeFacility = (
-              formData?.facility_name || filenameBase
-            )
-              .replace(/[^a-z0-9]+/gi, "-")
-              .toLowerCase();
-            pdf.save(`${filenameSafeFacility}-pre-audit.pdf`);
-          } catch (error) {
-            console.error("PDF generation failed:", error);
-            alert("Failed to generate PDF. Please try again.");
-          }
-        };
-
-        const handleDownloadPdf = async () => {
-          if (!formRef.current) return;
-          console.log(formRef, formRef.current);
-          await exportElementToPdf(
-            formRef.current,
-            submittedData?.facility_name || "spd-assessment",
-          );
-        };
 
         const handleSubmit = async (e) => {
           e.preventDefault();
           setIsSubmitting(true);
-
           const result = auditSchema.safeParse(formData);
           if (!result.success) {
             const fieldErrors = {};
@@ -487,122 +559,37 @@
             setIsSubmitting(false);
             return;
           }
-
           setErrors({});
-
           try {
             // Send to backend endpoint
             const response = await fetch(
               "https://api.crownpointconsult.com/api/gatekeeper",
               {
                 method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(formData),
               },
             );
-
             if (response.ok) {
               setSubmittedData(formData);
-              window.scrollTo({ top: 0, behavior: "smooth" });
+              await showSuccessModal();
+              await showSubmissionModal({
+                facilityName: formData.facility_name,
+                onDownload: handleDownloadPdf,
+                onNew: () => window.location.reload(),
+              });
             } else {
               throw new Error("Submission failed");
             }
           } catch (error) {
             console.error("Submission error:", error);
-            alert("Submission failed. PDF has been generated locally instead.");
             setSubmittedData(formData);
             window.scrollTo({ top: 0, behavior: "smooth" });
+            // Offer the user to download the local PDF since the server submission failed
           } finally {
             setIsSubmitting(false);
           }
         };
-
-        if (submittedData) {
-          return (
-            <div className="py-6">
-              <div
-                ref={summaryRef}
-                className="bg-white/90 backdrop-blur rounded-3xl shadow-soft border border-primary-100 p-8 md:p-10 space-y-8"
-              >
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-                  <div className="flex items-center gap-4">
-                    <div className="h-14 w-14 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center">
-                      <svg
-                        className="w-9 h-9"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2.5"
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                    </div>
-                    <div>
-                      <p className="text-xs font-semibold tracking-[0.2em] uppercase text-primary-600">
-                        Assessment captured
-                      </p>
-                      <h1 className="mt-1 text-2xl md:text-3xl font-semibold text-slate-900 font-display">
-                        SPD Operational Review Logged
-                      </h1>
-                      <p className="text-sm text-slate-500 mt-1">
-                        Facility:{" "}
-                        <span className="font-medium text-slate-700">
-                          {submittedData.facility_name}
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex flex-col gap-3 md:items-end">
-                    <button
-                      onClick={() => window.location.reload()}
-                      className="inline-flex items-center justify-center px-3 py-2 rounded-xl text-xs font-semibold border border-slate-200 text-slate-600 hover:bg-slate-50"
-                    >
-                      Start new assessment
-                    </button>
-                  </div>
-                </div>
-                <div className="grid md:grid-cols-3 gap-6 text-sm text-slate-600">
-                  <div className="space-y-1">
-                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide">
-                      Assessment
-                    </p>
-                    <p>{submittedData.date}</p>
-                    <p>{submittedData.hours_operation} hours</p>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide">
-                      Contact
-                    </p>
-                    <p>{submittedData.contact_name}</p>
-                    <p>{submittedData.contact_title}</p>
-                    <p>{submittedData.contact_email}</p>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide">
-                      Accreditation
-                    </p>
-                    <p>{submittedData.accrediting_name}</p>
-                    <p>Last survey: {submittedData.last_audit_date}</p>
-                  </div>
-                </div>
-                <div className="border-t border-dashed border-slate-200 pt-6">
-                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-2">
-                    Major operational pain points
-                  </p>
-                  <p className="text-sm text-slate-700 whitespace-pre-line">
-                    {submittedData.pain_points}
-                  </p>
-                </div>
-              </div>
-            </div>
-          );
-        }
 
         return (
           <div className="space-y-8" ref={formRef}>
@@ -619,6 +606,7 @@
                 assessment.
               </p>
             </header>
+
             <form
               onSubmit={handleSubmit}
               className="form-card p-6 md:p-10 space-y-10 border border-primary-50"
@@ -665,6 +653,7 @@
                     />
                   </Field>
                 </div>
+
                 <Field
                   label="Facility Address"
                   error={errors.facility_address}
@@ -682,6 +671,7 @@
                     }
                   />
                 </Field>
+
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end bg-slate-50/80 p-5 rounded-2xl border border-slate-200">
                   <Field label="Health system affiliation?">
                     <RadioGroup
@@ -758,7 +748,7 @@
                   </Field>
                   <Field label="Title" error={errors.contact_title}>
                     <Input
-                      placeholder="SPD Manager/Director of Sterile Processing"
+                      placeholder="SPD Manager / Director of Sterile Processing"
                       value={formData.contact_title}
                       onChange={(e) =>
                         setFormData({
@@ -819,7 +809,7 @@
                     />
                   </Field>
                   <Field
-                    label="Last survey/audit date"
+                    label="Last survey / audit date"
                     error={errors.last_audit_date}
                   >
                     <Input
@@ -835,6 +825,7 @@
                     />
                   </Field>
                 </div>
+
                 <div className="bg-slate-900 p-6 rounded-2xl space-y-4 border border-slate-700">
                   <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <div>
@@ -857,14 +848,13 @@
                       />
                     </div>
                   </div>
+
                   {formData.has_findings && (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       {[0, 1, 2, 3].map((i) => (
                         <input
                           key={i}
-                          placeholder={`Finding ${
-                            i + 1
-                          } (e.g. Bioburden on trays)`}
+                          placeholder={`Finding ${i + 1} (e.g. Bioburden on trays)`}
                           className="bg-slate-800/80 border border-slate-600 text-slate-50 placeholder:text-slate-400 p-3 rounded-lg text-sm focus:outline-none focus:border-primary-300 focus:ring-1 focus:ring-primary-400/60"
                           value={formData.findings[i]}
                           onChange={(e) => {
@@ -877,6 +867,7 @@
                     </div>
                   )}
                 </div>
+
                 <Field
                   label="Direct reporting line"
                   error={errors.reporting_to}
@@ -900,7 +891,7 @@
                 description="Outline current personnel mix and perioperative footprint."
               >
                 <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                  <Field label="FT w/FMLA" error={errors.staff_ft_w_fmla}>
+                  <Field label="FT w/ FMLA" error={errors.staff_ft_w_fmla}>
                     <Input
                       type="number"
                       value={formData.staff_ft_w_fmla}
@@ -955,6 +946,7 @@
                     />
                   </Field>
                 </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <Field
                     label="Hours of operation"
@@ -983,7 +975,7 @@
                     />
                   </Field>
                   <Field
-                    label="Clinic/satellite areas"
+                    label="Clinic / satellite areas"
                     error={errors.clinic_count}
                   >
                     <Input
@@ -1016,7 +1008,7 @@
                       }
                     />
                     <Checkbox
-                      label="Vascular/open heart"
+                      label="Vascular / open heart"
                       checked={formData.proc_vascular}
                       onChange={(v) =>
                         setFormData({ ...formData, proc_vascular: v })
@@ -1030,7 +1022,7 @@
                       }
                     />
                     <Checkbox
-                      label="Robotic (da Vinci)"
+                      label="Robotic (daVinci)"
                       checked={formData.proc_robotic}
                       onChange={(v) =>
                         setFormData({ ...formData, proc_robotic: v })
@@ -1045,6 +1037,7 @@
                     />
                   </div>
                 </Field>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
                   <Field label="Instrument tracking system?">
                     <RadioGroup
@@ -1077,7 +1070,7 @@
                 description="Highlight pain points and strategic considerations that should shape the review."
               >
                 <Field
-                  label="Major operational pain points"
+                  label="Major operational painpoints"
                   error={errors.pain_points}
                 >
                   <textarea
@@ -1089,6 +1082,7 @@
                     }
                   />
                 </Field>
+
                 <Field label="Additional strategic information">
                   <textarea
                     className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl min-h-[100px] focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 outline-none transition-all text-sm placeholder:text-slate-400"
@@ -1139,7 +1133,7 @@
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth="2"
-                      d="M13 5l7 7m0 0l-7 7m7-7H6"
+                      d="M13 5l7 7-7 7M5 5v14"
                     />
                   </svg>
                 </button>
