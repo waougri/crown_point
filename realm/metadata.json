@@ -1,0 +1,8 @@
+
+{
+  "name": "Realm SPD Audit v3",
+  "description": "Multi-category SPD assessment tool with categorical standards (CSSD, Endoscopy, Dental), image evidence support, and centralized audit dashboards.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
