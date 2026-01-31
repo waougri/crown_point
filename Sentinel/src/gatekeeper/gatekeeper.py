@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import List, Optional
 
 from fastapi import HTTPException, APIRouter, BackgroundTasks
@@ -6,261 +7,189 @@ from pydantic import BaseModel, EmailStr
 from src.gatekeeper.send_mail.send_mail import SENDER_EMAIL, send_audit_confirmation
 
 gatekeeper_router = APIRouter()
+
+
 # Allow your frontend to communicate with the backend
+class DateInterval(BaseModel):
+    start: str
+    end: str
+
+
+class AuditType(str, Enum):
+    CSSD = "CSSD"
+    ENDOSCOPY = "Endoscopy"
+    DENTAL = "Dental"
+
+
 class AuditData(BaseModel):
-    date: str
+    # Modified: Expects a list of start/end objects
+    date_intervals: List[DateInterval]
+
+    audit_type: AuditType
     facility_name: str
     facility_address: str
     is_affiliated: bool
     system_name: Optional[str] = ""
     trauma_level: str
+
     contact_name: str
     contact_title: str
     contact_phone: str
     contact_email: EmailStr
+    reporting_to: str
+
     accrediting_name: str
     last_audit_date: str
     has_findings: bool
-    findings: List[str]
-    reporting_to: str
+    findings: List[str]  # Zod schema enforces max(4) on frontend
+
     staff_ft_w_fmla: str
-    staff_ft_no_fmla: str
     staff_pt: str
     staff_pd: str
     staff_travelers: str
+
     hours_operation: str
     or_count: str
     clinic_count: str
+
     proc_endoscopes: bool
     proc_vascular: bool
     proc_arthroscopic: bool
     proc_robotic: bool
     proc_tee: bool
+
     has_tracking: bool
     tracking_system_name: Optional[str] = ""
+
     pain_points: str
     additional_info: Optional[str] = ""
+    bot_check: Optional[str] = ""  # Honeypot field
 
 
 def generate_html_email(data: AuditData):
-    findings_html = ""
-    if data.has_findings and data.findings:
-        findings_items = "".join([
-            f"<li style='margin-bottom: 8px; color: #334155;'>{f}</li>"
-            for f in data.findings if f.strip()
-        ])
-        findings_html = f"<ul style='margin: 12px 0; padding-left: 24px;'>{findings_items}</ul>"
-    else:
-        findings_html = "<p style='color: #10b981; margin: 12px 0; font-weight: 500;'>✓ No findings reported</p>"
+    dates_html = "".join(
+        [
+            f"<div style='margin-bottom:4px;'>📅 {d.start} to {d.end}</div>"
+            for d in data.date_intervals
+        ]
+    )
 
-    def badge(val: bool):
-        if val:
-            return '<span style="display: inline-block; background: #10b981; color: white; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600;">YES</span>'
-        return '<span style="display: inline-block; background: #e2e8f0; color: #64748b; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600;">NO</span>'
+    # Format Findings
+    findings_list = "".join([f"<li>{f}</li>" for f in data.findings if f.strip()])
+    findings_html = f"<ul>{findings_list}</ul>" if findings_list else "None reported"
+
+    # Processing Scope tags
+    scope_items = []
+    if data.proc_endoscopes:
+        scope_items.append("Endoscopes")
+    if data.proc_vascular:
+        scope_items.append("Vascular/Heart")
+    if data.proc_arthroscopic:
+        scope_items.append("Arthroscopic")
+    if data.proc_robotic:
+        scope_items.append("Robotic")
+    if data.proc_tee:
+        scope_items.append("TEE Probes")
+    scope_html = ", ".join(scope_items) if scope_items else "Standard Processing"
 
     return f"""
     <!DOCTYPE html>
     <html>
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="utf-8">
+        <style>
+            body {{ font-family: 'Segoe UI', Helvetica, Arial, sans-serif; background-color: #faf5ff; margin: 0; padding: 20px; color: #1e293b; }}
+            .container {{ max-width: 650px; margin: 0 auto; background: #ffffff; border-radius: 16px; overflow: hidden; border: 1px solid #f3e8ff; box-shadow: 0 4px 12px rgba(147, 51, 234, 0.05); }}
+            .header {{ background: linear-gradient(135deg, #9333ea 0%, #db2777 100%); padding: 30px; text-align: center; color: white; }}
+            .section {{ padding: 25px; border-bottom: 1px solid #f3e8ff; }}
+            .section-title {{ color: #7e22ce; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }}
+            .grid {{ display: table; width: 100%; }}
+            .row {{ display: table-row; }}
+            .label {{ display: table-cell; padding: 8px 0; font-weight: 600; font-size: 13px; color: #64748b; width: 35%; }}
+            .value {{ display: table-cell; padding: 8px 0; font-size: 14px; color: #1e293b; }}
+            .pill {{ background: #f3e8ff; color: #7e22ce; padding: 4px 12px; border-radius: 99px; font-size: 12px; font-weight: 600; display: inline-block; }}
+            .highlight-box {{ background: #faf5ff; border: 1px solid #f3e8ff; border-radius: 8px; padding: 15px; margin-top: 10px; font-size: 14px; }}
+            .footer {{ background: #f8fafc; padding: 20px; text-align: center; font-size: 12px; color: #94a3b8; }}
+        </style>
     </head>
-    <body style="margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f8fafc; color: #1e293b;">
-        
-        <div style="max-width: 680px; margin: 40px auto; background: white; border-radius: 24px; overflow: hidden; box-shadow: 0 20px 40px -24px rgba(15, 23, 42, 0.4);">
-            
-            <!-- Header -->
-            <div style="background: linear-gradient(135deg, #9333ea 0%, #a855f7 50%, #ec4899 100%); padding: 32px 40px; color: white;">
-                <div style="margin-bottom: 24px;">
-                    <img src="https://crownpointconsult.com/assets/bg_less_logo.png" alt="Crown Point Consulting" style="width: 180px; height: auto; display: block;">
+    <body>
+        <div class="container">
+            <div class="header">
+                <p style="margin:0; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.9;">New Service Request</p>
+                <h1 style="margin: 10px 0 0 0; font-size: 24px;">{data.audit_type.value} Operational Review</h1>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Facility Information</div>
+                <div class="grid">
+                    <div class="row"><div class="label">Facility</div><div class="value"><strong>{data.facility_name}</strong></div></div>
+                    <div class="row"><div class="label">Address</div><div class="value">{data.facility_address}</div></div>
+                    <div class="row"><div class="label">System</div><div class="value">{data.system_name if data.is_affiliated else "Independent"}</div></div>
+                    <div class="row"><div class="label">Trauma Level</div><div class="value"><span class="pill">{data.trauma_level}</span></div></div>
                 </div>
-                <div style="font-size: 11px; font-weight: 700; letter-spacing: 1.2px; color: rgba(255,255,255,0.95); margin-bottom: 12px;">SPD OPERATIONS REVIEW</div>
-                <h1 style="margin: 0 0 6px 0; font-size: 26px; font-weight: 700; line-height: 1.2;">{data.facility_name}</h1>
-                <p style="margin: 0; font-size: 15px; color: rgba(255,255,255,0.9);">{data.facility_address}</p>
             </div>
 
-            <div style="padding: 40px;">
-                
-                <!-- Facility Overview -->
-                <section style="margin-bottom: 36px;">
-                    <h2 style="margin: 0 0 20px 0; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b;">Facility Overview</h2>
-                    
-                    <table style="width: 100%; border-collapse: collapse;">
-                        <tr>
-                            <td style="padding: 14px 16px; background: #f8fafc; border-bottom: 1px solid #e2e8f0; width: 50%;">
-                                <div style="font-size: 12px; color: #64748b; margin-bottom: 4px;">Affiliation Status</div>
-                                <div style="font-size: 15px; font-weight: 600; color: #1e293b;">
-                                    {data.system_name if data.is_affiliated else "Independent Facility"}
-                                </div>
-                            </td>
-                            <td style="padding: 14px 16px; background: #f8fafc; border-bottom: 1px solid #e2e8f0;">
-                                <div style="font-size: 12px; color: #64748b; margin-bottom: 4px;">Trauma Level</div>
-                                <div style="font-size: 15px; font-weight: 600; color: #1e293b;">{data.trauma_level}</div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 14px 16px; background: #f8fafc; border-bottom: 1px solid #e2e8f0;">
-                                <div style="font-size: 12px; color: #64748b; margin-bottom: 4px;">Hours of Operation</div>
-                                <div style="font-size: 15px; font-weight: 600; color: #1e293b;">{data.hours_operation}</div>
-                            </td>
-                            <td style="padding: 14px 16px; background: #f8fafc; border-bottom: 1px solid #e2e8f0;">
-                                <div style="font-size: 12px; color: #64748b; margin-bottom: 4px;">SPD Reports To</div>
-                                <div style="font-size: 15px; font-weight: 600; color: #1e293b;">{data.reporting_to}</div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 14px 16px; background: #f8fafc;">
-                                <div style="font-size: 12px; color: #64748b; margin-bottom: 4px;">Operating Rooms</div>
-                                <div style="font-size: 15px; font-weight: 600; color: #1e293b;">{data.or_count}</div>
-                            </td>
-                            <td style="padding: 14px 16px; background: #f8fafc;">
-                                <div style="font-size: 12px; color: #64748b; margin-bottom: 4px;">Clinic Locations</div>
-                                <div style="font-size: 15px; font-weight: 600; color: #1e293b;">{data.clinic_count}</div>
-                            </td>
-                        </tr>
-                    </table>
-                </section>
-
-                <!-- Contact Information -->
-                <section style="margin-bottom: 36px;">
-                    <h2 style="margin: 0 0 20px 0; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b;">Primary Contact</h2>
-                    
-                    <div style="background: #faf5ff; border-left: 3px solid #a855f7; padding: 18px 20px; border-radius: 6px;">
-                        <div style="font-size: 16px; font-weight: 600; color: #7e22ce; margin-bottom: 6px;">{data.contact_name}</div>
-                        <div style="font-size: 14px; color: #9333ea; margin-bottom: 8px;">{data.contact_title}</div>
-                        <div style="font-size: 13px; color: #a855f7;">
-                            <span style="margin-right: 16px;">📞 {data.contact_phone}</span>
-                            <span>✉️ {data.contact_email}</span>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Staffing -->
-                <section style="margin-bottom: 36px;">
-                    <h2 style="margin: 0 0 20px 0; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b;">Staffing Overview</h2>
-                    
-                    <div style="display: table; width: 100%; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
-                        <div style="display: table-row;">
-                            <div style="display: table-cell; padding: 16px; background: #faf5ff; text-align: center; border-right: 1px solid #e2e8f0; width: 20%;">
-                                <div style="font-size: 24px; font-weight: 700; color: #9333ea; margin-bottom: 4px;">{data.staff_ft_w_fmla}</div>
-                                <div style="font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 0.3px;">FT (FMLA)</div>
-                            </div>
-                            <div style="display: table-cell; padding: 16px; background: #faf5ff; text-align: center; border-right: 1px solid #e2e8f0; width: 20%;">
-                                <div style="font-size: 24px; font-weight: 700; color: #9333ea; margin-bottom: 4px;">{data.staff_ft_no_fmla}</div>
-                                <div style="font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 0.3px;">FT (Active)</div>
-                            </div>
-                            <div style="display: table-cell; padding: 16px; background: #faf5ff; text-align: center; border-right: 1px solid #e2e8f0; width: 20%;">
-                                <div style="font-size: 24px; font-weight: 700; color: #9333ea; margin-bottom: 4px;">{data.staff_pt}</div>
-                                <div style="font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 0.3px;">Part Time</div>
-                            </div>
-                            <div style="display: table-cell; padding: 16px; background: #faf5ff; text-align: center; border-right: 1px solid #e2e8f0; width: 20%;">
-                                <div style="font-size: 24px; font-weight: 700; color: #9333ea; margin-bottom: 4px;">{data.staff_pd}</div>
-                                <div style="font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 0.3px;">Per Diem</div>
-                            </div>
-                            <div style="display: table-cell; padding: 16px; background: #faf5ff; text-align: center; width: 20%;">
-                                <div style="font-size: 24px; font-weight: 700; color: #9333ea; margin-bottom: 4px;">{data.staff_travelers}</div>
-                                <div style="font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 0.3px;">Travelers</div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Clinical Capabilities -->
-                <section style="margin-bottom: 36px;">
-                    <h2 style="margin: 0 0 20px 0; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b;">Clinical Capabilities</h2>
-                    
-                    <table style="width: 100%; border-collapse: collapse;">
-                        <tr>
-                            <td style="padding: 12px 0; border-bottom: 1px solid #f1f5f9;">
-                                <span style="font-size: 14px; color: #334155; margin-right: 12px;">Endoscopes</span>
-                                {badge(data.proc_endoscopes)}
-                            </td>
-                            <td style="padding: 12px 0; border-bottom: 1px solid #f1f5f9;">
-                                <span style="font-size: 14px; color: #334155; margin-right: 12px;">Vascular</span>
-                                {badge(data.proc_vascular)}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 12px 0; border-bottom: 1px solid #f1f5f9;">
-                                <span style="font-size: 14px; color: #334155; margin-right: 12px;">Arthroscopic</span>
-                                {badge(data.proc_arthroscopic)}
-                            </td>
-                            <td style="padding: 12px 0; border-bottom: 1px solid #f1f5f9;">
-                                <span style="font-size: 14px; color: #334155; margin-right: 12px;">Robotic Surgery</span>
-                                {badge(data.proc_robotic)}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 12px 0;">
-                                <span style="font-size: 14px; color: #334155; margin-right: 12px;">TEE</span>
-                                {badge(data.proc_tee)}
-                            </td>
-                            <td style="padding: 12px 0;">
-                                <span style="font-size: 14px; color: #334155; margin-right: 12px;">Instrument Tracking</span>
-                                {badge(data.has_tracking)}
-                                {f'<span style="font-size: 13px; color: #64748b; margin-left: 8px;">({data.tracking_system_name})</span>' if data.has_tracking and data.tracking_system_name else ''}
-                            </td>
-                        </tr>
-                    </table>
-                </section>
-
-                <!-- Pain Points -->
-                <section style="margin-bottom: 36px;">
-                    <h2 style="margin: 0 0 20px 0; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b;">Key Pain Points</h2>
-                    
-                    <div style="background: #fef2f2; border-left: 3px solid #f472b6; padding: 18px 20px; border-radius: 6px;">
-                        <p style="margin: 0; font-size: 14px; color: #9f1239; line-height: 1.6;">{data.pain_points}</p>
-                    </div>
-                </section>
-
-                <!-- Accreditation History -->
-                <section style="margin-bottom: 36px;">
-                    <h2 style="margin: 0 0 20px 0; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b;">Accreditation History</h2>
-                    
-                    <div style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; background: #fafafa;">
-                        <div style="margin-bottom: 14px;">
-                            <span style="font-size: 13px; color: #64748b;">Accrediting Body:</span>
-                            <span style="font-size: 14px; font-weight: 600; color: #1e293b; margin-left: 8px;">{data.accrediting_name}</span>
-                        </div>
-                        <div style="margin-bottom: 14px;">
-                            <span style="font-size: 13px; color: #64748b;">Last Audit Date:</span>
-                            <span style="font-size: 14px; font-weight: 600; color: #1e293b; margin-left: 8px;">{data.last_audit_date}</span>
-                        </div>
-                        <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
-                            <div style="font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 8px;">Findings:</div>
-                            {findings_html}
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Additional Information -->
-                {f'''<section>
-                    <h2 style="margin: 0 0 20px 0; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b;">Additional Notes</h2>
-                    <div style="background: #f8fafc; border-radius: 6px; padding: 16px; border: 1px solid #e2e8f0;">
-                        <p style="margin: 0; font-size: 14px; color: #475569; line-height: 1.6;">{data.additional_info}</p>
-                    </div>
-                </section>''' if data.additional_info else ''}
-
+            <div class="section">
+                <div class="section-title">Requested Windows</div>
+                <div class="highlight-box" style="color: #9333ea; font-weight: 600;">
+                    {dates_html}
+                </div>
             </div>
 
-            <!-- Footer -->
-            <div style="background: #f8fafc; padding: 24px 40px; text-align: center; border-top: 1px solid #e2e8f0;">
-                <p style="margin: 0; font-size: 12px; color: #94a3b8;">
-                    Generated {data.date} • Crown Point Consulting Operations Review
-                </p>
+            <div class="section">
+                <div class="section-title">Point of Contact</div>
+                <div class="grid">
+                    <div class="row"><div class="label">Contact</div><div class="value">{data.contact_name} ({data.contact_title})</div></div>
+                    <div class="row"><div class="label">Email</div><div class="value"><a href="mailto:{data.contact_email}" style="color: #9333ea;">{data.contact_email}</a></div></div>
+                    <div class="row"><div class="label">Phone</div><div class="value">{data.contact_phone}</div></div>
+                    <div class="row"><div class="label">Reporting To</div><div class="value">{data.reporting_to}</div></div>
+                </div>
             </div>
 
+            <div class="section">
+                <div class="section-title">Operations & Scope</div>
+                <div class="grid">
+                    <div class="row"><div class="label">Staffing (FT/PT/PD)</div><div class="value">{data.staff_ft_w_fmla} / {data.staff_pt} / {data.staff_pd}</div></div>
+                    <div class="row"><div class="label">Main ORs</div><div class="value">{data.or_count}</div></div>
+                    <div class="row"><div class="label">Specialized Scope</div><div class="value">{scope_html}</div></div>
+                    <div class="row"><div class="label">Tracking System</div><div class="value">{data.tracking_system_name or "None"}</div></div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Pain Points & Notes</div>
+                <div style="font-size: 14px; line-height: 1.6; color: #334155;">
+                    <p><strong>Primary Concerns:</strong><br>{data.pain_points}</p>
+                    {f'<p><strong>Additional Info:</strong><br>{data.additional_info}</p>' if data.additional_info else ""}
+                </div>
+            </div>
+
+            <div class="section" style="border-bottom: none;">
+                <div class="section-title">Regulatory History</div>
+                <div class="grid">
+                    <div class="row"><div class="label">Accreditor</div><div class="value">{data.accrediting_name}</div></div>
+                    <div class="row"><div class="label">Last Audit</div><div class="value">{data.last_audit_date}</div></div>
+                </div>
+                <div class="highlight-box">
+                    <strong>Past Findings:</strong><br>
+                    {findings_html}
+                </div>
+            </div>
+
+            <div class="footer">
+                This is an automated notification from the Pre-Audit Assessment Portal.
+            </div>
         </div>
     </body>
     </html>
     """
+
 
 @gatekeeper_router.post("/api/gatekeeper", status_code=201)
 async def submit_audit(data: AuditData, background_tasks: BackgroundTasks):
 
     try:
         email_str = generate_html_email(data)
-        # background_tasks.add_task(send_audit_confirmation, SENDER_EMAIL, data.facility_name, email_str )
         send_audit_confirmation(SENDER_EMAIL, data.facility_name, email_str)
         return {"status": "success", "message": "Email sent successfully"}
     except Exception as e:

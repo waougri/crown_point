@@ -10,4 +10,6 @@ dependencies = [
     "pydantic[email]>=2.12.5",
     "mailjet>=1.4.1",
     "mailjet-rest>=1.5.1",
+    "tenacity>=9.1.2",
+    "logging>=0.4.9.6",
 ]

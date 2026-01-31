@@ -1,209 +1,252 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="title"
-      content="SPD Pre-Audit Assessment | CrownPoint Consulting"
-    />
-    <meta
-      name="description"
-      content="Professional SPD operational review and pre-audit tool. Streamlines sterile processing data collection for facility identity, staffing, and regulatory compliance."
-    />
-    <meta name="author" content="CrownPointConsulting" />
-    <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg" />
-    <link
-      rel="icon"
-      type="image/png"
-      href="favicon/favicon-96x96.png"
-      sizes="96x96"
-    />
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="favicon/apple-touch-icon.png"
-    />
-    <link rel="manifest" href="favicon/site.webmanifest" />
-    <meta property="og:type" content="website" />
-    <meta
-      property="og:url"
-      content="https://crownpointconsulting.com/schedule"
-    />
-    <meta
-      property="og:title"
-      content="SPD Pre-Audit Assessment | CrownPoint Consulting"
-    />
-    <meta
-      property="og:description"
-      content="Evaluate SPD operational efficiency and survey readiness with our digital pre-audit tool."
-    />
-    <meta property="og:image" content="assets/cleanroom.png" />
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:title" content="SPD Pre-Audit Assessment" />
-    <meta property="twitter:image" content="assets/bg_less_logo.png" />
-    <title>Pre-Audit Assessment | CrownPoint Consulting</title>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes"/>
+    <meta name="mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <title>Pre-Audit Assessment | Crown Point Consulting</title>
 
-    <!-- Fonts + Tailwind -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+          rel="stylesheet"/>
+
+    <!-- Core Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- React + Babel + Zod -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://unpkg.com/zod@3.21.4/lib/index.umd.js"></script>
-
-    <!-- PDF libraries -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
-    <!-- SWEETALERT2 (Swal) -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <!-- Flatpickr -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/airbnb.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
     <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              primary: {
-                50: "#faf5ff",
-                100: "#f3e8ff",
-                500: "#a855f7",
-                600: "#9333ea",
-                700: "#7e22ce",
-              },
-              accent: {
-                400: "#f472b6",
-                500: "#ec4899",
-                600: "#db2777",
-              },
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: "#faf5ff",
+                            100: "#f3e8ff",
+                            500: "#a855f7",
+                            600: "#9333ea",
+                            700: "#7e22ce",
+                            900: "#AA336A",
+                        },
+                    },
+                    fontFamily: {
+                        display: ["Playfair Display", "serif"],
+                        sans: ["Inter", "sans-serif"],
+                    },
+                    boxShadow: {
+                        soft: "0 18px 45px -18px rgba(15, 23, 42, 0.35)",
+                    },
+                },
             },
-            fontFamily: {
-              display: ["Playfair Display", "serif"],
-              sans: ["Inter", "sans-serif"],
-            },
-            boxShadow: {
-              soft: "0 18px 45px -18px rgba(15,23,42,0.35)",
-            },
-          },
-        },
-      };
+        };
     </script>
 
     <style>
-      body {
-        font-family: "Inter", sans-serif;
-        background: radial-gradient(
-          circle at top,
-          #faf5ff 0%,
-          #f8fafc 45%,
-          #eef2ff 100%
-        );
-      }
-      .form-card {
-        background: white;
-        border-radius: 1.5rem;
-        box-shadow: 0 20px 40px -24px rgba(15, 23, 42, 0.4);
-      }
-      .hp-field {
-        position: absolute;
-        left: -5000px;
-        top: -5000px;
-      }
-      input::-webkit-outer-spin-button,
-      input::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-      }
-      /* Autocomplete override */
-      input:-webkit-autofill,
-      input:-webkit-autofill:hover,
-      input:-webkit-autofill:focus,
-      input:-webkit-autofill:active {
-        -webkit-box-shadow: 0 0 30px #f8fafc inset !important;
-        box-shadow: 0 0 30px #f8fafc inset !important;
-        -webkit-text-fill-color: #475569 !important;
-        transition: background-color 5000s ease-in-out 0s;
-      }
+        * {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: "Inter", sans-serif;
+            background: radial-gradient(circle at top, #faf5ff 0%, #f8fafc 45%, #eef2ff 100%);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 1.5rem;
+            box-shadow: 0 20px 40px -24px rgba(15, 23, 42, 0.4);
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 640px) {
+            .form-card {
+                border-radius: 1rem;
+                margin-left: -0.5rem;
+                margin-right: -0.5rem;
+            }
+        }
+
+        /* Honeypot field */
+        .hp-field {
+            position: absolute;
+            left: -5000px;
+            top: -5000px;
+        }
+
+        /* Flatpickr overrides */
+        .flatpickr-calendar {
+            border-radius: 1rem !important;
+            box-shadow: 0 20px 40px -24px rgba(15, 23, 42, 0.4) !important;
+            border: 1px solid #e2e8f0 !important;
+            font-family: "Inter", sans-serif !important;
+        }
+
+        .flatpickr-day.selected,
+        .flatpickr-day.startRange,
+        .flatpickr-day.endRange,
+        .flatpickr-day.selected.inRange,
+        .flatpickr-day.startRange.inRange,
+        .flatpickr-day.endRange.inRange,
+        .flatpickr-day.selected:focus,
+        .flatpickr-day.startRange:focus,
+        .flatpickr-day.endRange:focus,
+        .flatpickr-day.selected:hover,
+        .flatpickr-day.startRange:hover,
+        .flatpickr-day.endRange:hover {
+            background: #9333ea !important;
+            border-color: #9333ea !important;
+        }
+
+        .flatpickr-day.inRange {
+            box-shadow: -5px 0 0 #f3e8ff, 5px 0 0 #f3e8ff !important;
+            background: #f3e8ff !important;
+            border-color: #f3e8ff !important;
+            color: #7e22ce !important;
+        }
+
+        /* Mobile flatpickr */
+        @media (max-width: 640px) {
+            .flatpickr-calendar {
+                width: 100% !important;
+                max-width: 320px !important;
+            }
+        }
+
+        /* Smooth animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        /* Better focus states for accessibility */
+        *:focus-visible {
+            outline: 2px solid #9333ea;
+            outline-offset: 2px;
+        }
+
+        /* Prevent zoom on iOS */
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="number"],
+        input[type="date"],
+        select,
+        textarea {
+            font-size: 16px !important;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Better touch targets for mobile */
+        @media (max-width: 640px) {
+            button,
+            input,
+            select,
+            textarea,
+            label {
+                min-height: 44px;
+            }
+        }
+
+        /* Loading state */
+        .loading {
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        /* Responsive grid improvements */
+        @media (max-width: 768px) {
+            .responsive-grid {
+                grid-template-columns: 1fr !important;
+            }
+        }
     </style>
-  </head>
+</head>
 
-  <body class="min-h-screen text-slate-900">
-    <div class="relative overflow-hidden">
-      <!-- decorative gradient blob -->
+<body class="min-h-screen text-slate-900">
+<div class="relative overflow-hidden">
+    <div id="root" class="max-w-6xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-8 md:py-10"></div>
+</div>
 
-      <div id="root" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10"></div>
-    </div>
+<script type="text/babel">
+    const {useState, useRef, useCallback, useEffect} = React;
+    const z = Zod;
+    const today = new Date().toISOString().split("T")[0];
 
-    <script type="text/babel">
-      const { useState, useRef, useCallback } = React;
-      const z = Zod;
-      const today = new Date().toISOString().split("T")[0];
-
-      /* ---------- Swal Helpers ---------- */
-      function createToast() {
+    /* ---------- Swal Helpers ---------- */
+    function createToast() {
         return Swal.mixin({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 2000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.addEventListener("mouseenter", Swal.stopTimer);
-            toast.addEventListener("mouseleave", Swal.resumeTimer);
-          },
+            toast: true,
+            position: window.innerWidth < 640 ? "top" : "top-end",
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener("mouseenter", Swal.stopTimer);
+                toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
         });
-      }
+    }
 
-      const toast = createToast();
+    const toast = createToast();
 
-      function showSuccessToast(title = "Saved") {
-        toast.fire({ icon: "success", title });
-      }
+    function showSuccessToast(title = "Saved") {
+        toast.fire({icon: "success", title});
+    }
 
-      function showErrorToast(title = "Something went wrong") {
-        toast.fire({ icon: "error", title });
-      }
+    function showErrorToast(title = "Something went wrong") {
+        toast.fire({icon: "error", title});
+    }
 
-      async function showSubmissionModal({ facilityName, onDownload, onNew }) {
-        const { isConfirmed, isDenied } = await Swal.fire({
-          title: "Assessment captured",
-          html: `<div class="text-left"><p class="mb-2">Facility: <strong>${facilityName || ""}</strong></p><p class="text-sm text-slate-600">Your assessment was recorded. You can download a PDF copy or start a new assessment.</p></div>`,
-          icon: "success",
-          showDenyButton: true,
-          showCancelButton: true,
-          confirmButtonText: "Download PDF",
-          denyButtonText: "Start new assessment",
-          cancelButtonText: "Close",
-          customClass: { popup: "rounded-xl" },
-        });
-
-        if (isConfirmed && typeof onDownload === "function") onDownload();
-        if (isDenied && typeof onNew === "function") onNew();
-      }
-
-      async function showSubmissionErrorModal({ message = "", onDownload }) {
-        const { isConfirmed } = await Swal.fire({
-          title: "Submission failed",
-          html: `<p class="text-sm">${message || "Submission to server failed."}</p>`,
-          icon: "error",
-          showCancelButton: true,
-          confirmButtonText: "Download PDF",
-          cancelButtonText: "Close",
-          customClass: { popup: "rounded-xl" },
-        });
-
-        if (isConfirmed && typeof onDownload === "function") onDownload();
-      }
-
-      /* ---------- Schema (unchanged) ---------- */
-      const auditSchema = z.object({
-        date: z.string().min(1, "Date is required"),
+    /* ---------- Schema ---------- */
+    const auditSchema = z.object({
+        audit_type: z.enum(["CSSD", "Endoscopy", "Dental"], {
+            errorMap: () => ({message: "Please select an audit type"})
+        }),
+        date_intervals: z.array(z.object({
+            start: z.string().min(1),
+            end: z.string().min(1),
+        })).min(1, "Please add at least one preferred date range"),
         facility_name: z.string().min(2, "Facility name is required"),
         facility_address: z.string().min(5, "Full address is required"),
         is_affiliated: z.boolean(),
@@ -213,13 +256,12 @@
         contact_title: z.string().min(1, "Title required"),
         contact_phone: z.string().min(7, "Valid phone required"),
         contact_email: z.string().email("Invalid email"),
+        reporting_to: z.string().min(1, "Required"),
         accrediting_name: z.string().min(1, "Org name required"),
         last_audit_date: z.string().min(1, "Audit date required"),
         has_findings: z.boolean(),
         findings: z.array(z.string()).max(4),
-        reporting_to: z.string().min(1, "Required"),
         staff_ft_w_fmla: z.string().min(1, "Required"),
-        staff_ft_no_fmla: z.string().min(1, "Required"),
         staff_pt: z.string().min(1, "Required"),
         staff_pd: z.string().min(1, "Required"),
         staff_travelers: z.string().min(1, "Required"),
@@ -236,278 +278,224 @@
         pain_points: z.string().min(1, "Please describe the pain points"),
         additional_info: z.string().optional(),
         bot_check: z.string().max(0),
-      });
+    });
 
-      /* ---------- UI primitives (unchanged) ---------- */
-      const SectionShell = ({ kicker, title, children, description }) => (
-        <section className="space-y-6">
-          <div className="flex flex-col gap-1">
-            {kicker && (
-              <p className="text-[11px] font-semibold tracking-[0.2em] uppercase text-primary-600">
-                {kicker}
-              </p>
-            )}
-            {title && (
-              <h2 className="font-semibold text-lg text-slate-900">{title}</h2>
-            )}
-            {description && (
-              <p className="text-sm text-slate-500 max-w-2xl">{description}</p>
-            )}
-          </div>
-          <div className="grid gap-6">{children}</div>
+    /* ---------- UI Primitives ---------- */
+    const SectionShell = ({kicker, title, children, description}) => (
+        <section className="space-y-4 sm:space-y-6">
+            <div className="flex flex-col gap-1">
+                {kicker && (
+                    <p className="text-[10px] sm:text-[11px] font-semibold tracking-[0.2em] uppercase text-primary-600">
+                        {kicker}
+                    </p>
+                )}
+                {title && (
+                    <h2 className="font-semibold text-base sm:text-lg text-slate-900">
+                        {title}
+                    </h2>
+                )}
+                {description && (
+                    <p className="text-xs sm:text-sm text-slate-500 max-w-2xl leading-relaxed">
+                        {description}
+                    </p>
+                )}
+            </div>
+            <div className="grid gap-4 sm:gap-6">{children}</div>
         </section>
-      );
+    );
 
-      const Field = ({ label, error, children, helper, className = "" }) => (
+    const Field = ({label, error, children, helper, className = ""}) => (
         <div className={`space-y-1.5 ${className}`}>
-          <div className="flex items-baseline justify-between gap-3">
-            <label className="text-xs font-semibold text-slate-600 tracking-wide">
-              {label}
-            </label>
-            {helper && (
-              <span className="text-[11px] text-slate-400">{helper}</span>
-            )}
-          </div>
-          {children}
-          {error && (
-            <p className="text-rose-500 text-xs font-medium">{error}</p>
-          )}
+            <div className="flex items-baseline justify-between gap-2 sm:gap-3">
+                <label className="text-xs sm:text-xs font-semibold text-slate-600 tracking-wide">
+                    {label}
+                </label>
+                {helper && (
+                    <span className="text-[10px] sm:text-[11px] text-slate-400 text-right">
+                            {helper}
+                        </span>
+                )}
+            </div>
+            {children}
+            {error && <p className="text-rose-500 text-xs font-medium">{error}</p>}
         </div>
-      );
+    );
 
-      const Input = (props) => (
+    const Input = (props) => (
         <input
-          {...props}
-          className={`w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 transition-all ${props.className || ""}`}
-        />
-      );
-
-      const RadioGroup = ({
-        value,
-        onChange,
-        yesLabel = "Yes",
-        noLabel = "No",
-      }) => (
-        <div className="inline-flex rounded-full bg-slate-100 p-1 border border-slate-200">
-          <button
-            type="button"
-            onClick={() => onChange(true)}
-            className={`px-4 py-1.5 text-xs font-semibold rounded-full transition-all ${value ? "bg-primary-600 text-white shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
-          >
-            {yesLabel}
-          </button>
-          <button
-            type="button"
-            onClick={() => onChange(false)}
-            className={`px-4 py-1.5 text-xs font-semibold rounded-full transition-all ${!value ? "bg-rose-500 text-white shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
-          >
-            {noLabel}
-          </button>
-        </div>
-      );
-
-      const Checkbox = ({ label, checked, onChange }) => (
-        <label className="flex items-center gap-3 p-3 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer hover:border-primary-400 hover:bg-primary-50/50 transition-colors text-sm">
-          <input
-            type="checkbox"
-            checked={checked}
-            onChange={(e) => onChange(e.target.checked)}
-            className="w-4 h-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500"
-          />
-          <span className="font-medium text-slate-700">{label}</span>
-        </label>
-      );
-
-      const Select = ({ options, ...props }) => (
-        <div className="relative">
-          <select
             {...props}
-            autoComplete="off"
-            className={`w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 appearance-none ${props.className || ""}`}
-          >
-            <option value="">Select level...</option>
-            {options.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
-          <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-slate-400 text-xs">
-            ▼
-          </span>
+            className={`w-full px-3 sm:px-3.5 py-2.5 sm:py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 transition-all ${props.className || ""}`}
+        />
+    );
+
+    const RadioGroup = ({value, onChange, yesLabel = "Yes", noLabel = "No"}) => (
+        <div className="inline-flex rounded-full bg-slate-100 p-1 border border-slate-200 w-full sm:w-auto">
+            <button
+                type="button"
+                onClick={() => onChange(true)}
+                className={`flex-1 sm:flex-none px-4 sm:px-6 py-2 sm:py-1.5 text-xs sm:text-xs font-semibold rounded-full transition-all ${
+                    value
+                        ? "bg-primary-600 text-white shadow-sm"
+                        : "text-slate-500 hover:text-slate-700"
+                }`}
+            >
+                {yesLabel}
+            </button>
+            <button
+                type="button"
+                onClick={() => onChange(false)}
+                className={`flex-1 sm:flex-none px-4 sm:px-6 py-2 sm:py-1.5 text-xs sm:text-xs font-semibold rounded-full transition-all ${
+                    !value
+                        ? "bg-rose-500 text-white shadow-sm"
+                        : "text-slate-500 hover:text-slate-700"
+                }`}
+            >
+                {noLabel}
+            </button>
         </div>
-      );
+    );
 
-      /* ---------- Main form component w/ Swal integration ---------- */
-      const PreAuditForm = () => {
-        const [formData, setFormData] = useState({
-          date: today,
-          facility_name: "",
-          facility_address: "",
-          is_affiliated: false,
-          system_name: "",
-          trauma_level: "",
-          contact_name: "",
-          contact_title: "",
-          contact_phone: "",
-          contact_email: "",
-          accrediting_name: "",
-          last_audit_date: "",
-          has_findings: false,
-          findings: ["", "", "", ""],
-          reporting_to: "",
-          staff_ft_w_fmla: "",
-          staff_ft_no_fmla: "",
-          staff_pt: "",
-          staff_pd: "",
-          staff_travelers: "",
-          hours_operation: "",
-          or_count: "",
-          clinic_count: "",
-          proc_endoscopes: false,
-          proc_vascular: false,
-          proc_arthroscopic: false,
-          proc_robotic: false,
-          proc_tee: false,
-          has_tracking: false,
-          tracking_system_name: "",
-          pain_points: "",
-          additional_info: "",
-          bot_check: "",
-        });
+    const Checkbox = ({label, checked, onChange}) => (
+        <label
+            className="flex items-center gap-2.5 sm:gap-3 p-2.5 sm:p-3 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer hover:border-primary-400 hover:bg-primary-50/50 transition-colors text-xs sm:text-sm active:scale-98">
+            <input
+                type="checkbox"
+                checked={checked}
+                onChange={(e) => onChange(e.target.checked)}
+                className="w-4 h-4 sm:w-4 sm:h-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500"
+            />
+            <span className="font-medium text-slate-700">{label}</span>
+        </label>
+    );
 
-        const [errors, setErrors] = useState({});
-        const [submittedData, setSubmittedData] = useState(null);
-        const [isSubmitting, setIsSubmitting] = useState(false);
-        const summaryRef = useRef(null);
-        const formRef = useRef(null);
-        const autosaveTimer = useRef(null);
-
-        const showSuccessModal = async () => {
-          const result = await Swal.fire({
-            title: "Assessment Submitted!",
-            html: `
-        <div class="text-center space-y-5 mt-5">
-          <p class="text-slate-700 text-base">
-            Your SPD Pre-Audit Assessment for
-            <br><strong>${formData.facility_name || "the facility"}</strong>
-            has been successfully recorded.
-          </p>
-          <p class="text-sm text-slate-500">
-            Thank you for your submission.<br>
-            What would you like to do next?
-          </p>
+    const Select = ({options, placeholder = "Select...", ...props}) => (
+        <div className="relative">
+            <select
+                {...props}
+                autoComplete="off"
+                className={`w-full px-3 sm:px-3.5 py-2.5 sm:py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 appearance-none ${props.className || ""}`}
+            >
+                <option value="">{placeholder}</option>
+                {options.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                        {opt.label}
+                    </option>
+                ))}
+            </select>
+            <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-slate-400 text-xs">
+                    ▼
+                </span>
         </div>
-      `,
-            icon: "success",
-            iconColor: "#a855f7",
-            showConfirmButton: false,
-            showDenyButton: true,
-            denyButtonText: "Start New Assessment",
-            denyButtonColor: "#6b7280",
-            showCancelButton: true,
-            cancelButtonText: "Close",
-            cancelButtonColor: "#9333ea",
-            reverseButtons: true,
-            customClass: {
-              popup: "rounded-2xl shadow-2xl max-w-lg",
-              title: "text-2xl font-display font-semibold text-slate-800 pt-4",
-              htmlContainer: "text-base",
-              actions: "gap-4 mt-8",
-              denyButton: "px-7 py-3.5 text-sm font-medium rounded-xl",
-              cancelButton:
-                "px-7 py-3.5 text-sm font-medium rounded-xl bg-primary-600 text-white hover:bg-primary-700",
-            },
-            backdrop: "rgba(15,23,42,0.65)",
-          });
+    );
 
-          if (result.isDenied) {
-            // Reset form
-            setFormData({
-              date: today,
-              facility_name: "",
-              facility_address: "",
-              is_affiliated: false,
-              system_name: "",
-              trauma_level: "",
-              contact_name: "",
-              contact_title: "",
-              contact_phone: "",
-              contact_email: "",
-              accrediting_name: "",
-              last_audit_date: "",
-              has_findings: false,
-              findings: ["", "", "", ""],
-              reporting_to: "",
-              staff_ft_w_fmla: "",
-              staff_ft_no_fmla: "",
-              staff_pt: "",
-              staff_pd: "",
-              staff_travelers: "",
-              hours_operation: "",
-              or_count: "",
-              clinic_count: "",
-              proc_endoscopes: false,
-              proc_vascular: false,
-              proc_arthroscopic: false,
-              proc_robotic: false,
-              proc_tee: false,
-              has_tracking: false,
-              tracking_system_name: "",
-              pain_points: "",
-              additional_info: "",
-              bot_check: "",
+    /* ---------- Range List Picker ---------- */
+    const RangeListPicker = ({value = [], onChange}) => {
+        const pickerRef = useRef(null);
+        const [tempRange, setTempRange] = useState({start: "", end: ""});
+        const [displayVal, setDisplayVal] = useState("");
+
+        useEffect(() => {
+            if (!pickerRef.current) return;
+            const fp = window.flatpickr(pickerRef.current, {
+                mode: "range",
+                dateFormat: "Y-m-d",
+                minDate: "today",
+                theme: "airbnb",
+                onChange: (selectedDates, dateStr, instance) => {
+                    if (selectedDates.length === 2) {
+                        const start = selectedDates[0].toISOString().split("T")[0];
+                        const end = selectedDates[1].toISOString().split("T")[0];
+                        setTempRange({start, end});
+                        setDisplayVal(dateStr);
+                    }
+                },
             });
-            setErrors({});
-            localStorage.removeItem("preAuditDraft"); // optional: clear draft too
-            window.scrollTo({ top: 0, behavior: "smooth" });
-            showSuccessToast("Form cleared — ready for new assessment");
-          }
-          // If closed → form remains as submitted (useful for review)
-          window.location.href = "/";
-        };
-        React.useEffect(() => {
-          try {
-            const draft = localStorage.getItem("preAuditDraft");
-            if (draft) {
-              setFormData((prev) => ({ ...prev, ...JSON.parse(draft) }));
-              showSuccessToast("Draft loaded");
-            }
-          } catch (e) {
-            console.warn("No draft found", e);
-          }
+            return () => fp.destroy();
         }, []);
 
-        React.useEffect(() => {
-          if (autosaveTimer.current) {
-            clearTimeout(autosaveTimer.current);
-          }
-          autosaveTimer.current = setTimeout(() => {
-            try {
-              localStorage.setItem("preAuditDraft", JSON.stringify(formData));
-            } catch (e) {
-              console.warn("Cannot save draft:", e);
+        const handleAdd = () => {
+            if (!tempRange.start || !tempRange.end) return;
+            const newIntervals = [...value, tempRange];
+            onChange(newIntervals);
+            setTempRange({start: "", end: ""});
+            setDisplayVal("");
+            if (pickerRef.current) {
+                pickerRef.current._flatpickr.clear();
             }
-          }, 600);
-          return () => {
-            if (autosaveTimer.current) clearTimeout(autosaveTimer.current);
-          };
-        }, [formData]);
+        };
 
-        const saveDraftNow = useCallback(() => {
-          try {
-            localStorage.setItem("preAuditDraft", JSON.stringify(formData));
-            showSuccessToast("Draft saved locally");
-          } catch (e) {
-            console.error(e);
-            showErrorToast("Failed to save draft");
-          }
-        }, [formData]);
+        const handleRemove = (idx) => {
+            const newIntervals = value.filter((_, i) => i !== idx);
+            onChange(newIntervals);
+        };
 
-        const clearDraft = useCallback(() => {
-          localStorage.removeItem("preAuditDraft");
-          setFormData({
-            date: today,
+        return (
+            <div className="space-y-3">
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 items-stretch sm:items-end">
+                    <div className="flex-1 w-full relative">
+                            <span className="absolute left-3 top-3 text-slate-400 pointer-events-none">
+                                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+                                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                            </span>
+                        <input
+                            ref={pickerRef}
+                            type="text"
+                            placeholder="Select date range (e.g. Jan 1 to Jan 7)"
+                            className="w-full pl-10 pr-3 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 outline-none shadow-sm cursor-pointer"
+                        />
+                    </div>
+                    <button
+                        type="button"
+                        onClick={handleAdd}
+                        disabled={!tempRange.start || !tempRange.end}
+                        className="w-full sm:w-auto px-4 sm:px-5 py-3 bg-slate-800 text-white text-sm font-medium rounded-xl hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm active:scale-98"
+                    >
+                        Add Selection
+                    </button>
+                </div>
+                {value.length > 0 && (
+                    <div className="flex flex-wrap gap-2 pt-1">
+                        {value.map((interval, i) => (
+                            <div
+                                key={i}
+                                className="animate-fade-in flex items-center gap-2 bg-primary-50 border border-primary-100 text-primary-700 pl-3 pr-2 py-2 rounded-lg text-xs font-medium shadow-sm"
+                            >
+                                    <span className="whitespace-nowrap">
+                                        {new Date(interval.start).toLocaleDateString(undefined, {
+                                            month: "short",
+                                            day: "numeric",
+                                        })}
+                                        <span className="text-primary-400 mx-1">→</span>
+                                        {new Date(interval.end).toLocaleDateString(undefined, {
+                                            month: "short",
+                                            day: "numeric",
+                                        })}
+                                    </span>
+                                <button
+                                    type="button"
+                                    onClick={() => handleRemove(i)}
+                                    className="p-1 hover:bg-primary-100 rounded text-primary-400 hover:text-rose-500 transition-colors"
+                                >
+                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+                                              d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
+        );
+    };
+
+    /* ---------- Main Form ---------- */
+    const PreAuditForm = () => {
+        const [formData, setFormData] = useState({
+            audit_type: "",
+            date_intervals: [],
             facility_name: "",
             facility_address: "",
             is_affiliated: false,
@@ -523,7 +511,6 @@
             findings: ["", "", "", ""],
             reporting_to: "",
             staff_ft_w_fmla: "",
-            staff_ft_no_fmla: "",
             staff_pt: "",
             staff_pd: "",
             staff_travelers: "",
@@ -540,615 +527,629 @@
             pain_points: "",
             additional_info: "",
             bot_check: "",
-          });
-          showToast("Draft cleared");
+        });
+
+        const [errors, setErrors] = useState({});
+        const [isSubmitting, setIsSubmitting] = useState(false);
+        const autosaveTimer = useRef(null);
+
+        // Success Modal
+        const showSuccessModal = async () => {
+            const result = await Swal.fire({
+                title: "Assessment Submitted!",
+                html: `<div class="text-center space-y-5 mt-5">
+                        <p class="text-slate-700 text-base">Your ${formData.audit_type || "SPD"} Pre-Audit Assessment for<br><strong>${formData.facility_name || "the facility"}</strong> has been successfully recorded.</p>
+                        <p class="text-sm text-slate-500">Thank you for your submission.<br>What would you like to do next?</p>
+                    </div>`,
+                icon: "success",
+                iconColor: "#a855f7",
+                showConfirmButton: false,
+                showDenyButton: true,
+                denyButtonText: "Start New Assessment",
+                denyButtonColor: "#6b7280",
+                showCancelButton: true,
+                cancelButtonText: "Close",
+                cancelButtonColor: "#9333ea",
+                reverseButtons: true,
+                customClass: {
+                    popup: "rounded-2xl shadow-2xl max-w-lg",
+                    title: "text-xl sm:text-2xl font-display font-semibold text-slate-800 pt-4",
+                    htmlContainer: "text-sm sm:text-base",
+                    actions: "gap-3 sm:gap-4 mt-8 flex-col sm:flex-row",
+                    denyButton: "px-6 sm:px-7 py-3 sm:py-3.5 text-sm font-medium rounded-xl w-full sm:w-auto",
+                    cancelButton: "px-6 sm:px-7 py-3 sm:py-3.5 text-sm font-medium rounded-xl bg-primary-600 text-white hover:bg-primary-700 w-full sm:w-auto",
+                },
+                backdrop: "rgba(15, 23, 42, 0.65)",
+            });
+
+            if (result.isDenied) {
+                // Reset form
+                setFormData({
+                    audit_type: "",
+                    date_intervals: [],
+                    facility_name: "",
+                    facility_address: "",
+                    is_affiliated: false,
+                    system_name: "",
+                    trauma_level: "",
+                    contact_name: "",
+                    contact_title: "",
+                    contact_phone: "",
+                    contact_email: "",
+                    accrediting_name: "",
+                    last_audit_date: "",
+                    has_findings: false,
+                    findings: ["", "", "", ""],
+                    reporting_to: "",
+                    staff_ft_w_fmla: "",
+                    staff_pt: "",
+                    staff_pd: "",
+                    staff_travelers: "",
+                    hours_operation: "",
+                    or_count: "",
+                    clinic_count: "",
+                    proc_endoscopes: false,
+                    proc_vascular: false,
+                    proc_arthroscopic: false,
+                    proc_robotic: false,
+                    proc_tee: false,
+                    has_tracking: false,
+                    tracking_system_name: "",
+                    pain_points: "",
+                    additional_info: "",
+                    bot_check: "",
+                });
+                setErrors({});
+                localStorage.removeItem("preAuditDraft");
+                window.scrollTo({top: 0, behavior: "smooth"});
+                showSuccessToast("Form cleared—ready for new assessment");
+            }
+        };
+
+        // Load Draft
+        React.useEffect(() => {
+            try {
+                const draft = localStorage.getItem("preAuditDraft");
+                if (draft) {
+                    setFormData((prev) => ({...prev, ...JSON.parse(draft)}));
+                    showSuccessToast("Draft loaded");
+                }
+            } catch (e) {
+                console.warn("No draft found", e);
+            }
+        }, []);
+
+        // Save Draft
+        React.useEffect(() => {
+            if (autosaveTimer.current) {
+                clearTimeout(autosaveTimer.current);
+            }
+            autosaveTimer.current = setTimeout(() => {
+                try {
+                    localStorage.setItem("preAuditDraft", JSON.stringify(formData));
+                } catch (e) {
+                    console.warn("Cannot save draft:", e);
+                }
+            }, 600);
+            return () => {
+                if (autosaveTimer.current) clearTimeout(autosaveTimer.current);
+            };
+        }, [formData]);
+
+        const saveDraftNow = useCallback(() => {
+            try {
+                localStorage.setItem("preAuditDraft", JSON.stringify(formData));
+                showSuccessToast("Draft saved locally");
+            } catch (e) {
+                console.error(e);
+                showErrorToast("Failed to save draft");
+            }
+        }, [formData]);
+
+        const clearDraft = useCallback(() => {
+            localStorage.removeItem("preAuditDraft");
+            window.location.reload();
         }, []);
 
         const handleSubmit = async (e) => {
-          e.preventDefault();
-          setIsSubmitting(true);
-          const result = auditSchema.safeParse(formData);
-          if (!result.success) {
-            const fieldErrors = {};
-            result.error.issues.forEach((i) => {
-              const key = i.path[0];
-              if (!fieldErrors[key]) fieldErrors[key] = i.message;
-            });
-            setErrors(fieldErrors);
-            window.scrollTo({ top: 0, behavior: "smooth" });
-            setIsSubmitting(false);
-            return;
-          }
-          setErrors({});
-          try {
-            // Send to backend endpoint
-            const response = await fetch(
-              "https://api.crownpointconsult.com/api/gatekeeper",
-              {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(formData),
-              },
-            );
-            if (response.ok) {
-              setSubmittedData(formData);
-              await showSuccessModal();
-              await showSubmissionModal({
-                facilityName: formData.facility_name,
-                onDownload: handleDownloadPdf,
-                onNew: () => window.location.reload(),
-              });
-            } else {
-              throw new Error("Submission failed");
+            e.preventDefault();
+            setIsSubmitting(true);
+
+            const result = auditSchema.safeParse(formData);
+            if (!result.success) {
+                const fieldErrors = {};
+                result.error.issues.forEach((i) => {
+                    const key = i.path[0];
+                    if (!fieldErrors[key]) fieldErrors[key] = i.message;
+                });
+                setErrors(fieldErrors);
+                window.scrollTo({top: 0, behavior: "smooth"});
+                setIsSubmitting(false);
+                return;
             }
-          } catch (error) {
-            console.error("Submission error:", error);
-            setSubmittedData(formData);
-            window.location.href = "/";
-            // Offer the user to download the local PDF since the server submission failed
-          } finally {
-            setIsSubmitting(false);
-          }
+
+            setErrors({});
+            try {
+                const response = await fetch("https://api.crownpointconsult.com/api/gatekeeper", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify(result.data),
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || "Server Error");
+                }
+
+                const data = response.json();
+                console.log(data);
+                localStorage.removeItem("preAuditDraft");
+                await showSuccessModal();
+            } catch (error) {
+                console.error("Submission error:", error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Submission Failed',
+                    text: error.message || "We couldn't reach the server. Please try again or contact support.",
+                    confirmButtonColor: '#9333ea',
+                });
+            } finally {
+                setIsSubmitting(false);
+            }
         };
 
         return (
-          <div className="space-y-8" ref={formRef}>
-            <header className="text-center space-y-4">
-              <p className="text-xs font-semibold tracking-[0.35em] uppercase text-primary-600">
-                Crown Point Consulting
-              </p>
-              <h1 className="text-3xl md:text-4xl font-semibold text-slate-900 font-display tracking-tight">
-                SPD Pre‑Audit Operational Review
-              </h1>
-              <p className="max-w-2xl mx-auto text-sm text-slate-500">
-                Capture a concise snapshot of sterile processing operations,
-                staffing, and survey readiness in a single structured
-                assessment.
-              </p>
-            </header>
+            <div className="space-y-6 sm:space-y-8">
+                <header className="text-center space-y-3 sm:space-y-4 px-2">
+                    <p className="text-[10px] sm:text-xs font-semibold tracking-[0.25em] sm:tracking-[0.35em] uppercase text-primary-600">
+                        Crown Point Consulting
+                    </p>
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-slate-900 font-display tracking-tight px-4">
+                        SPD Pre‑Audit Operational Review
+                    </h1>
+                    <p className="max-w-2xl mx-auto text-xs sm:text-sm text-slate-500 leading-relaxed px-4">
+                        Capture a concise snapshot of processing operations, staffing, and survey readiness.
+                    </p>
+                </header>
 
-            <form
-              onSubmit={handleSubmit}
-              className="form-card p-6 md:p-10 space-y-10 border border-primary-50"
-            >
-              <input
-                type="text"
-                className="hp-field"
-                value={formData.bot_check}
-                onChange={(e) =>
-                  setFormData({ ...formData, bot_check: e.target.value })
-                }
-                tabIndex="-1"
-              />
-
-              <SectionShell
-                kicker="Section 1"
-                title="Facility identity"
-                description="Confirm basic identifying information for the facility and trauma designation."
-              >
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <Field label="Assessment date" error={errors.date}>
-                    <Input
-                      type="date"
-                      value={formData.date}
-                      onChange={(e) =>
-                        setFormData({ ...formData, date: e.target.value })
-                      }
+                <form onSubmit={handleSubmit}
+                      className="form-card p-4 sm:p-6 md:p-10 space-y-8 sm:space-y-10 border border-primary-50">
+                    <input
+                        type="text"
+                        className="hp-field"
+                        value={formData.bot_check}
+                        onChange={(e) => setFormData({...formData, bot_check: e.target.value})}
+                        tabIndex="-1"
                     />
-                  </Field>
-                  <Field
-                    label="Facility name"
-                    error={errors.facility_name}
-                    helper="As it appears on accreditation documents"
-                  >
-                    <Input
-                      placeholder="e.g. Cedars-Sinai Medical Center"
-                      value={formData.facility_name}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          facility_name: e.target.value,
-                        })
-                      }
-                    />
-                  </Field>
-                </div>
 
-                <Field
-                  label="Facility Address"
-                  error={errors.facility_address}
-                  helper="Street, city, state, zip"
-                >
-                  <Input
-                    placeholder="Enter your address"
-                    autoComplete="address"
-                    name="address"
-                    value={formData.facility_address}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        facility_address: e.target.value,
-                      })
-                    }
-                  />
-                </Field>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end bg-slate-50/80 p-5 rounded-2xl border border-slate-200">
-                  <Field label="Health system affiliation?">
-                    <RadioGroup
-                      value={formData.is_affiliated}
-                      onChange={(v) =>
-                        setFormData({ ...formData, is_affiliated: v })
-                      }
-                    />
-                  </Field>
-                  {formData.is_affiliated && (
-                    <Field
-                      label="System name"
-                      error={errors.system_name}
-                      className="md:col-span-2"
+                    {/* Section 1 */}
+                    <SectionShell
+                        kicker="Section 1"
+                        title="Facility identity"
+                        description="Confirm basic identifying information and preferred assessment timeline."
                     >
-                      <Input
-                        placeholder="e.g. HCA Healthcare, Ascension, Tenet"
-                        value={formData.system_name}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            system_name: e.target.value,
-                          })
-                        }
-                      />
-                    </Field>
-                  )}
-                  <Field
-                    label="Trauma level"
-                    error={errors.trauma_level}
-                    className={!formData.is_affiliated ? "md:col-span-2" : ""}
-                  >
-                    <Select
-                      value={formData.trauma_level}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          trauma_level: e.target.value,
-                        })
-                      }
-                      options={[
-                        { value: "Level I", label: "Level I (Comprehensive)" },
-                        { value: "Level II", label: "Level II (Major)" },
-                        { value: "Level III", label: "Level III (General)" },
-                        { value: "Level IV", label: "Level IV (Basic)" },
-                        {
-                          value: "Level V",
-                          label: "Level V (Critical Access)",
-                        },
-                        { value: "N/A", label: "None/Non-Trauma Center" },
-                      ]}
-                    />
-                  </Field>
-                </div>
-              </SectionShell>
+                        <Field label="Assessment Type" error={errors.audit_type} helper="Select the primary focus">
+                            <Select
+                                value={formData.audit_type}
+                                onChange={(e) => setFormData({...formData, audit_type: e.target.value})}
+                                placeholder="Select audit type..."
+                                options={[
+                                    {label: "CSSD/SPD", value: "CSSD"},
+                                    {label: "Endoscopy", value: "Endoscopy"},
+                                    {label: "Dental", value: "Dental"}
+                                ]}
+                            />
+                        </Field>
 
-              <SectionShell
-                kicker="Section 2"
-                title="Point of contact"
-                description="Identify the primary leader who will coordinate the SPD review."
-              >
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <Field label="Name" error={errors.contact_name}>
-                    <Input
-                      placeholder="Jane Doe"
-                      autoComplete="name"
-                      value={formData.contact_name}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          contact_name: e.target.value,
-                        })
-                      }
-                    />
-                  </Field>
-                  <Field label="Title" error={errors.contact_title}>
-                    <Input
-                      placeholder="SPD Manager / Director of Sterile Processing"
-                      value={formData.contact_title}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          contact_title: e.target.value,
-                        })
-                      }
-                    />
-                  </Field>
-                  <Field label="Phone" error={errors.contact_phone}>
-                    <Input
-                      type="tel"
-                      autoComplete="tel"
-                      placeholder="(555) 000-0000"
-                      value={formData.contact_phone}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          contact_phone: e.target.value,
-                        })
-                      }
-                    />
-                  </Field>
-                  <Field label="Email" error={errors.contact_email}>
-                    <Input
-                      type="email"
-                      placeholder="manager@hospital.org"
-                      autoComplete="email"
-                      value={formData.contact_email}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          contact_email: e.target.value,
-                        })
-                      }
-                    />
-                  </Field>
-                </div>
-              </SectionShell>
+                        <div className="flex flex-col gap-4 sm:gap-6">
+                            <Field
+                                label="Preferred Assessment Windows"
+                                error={errors.date_intervals}
+                                helper="Click to select a range, then 'Add'"
+                            >
+                                <RangeListPicker
+                                    value={formData.date_intervals}
+                                    onChange={(intervals) => setFormData({...formData, date_intervals: intervals})}
+                                />
+                            </Field>
 
-              <SectionShell
-                kicker="Section 3"
-                title="Regulatory context"
-                description="Summarize accreditation and recent survey history related to sterile processing."
-              >
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <Field
-                    label="Accrediting body"
-                    error={errors.accrediting_name}
-                  >
-                    <Input
-                      placeholder="e.g. The Joint Commission (TJC), DNV, AAAHC"
-                      value={formData.accrediting_name}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          accrediting_name: e.target.value,
-                        })
-                      }
-                    />
-                  </Field>
-                  <Field
-                    label="Last survey / audit date"
-                    error={errors.last_audit_date}
-                  >
-                    <Input
-                      type="date"
-                      max={today}
-                      value={formData.last_audit_date}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          last_audit_date: e.target.value,
-                        })
-                      }
-                    />
-                  </Field>
-                </div>
+                            <Field label="Facility name" error={errors.facility_name} helper="As on accreditation docs">
+                                <Input
+                                    placeholder="e.g. Cedars-Sinai Medical Center"
+                                    value={formData.facility_name}
+                                    onChange={(e) => setFormData({...formData, facility_name: e.target.value})}
+                                />
+                            </Field>
 
-                <div className="bg-slate-900 p-6 rounded-2xl space-y-4 border border-slate-700">
-                  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                    <div>
-                      <p className="text-xs font-semibold tracking-[0.2em] uppercase text-slate-400">
-                        Recent SPD findings
-                      </p>
-                      <p className="mt-1 text-sm text-slate-200">
-                        Indicate if the most recent accreditation or regulatory
-                        survey cited sterile processing.
-                      </p>
+                            <Field label="Facility Address" error={errors.facility_address}
+                                   helper="Street, city, state, zip">
+                                <Input
+                                    placeholder="Enter your address"
+                                    autoComplete="address"
+                                    name="address"
+                                    value={formData.facility_address}
+                                    onChange={(e) => setFormData({...formData, facility_address: e.target.value})}
+                                />
+                            </Field>
+                        </div>
+
+                        <div
+                            className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 items-end bg-slate-50/80 p-4 sm:p-5 rounded-2xl border border-slate-200">
+                            <Field label="Health system affiliation?">
+                                <RadioGroup
+                                    value={formData.is_affiliated}
+                                    onChange={(v) => setFormData({...formData, is_affiliated: v})}
+                                />
+                            </Field>
+
+                            {formData.is_affiliated && (
+                                <Field label="System name" error={errors.system_name} className="md:col-span-2">
+                                    <Input
+                                        placeholder="e.g. HCA Healthcare, Ascension, Tenet"
+                                        value={formData.system_name}
+                                        onChange={(e) => setFormData({...formData, system_name: e.target.value})}
+                                    />
+                                </Field>
+                            )}
+
+                            <Field
+                                label="Trauma level"
+                                error={errors.trauma_level}
+                                className={!formData.is_affiliated ? "md:col-span-2" : ""}
+                            >
+                                <Select
+                                    value={formData.trauma_level}
+                                    placeholder="Select level..."
+                                    onChange={(e) => setFormData({...formData, trauma_level: e.target.value})}
+                                    options={[
+                                        {value: "Level I", label: "Level I (Comprehensive)"},
+                                        {value: "Level II", label: "Level II (Major)"},
+                                        {value: "Level III", label: "Level III (General)"},
+                                        {value: "Level IV", label: "Level IV (Basic)"},
+                                        {value: "Level V", label: "Level V (Critical Access)"},
+                                        {value: "N/A", label: "None/Non-Trauma Center"},
+                                    ]}
+                                />
+                            </Field>
+                        </div>
+                    </SectionShell>
+
+                    {/* Section 2 */}
+                    <SectionShell
+                        kicker="Section 2"
+                        title="Point of contact"
+                        description="Identify the primary leader who will coordinate the SPD review."
+                    >
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                            <Field label="Name" error={errors.contact_name}>
+                                <Input
+                                    placeholder="Jane Doe"
+                                    autoComplete="name"
+                                    value={formData.contact_name}
+                                    onChange={(e) => setFormData({...formData, contact_name: e.target.value})}
+                                />
+                            </Field>
+
+                            <Field label="Title" error={errors.contact_title}>
+                                <Input
+                                    placeholder="SPD Manager/Director of Sterile Processing"
+                                    value={formData.contact_title}
+                                    onChange={(e) => setFormData({...formData, contact_title: e.target.value})}
+                                />
+                            </Field>
+
+                            <Field label="Phone" error={errors.contact_phone}>
+                                <Input
+                                    type="tel"
+                                    autoComplete="tel"
+                                    placeholder="(555) 000-0000"
+                                    value={formData.contact_phone}
+                                    onChange={(e) => setFormData({...formData, contact_phone: e.target.value})}
+                                />
+                            </Field>
+
+                            <Field label="Email" error={errors.contact_email}>
+                                <Input
+                                    type="email"
+                                    placeholder="manager@hospital.org"
+                                    autoComplete="email"
+                                    value={formData.contact_email}
+                                    onChange={(e) => setFormData({...formData, contact_email: e.target.value})}
+                                />
+                            </Field>
+
+                            <div className="md:col-span-2">
+                                <Field
+                                    label="Direct reporting line"
+                                    error={errors.reporting_to}
+                                    helper="Role or department SPD reports into"
+                                >
+                                    <Input
+                                        name="reporting-line"
+                                        autoComplete="organization-title"
+                                        placeholder="e.g. Perioperative Director, Chief Nursing Officer"
+                                        value={formData.reporting_to}
+                                        onChange={(e) => setFormData({...formData, reporting_to: e.target.value})}
+                                    />
+                                </Field>
+                            </div>
+                        </div>
+                    </SectionShell>
+
+                    {/* Section 3 */}
+                    <SectionShell
+                        kicker="Section 3"
+                        title="Regulatory context"
+                        description="Summarize accreditation and recent survey history related to processing."
+                    >
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                            <Field label="Accrediting body" error={errors.accrediting_name}>
+                                <Input
+                                    placeholder="e.g. The Joint Commission (TJC), DNV, AAAHC"
+                                    value={formData.accrediting_name}
+                                    onChange={(e) => setFormData({...formData, accrediting_name: e.target.value})}
+                                />
+                            </Field>
+
+                            <Field label="Last survey/audit date" error={errors.last_audit_date}>
+                                <Input
+                                    type="date"
+                                    max={today}
+                                    value={formData.last_audit_date}
+                                    onChange={(e) => setFormData({...formData, last_audit_date: e.target.value})}
+                                />
+                            </Field>
+                        </div>
+
+                        <div
+                            className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 sm:p-6 transition-all">
+                            <div
+                                className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 sm:gap-6 mb-4 sm:mb-6">
+                                <div className="space-y-1">
+                                    <div className="flex items-center gap-2">
+                                        <span className="h-2 w-2 rounded-full bg-primary-500"></span>
+                                        <p className="text-[10px] sm:text-[11px] font-bold tracking-wider uppercase text-slate-500">
+                                            Regulatory History
+                                        </p>
+                                    </div>
+                                    <h3 className="text-sm font-semibold text-slate-800">Recent SPD Findings</h3>
+                                    <p className="text-xs text-slate-500 leading-relaxed max-w-md">
+                                        Indicate if the most recent accreditation or regulatory survey (e.g., TJC, CMS,
+                                        or State) cited processing deficiencies.
+                                    </p>
+                                </div>
+                                <div className="shrink-0 w-full md:w-auto">
+                                    <RadioGroup
+                                        value={formData.has_findings}
+                                        onChange={(v) => setFormData({...formData, has_findings: v})}
+                                        yesLabel="Yes, cited"
+                                        noLabel="No findings"
+                                    />
+                                </div>
+                            </div>
+
+                            {formData.has_findings && (
+                                <div className="animate-fade-in">
+                                    <div className="rounded-xl bg-slate-50 p-3 sm:p-4 border border-slate-100">
+                                        <p className="text-[10px] font-bold text-slate-400 uppercase mb-3 tracking-tight">
+                                            Specific Citations (Maximum 4)
+                                        </p>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-3">
+                                            {[
+                                                "e.g., Humidity/Temp excursions in Sterile Stores",
+                                                "e.g., Missing IFU-validated cleaning competencies",
+                                                "e.g., Immediate Use Steam Sterilization (IUSS) over-utilization",
+                                                "e.g., Improper pre-cleaning/transport of soiled peel packs"
+                                            ].map((placeholder, idx) => (
+                                                <div key={idx} className="relative">
+                                                    <input
+                                                        placeholder={placeholder}
+                                                        className="w-full bg-white border border-slate-200 text-slate-700 placeholder:text-slate-400 p-2.5 pl-3 rounded-lg text-xs focus:outline-none focus:border-primary-400 focus:ring-2 focus:ring-primary-500/10 transition-all shadow-sm"
+                                                        value={formData.findings[idx]}
+                                                        onChange={(e) => {
+                                                            const newFindings = [...formData.findings];
+                                                            newFindings[idx] = e.target.value;
+                                                            setFormData({...formData, findings: newFindings});
+                                                        }}
+                                                    />
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </SectionShell>
+
+                    {/* Section 4 */}
+                    <SectionShell
+                        kicker="Section 4"
+                        title="Staffing & scope"
+                        description="Outline current personnel mix and perioperative footprint."
+                    >
+                        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-3 sm:gap-4">
+                            <Field label="FTE w/FMLA" error={errors.staff_ft_w_fmla}>
+                                <Input
+                                    type="number"
+                                    value={formData.staff_ft_w_fmla}
+                                    onChange={(e) => setFormData({...formData, staff_ft_w_fmla: e.target.value})}
+                                />
+                            </Field>
+
+                            <Field label="Part time" error={errors.staff_pt}>
+                                <Input
+                                    type="number"
+                                    value={formData.staff_pt}
+                                    onChange={(e) => setFormData({...formData, staff_pt: e.target.value})}
+                                />
+                            </Field>
+
+                            <Field label="Per diem" error={errors.staff_pd}>
+                                <Input
+                                    type="number"
+                                    value={formData.staff_pd}
+                                    onChange={(e) => setFormData({...formData, staff_pd: e.target.value})}
+                                />
+                            </Field>
+
+                            <Field label="Travelers" error={errors.staff_travelers}>
+                                <Input
+                                    type="number"
+                                    value={formData.staff_travelers}
+                                    onChange={(e) => setFormData({...formData, staff_travelers: e.target.value})}
+                                />
+                            </Field>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+                            <Field label="Hours of operation" error={errors.hours_operation}
+                                   helper="e.g. 24/7 or 06:30–23:00">
+                                <Input
+                                    placeholder="e.g. 24/7 or 06:30–23:00"
+                                    value={formData.hours_operation}
+                                    onChange={(e) => setFormData({...formData, hours_operation: e.target.value})}
+                                />
+                            </Field>
+
+                            <Field label="Main OR count" error={errors.or_count}>
+                                <Input
+                                    type="number"
+                                    placeholder="12"
+                                    value={formData.or_count}
+                                    onChange={(e) => setFormData({...formData, or_count: e.target.value})}
+                                />
+                            </Field>
+
+                            <Field label="Clinic/satellite areas" error={errors.clinic_count}>
+                                <Input
+                                    type="number"
+                                    placeholder="4"
+                                    value={formData.clinic_count}
+                                    onChange={(e) => setFormData({...formData, clinic_count: e.target.value})}
+                                />
+                            </Field>
+                        </div>
+                    </SectionShell>
+
+                    {/* Section 5 */}
+                    <SectionShell
+                        kicker="Section 5"
+                        title="Processing scope & tracking"
+                        description="Identify high-complexity items processed in SPD and current tracking tools."
+                    >
+                        <Field label="Specialized items processed in SPD">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-2 sm:gap-3 mt-1">
+                                <Checkbox
+                                    label="Flexible endoscopes"
+                                    checked={formData.proc_endoscopes}
+                                    onChange={(v) => setFormData({...formData, proc_endoscopes: v})}
+                                />
+                                <Checkbox
+                                    label="Vascular/open heart"
+                                    checked={formData.proc_vascular}
+                                    onChange={(v) => setFormData({...formData, proc_vascular: v})}
+                                />
+                                <Checkbox
+                                    label="Arthroscopic"
+                                    checked={formData.proc_arthroscopic}
+                                    onChange={(v) => setFormData({...formData, proc_arthroscopic: v})}
+                                />
+                                <Checkbox
+                                    label="Robotic (da Vinci)"
+                                    checked={formData.proc_robotic}
+                                    onChange={(v) => setFormData({...formData, proc_robotic: v})}
+                                />
+                                <Checkbox
+                                    label="TEE probes"
+                                    checked={formData.proc_tee}
+                                    onChange={(v) => setFormData({...formData, proc_tee: v})}
+                                />
+                            </div>
+                        </Field>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 items-end">
+                            <Field label="Instrument tracking system?">
+                                <RadioGroup
+                                    value={formData.has_tracking}
+                                    onChange={(v) => setFormData({...formData, has_tracking: v})}
+                                />
+                            </Field>
+
+                            {formData.has_tracking && (
+                                <Field label="Tracking system name">
+                                    <Input
+                                        placeholder="e.g. Censis, SPM, T-DOC, CaseTrack"
+                                        value={formData.tracking_system_name}
+                                        onChange={(e) => setFormData({
+                                            ...formData,
+                                            tracking_system_name: e.target.value
+                                        })}
+                                    />
+                                </Field>
+                            )}
+                        </div>
+                    </SectionShell>
+
+                    {/* Section 6 */}
+                    <SectionShell
+                        kicker="Section 6"
+                        title="Narrative context"
+                        description="Highlight pain points and strategic considerations that should shape the review."
+                    >
+                        <Field label="Major operational pain points" error={errors.pain_points}>
+                                <textarea
+                                    className="w-full p-3 sm:p-4 bg-slate-50 border border-slate-200 rounded-2xl min-h-[130px] sm:min-h-[150px] focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 outline-none transition-all text-sm placeholder:text-slate-400 resize-y"
+                                    placeholder="e.g. High turnover, backlogged sterilization, outdated washer-disinfectors..."
+                                    value={formData.pain_points}
+                                    onChange={(e) => setFormData({...formData, pain_points: e.target.value})}
+                                />
+                        </Field>
+
+                        <Field label="Additional strategic information">
+                                <textarea
+                                    className="w-full p-3 sm:p-4 bg-slate-50 border border-slate-200 rounded-2xl min-h-[90px] sm:min-h-[100px] focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 outline-none transition-all text-sm placeholder:text-slate-400 resize-y"
+                                    placeholder="Upcoming renovations, new service lines, capital planning, etc."
+                                    value={formData.additional_info}
+                                    onChange={(e) => setFormData({...formData, additional_info: e.target.value})}
+                                />
+                        </Field>
+                    </SectionShell>
+
+                    {/* Action Buttons */}
+                    <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 pt-2">
+                        <button
+                            type="button"
+                            onClick={saveDraftNow}
+                            className="w-full sm:flex-1 py-3 px-4 border border-slate-200 rounded-2xl font-semibold text-sm text-slate-700 hover:bg-slate-50 transition-all active:scale-98"
+                        >
+                            Save Draft
+                        </button>
+                        <button
+                            type="button"
+                            onClick={clearDraft}
+                            className="w-full sm:w-auto px-4 py-3 border border-rose-200 rounded-2xl font-semibold text-sm text-rose-600 hover:bg-rose-50 transition-all active:scale-98"
+                        >
+                            Clear Form
+                        </button>
+                        <button
+                            type="submit"
+                            disabled={isSubmitting}
+                            className="w-full sm:flex-1 py-3.5 bg-primary-600 text-white rounded-2xl font-semibold text-sm tracking-wide shadow-soft hover:bg-primary-700 hover:-translate-y-[1px] transition-all active:translate-y-0 active:shadow-md flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none disabled:transform-none"
+                        >
+                            <span>{isSubmitting ? "Submitting..." : "Submit operational review"}</span>
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+                                      d="M13 5l7 7-7 7M5 12h14"/>
+                            </svg>
+                        </button>
                     </div>
-                    <div className="md:w-auto">
-                      <RadioGroup
-                        value={formData.has_findings}
-                        onChange={(v) =>
-                          setFormData({ ...formData, has_findings: v })
-                        }
-                        yesLabel="Yes, cited"
-                        noLabel="No findings"
-                      />
-                    </div>
-                  </div>
-
-                  {formData.has_findings && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      {[0, 1, 2, 3].map((i) => (
-                        <input
-                          key={i}
-                          placeholder={`Finding ${i + 1} (e.g. Bioburden on trays)`}
-                          className="bg-slate-800/80 border border-slate-600 text-slate-50 placeholder:text-slate-400 p-3 rounded-lg text-sm focus:outline-none focus:border-primary-300 focus:ring-1 focus:ring-primary-400/60"
-                          value={formData.findings[i]}
-                          onChange={(e) => {
-                            const newFindings = [...formData.findings];
-                            newFindings[i] = e.target.value;
-                            setFormData({ ...formData, findings: newFindings });
-                          }}
-                        />
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                <Field
-                  label="Direct reporting line"
-                  error={errors.reporting_to}
-                  helper="Role or department SPD reports into"
-                >
-                  <Input
-                    name="reporting-line"
-                    autoComplete="organization-title"
-                    placeholder="e.g. Perioperative Director, Chief Nursing Officer"
-                    value={formData.reporting_to}
-                    onChange={(e) =>
-                      setFormData({ ...formData, reporting_to: e.target.value })
-                    }
-                  />
-                </Field>
-              </SectionShell>
-
-              <SectionShell
-                kicker="Section 4"
-                title="Staffing & scope"
-                description="Outline current personnel mix and perioperative footprint."
-              >
-                <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                  <Field label="FT w/ FMLA" error={errors.staff_ft_w_fmla}>
-                    <Input
-                      type="number"
-                      value={formData.staff_ft_w_fmla}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          staff_ft_w_fmla: e.target.value,
-                        })
-                      }
-                    />
-                  </Field>
-                  <Field label="FT no FMLA" error={errors.staff_ft_no_fmla}>
-                    <Input
-                      type="number"
-                      value={formData.staff_ft_no_fmla}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          staff_ft_no_fmla: e.target.value,
-                        })
-                      }
-                    />
-                  </Field>
-                  <Field label="Part time" error={errors.staff_pt}>
-                    <Input
-                      type="number"
-                      value={formData.staff_pt}
-                      onChange={(e) =>
-                        setFormData({ ...formData, staff_pt: e.target.value })
-                      }
-                    />
-                  </Field>
-                  <Field label="Per diem" error={errors.staff_pd}>
-                    <Input
-                      type="number"
-                      value={formData.staff_pd}
-                      onChange={(e) =>
-                        setFormData({ ...formData, staff_pd: e.target.value })
-                      }
-                    />
-                  </Field>
-                  <Field label="Travelers" error={errors.staff_travelers}>
-                    <Input
-                      type="number"
-                      value={formData.staff_travelers}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          staff_travelers: e.target.value,
-                        })
-                      }
-                    />
-                  </Field>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <Field
-                    label="Hours of operation"
-                    error={errors.hours_operation}
-                    helper="e.g. 24/7 or 06:30–23:00"
-                  >
-                    <Input
-                      placeholder="e.g. 24/7 or 06:30–23:00"
-                      value={formData.hours_operation}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          hours_operation: e.target.value,
-                        })
-                      }
-                    />
-                  </Field>
-                  <Field label="Main OR count" error={errors.or_count}>
-                    <Input
-                      type="number"
-                      placeholder="12"
-                      value={formData.or_count}
-                      onChange={(e) =>
-                        setFormData({ ...formData, or_count: e.target.value })
-                      }
-                    />
-                  </Field>
-                  <Field
-                    label="Clinic / satellite areas"
-                    error={errors.clinic_count}
-                  >
-                    <Input
-                      type="number"
-                      placeholder="4"
-                      value={formData.clinic_count}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          clinic_count: e.target.value,
-                        })
-                      }
-                    />
-                  </Field>
-                </div>
-              </SectionShell>
-
-              <SectionShell
-                kicker="Section 5"
-                title="Processing scope & tracking"
-                description="Identify high-complexity items processed in SPD and current tracking tools."
-              >
-                <Field label="Specialized items processed in SPD">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-1">
-                    <Checkbox
-                      label="Flexible endoscopes"
-                      checked={formData.proc_endoscopes}
-                      onChange={(v) =>
-                        setFormData({ ...formData, proc_endoscopes: v })
-                      }
-                    />
-                    <Checkbox
-                      label="Vascular / open heart"
-                      checked={formData.proc_vascular}
-                      onChange={(v) =>
-                        setFormData({ ...formData, proc_vascular: v })
-                      }
-                    />
-                    <Checkbox
-                      label="Arthroscopic"
-                      checked={formData.proc_arthroscopic}
-                      onChange={(v) =>
-                        setFormData({ ...formData, proc_arthroscopic: v })
-                      }
-                    />
-                    <Checkbox
-                      label="Robotic (daVinci)"
-                      checked={formData.proc_robotic}
-                      onChange={(v) =>
-                        setFormData({ ...formData, proc_robotic: v })
-                      }
-                    />
-                    <Checkbox
-                      label="TEE probes"
-                      checked={formData.proc_tee}
-                      onChange={(v) =>
-                        setFormData({ ...formData, proc_tee: v })
-                      }
-                    />
-                  </div>
-                </Field>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
-                  <Field label="Instrument tracking system?">
-                    <RadioGroup
-                      value={formData.has_tracking}
-                      onChange={(v) =>
-                        setFormData({ ...formData, has_tracking: v })
-                      }
-                    />
-                  </Field>
-                  {formData.has_tracking && (
-                    <Field label="Tracking system name">
-                      <Input
-                        placeholder="e.g. Censis, SPM, T-DOC, CaseTrack"
-                        value={formData.tracking_system_name}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            tracking_system_name: e.target.value,
-                          })
-                        }
-                      />
-                    </Field>
-                  )}
-                </div>
-              </SectionShell>
-
-              <SectionShell
-                kicker="Section 6"
-                title="Narrative context"
-                description="Highlight pain points and strategic considerations that should shape the review."
-              >
-                <Field
-                  label="Major operational painpoints"
-                  error={errors.pain_points}
-                >
-                  <textarea
-                    className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl min-h-[150px] focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 outline-none transition-all text-sm placeholder:text-slate-400"
-                    placeholder="e.g. High turnover, backlogged sterilization, outdated washer-disinfectors..."
-                    value={formData.pain_points}
-                    onChange={(e) =>
-                      setFormData({ ...formData, pain_points: e.target.value })
-                    }
-                  />
-                </Field>
-
-                <Field label="Additional strategic information">
-                  <textarea
-                    className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl min-h-[100px] focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 outline-none transition-all text-sm placeholder:text-slate-400"
-                    placeholder="Upcoming renovations, new service lines, capital planning, etc."
-                    value={formData.additional_info}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        additional_info: e.target.value,
-                      })
-                    }
-                  />
-                </Field>
-              </SectionShell>
-
-              <div className="flex flex-col sm:flex-row gap-3 pt-2">
-                <button
-                  type="button"
-                  onClick={saveDraftNow}
-                  className="flex-1 py-3 px-4 border border-slate-200 rounded-2xl font-semibold text-sm text-slate-700 hover:bg-slate-50 transition-all"
-                >
-                  Save Draft
-                </button>
-                <button
-                  type="button"
-                  onClick={clearDraft}
-                  className="px-4 py-3 border border-rose-200 rounded-2xl font-semibold text-sm text-rose-600 hover:bg-rose-50 transition-all"
-                >
-                  Clear Form
-                </button>
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="flex-1 py-3.5 bg-primary-600 text-white rounded-2xl font-semibold text-sm tracking-wide shadow-soft hover:bg-primary-700 hover:-translate-y-[1px] transition-all active:translate-y-0 active:shadow-md flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none"
-                >
-                  <span>
-                    {isSubmitting
-                      ? "Submitting..."
-                      : "Submit operational review"}
-                  </span>
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M13 5l7 7-7 7M5 5v14"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </form>
-          </div>
+                </form>
+            </div>
         );
-      };
+    };
 
-      const root = ReactDOM.createRoot(document.getElementById("root"));
-      root.render(<PreAuditForm />);
-    </script>
-  </body>
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<PreAuditForm/>);
+</script>
+</body>
 </html>
