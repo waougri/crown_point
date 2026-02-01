@@ -670,7 +670,7 @@
 
             setErrors({});
             try {
-                const response = await fetch("http://api.crownpointconsult.com/gatekeeper", {
+                const response = await fetch("https://api.crownpointconsult.com/gatekeeper", {
                     method: "POST",
                     headers: {"Content-Type": "application/json"},
                     body: JSON.stringify(result.data),
