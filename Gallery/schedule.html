@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes"/>
-    <meta name="mobile-web-app-capable" content="yes"/>
-    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta charset="UTF-8" />
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes"
+    />
     <title>Pre-Audit Assessment | Crown Point Consulting</title>
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com"/>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
-          rel="stylesheet"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+            rel="stylesheet"
+    />
 
-    <!-- Core Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -20,9 +21,15 @@
     <script src="https://unpkg.com/zod@3.21.4/lib/index.umd.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <!-- Flatpickr -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"/>
-    <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/airbnb.css"/>
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+    />
+    <link
+            rel="stylesheet"
+            type="text/css"
+            href="https://npmcdn.com/flatpickr/dist/themes/airbnb.css"
+    />
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
     <script>
@@ -54,11 +61,17 @@
     <style>
         * {
             -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
         }
 
         body {
             font-family: "Inter", sans-serif;
-            background: radial-gradient(circle at top, #faf5ff 0%, #f8fafc 45%, #eef2ff 100%);
+            background: radial-gradient(
+                    circle at top,
+                    #faf5ff 0%,
+                    #f8fafc 45%,
+                    #eef2ff 100%
+            );
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
@@ -70,7 +83,6 @@
             box-shadow: 0 20px 40px -24px rgba(15, 23, 42, 0.4);
         }
 
-        /* Mobile optimizations */
         @media (max-width: 640px) {
             .form-card {
                 border-radius: 1rem;
@@ -79,21 +91,40 @@
             }
         }
 
-        /* Honeypot field */
         .hp-field {
             position: absolute;
             left: -5000px;
             top: -5000px;
+            opacity: 0;
+            pointer-events: none;
         }
 
-        /* Flatpickr overrides */
+        /* Uniform Inputs */
+        input, select, textarea, button {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            border-radius: 0.75rem;
+        }
+
+        /* Reset for text inputs */
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="number"],
+        input[type="date"],
+        select,
+        textarea {
+            font-size: 16px !important;
+        }
+
+        /* Flatpickr Customization */
         .flatpickr-calendar {
             border-radius: 1rem !important;
             box-shadow: 0 20px 40px -24px rgba(15, 23, 42, 0.4) !important;
             border: 1px solid #e2e8f0 !important;
             font-family: "Inter", sans-serif !important;
         }
-
         .flatpickr-day.selected,
         .flatpickr-day.startRange,
         .flatpickr-day.endRange,
@@ -109,7 +140,6 @@
             background: #9333ea !important;
             border-color: #9333ea !important;
         }
-
         .flatpickr-day.inRange {
             box-shadow: -5px 0 0 #f3e8ff, 5px 0 0 #f3e8ff !important;
             background: #f3e8ff !important;
@@ -117,7 +147,6 @@
             color: #7e22ce !important;
         }
 
-        /* Mobile flatpickr */
         @media (max-width: 640px) {
             .flatpickr-calendar {
                 width: 100% !important;
@@ -125,95 +154,32 @@
             }
         }
 
-        /* Smooth animations */
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
+        .animate-fade-in { animation: fadeIn 0.3s ease-out; }
 
-        .animate-fade-in {
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        /* Better focus states for accessibility */
         *:focus-visible {
             outline: 2px solid #9333ea;
             outline-offset: 2px;
         }
-
-        /* Prevent zoom on iOS */
-        input[type="text"],
-        input[type="email"],
-        input[type="tel"],
-        input[type="number"],
-        input[type="date"],
-        select,
-        textarea {
-            font-size: 16px !important;
-        }
-
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f5f9;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
-
-        /* Better touch targets for mobile */
-        @media (max-width: 640px) {
-            button,
-            input,
-            select,
-            textarea,
-            label {
-                min-height: 44px;
-            }
-        }
-
-        /* Loading state */
-        .loading {
-            pointer-events: none;
-            opacity: 0.6;
-        }
-
-        /* Responsive grid improvements */
-        @media (max-width: 768px) {
-            .responsive-grid {
-                grid-template-columns: 1fr !important;
-            }
-        }
     </style>
 </head>
-
 <body class="min-h-screen text-slate-900">
 <div class="relative overflow-hidden">
-    <div id="root" class="max-w-6xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-8 md:py-10"></div>
+    <div
+            id="root"
+            class="max-w-6xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-8 md:py-10"
+    ></div>
 </div>
 
 <script type="text/babel">
-    const {useState, useRef, useCallback, useEffect} = React;
+    const { useState, useRef, useCallback, useEffect } = React;
     const z = Zod;
     const today = new Date().toISOString().split("T")[0];
 
-    /* ---------- Swal Helpers ---------- */
+    /* ---------- Toast Helpers ---------- */
     function createToast() {
         return Swal.mixin({
             toast: true,
@@ -227,26 +193,23 @@
             },
         });
     }
-
     const toast = createToast();
-
     function showSuccessToast(title = "Saved") {
-        toast.fire({icon: "success", title});
+        toast.fire({ icon: "success", title });
     }
-
     function showErrorToast(title = "Something went wrong") {
-        toast.fire({icon: "error", title});
+        toast.fire({ icon: "error", title });
     }
 
     /* ---------- Schema ---------- */
     const auditSchema = z.object({
-        audit_type: z.enum(["CSSD", "Endoscopy", "Dental"], {
-            errorMap: () => ({message: "Please select an audit type"})
-        }),
-        date_intervals: z.array(z.object({
-            start: z.string().min(1),
-            end: z.string().min(1),
-        })).min(1, "Please add at least one preferred date range"),
+        audit_type: z.array(z.string()).min(1, { message: "Please select at least one audit type" }),
+        date_intervals: z.array(
+            z.object({
+                start: z.string().min(1),
+                end: z.string().min(1),
+            })
+        ).min(1, "Please add at least one preferred date range"),
         facility_name: z.string().min(2, "Facility name is required"),
         facility_address: z.string().min(5, "Full address is required"),
         is_affiliated: z.boolean(),
@@ -275,13 +238,16 @@
         proc_tee: z.boolean(),
         has_tracking: z.boolean(),
         tracking_system_name: z.string().optional(),
+        /* NEW: Schema for the keywords */
+        areas_of_focus: z.array(z.string()).optional(),
         pain_points: z.string().min(1, "Please describe the pain points"),
         additional_info: z.string().optional(),
         bot_check: z.string().max(0),
     });
 
-    /* ---------- UI Primitives ---------- */
-    const SectionShell = ({kicker, title, children, description}) => (
+    /* ---------- Components ---------- */
+
+    const SectionShell = ({ kicker, title, children, description }) => (
         <section className="space-y-4 sm:space-y-6">
             <div className="flex flex-col gap-1">
                 {kicker && (
@@ -304,16 +270,16 @@
         </section>
     );
 
-    const Field = ({label, error, children, helper, className = ""}) => (
+    const Field = ({ label, error, children, helper, className = "" }) => (
         <div className={`space-y-1.5 ${className}`}>
-            <div className="flex items-baseline justify-between gap-2 sm:gap-3">
-                <label className="text-xs sm:text-xs font-semibold text-slate-600 tracking-wide">
+            <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                <label className="text-xs sm:text-xs font-bold text-slate-700 tracking-wide">
                     {label}
                 </label>
                 {helper && (
-                    <span className="text-[10px] sm:text-[11px] text-slate-400 text-right">
-                            {helper}
-                        </span>
+                    <span className="text-[11px] text-slate-400 font-medium">
+                {helper}
+              </span>
                 )}
             </div>
             {children}
@@ -321,19 +287,72 @@
         </div>
     );
 
+    const inputBaseClasses = "w-full px-3 sm:px-3.5 h-[46px] bg-slate-50 border border-slate-200 rounded-xl text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 transition-all appearance-none";
+
     const Input = (props) => (
         <input
             {...props}
-            className={`w-full px-3 sm:px-3.5 py-2.5 sm:py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 transition-all ${props.className || ""}`}
+            className={`${inputBaseClasses} ${props.className || ""}`}
         />
     );
 
-    const RadioGroup = ({value, onChange, yesLabel = "Yes", noLabel = "No"}) => (
-        <div className="inline-flex rounded-full bg-slate-100 p-1 border border-slate-200 w-full sm:w-auto">
+    /* NEW: Tag/Keyword Input Component */
+    const TagInput = ({ value = [], onChange, placeholder }) => {
+        const [inputValue, setInputValue] = useState("");
+
+        const handleKeyDown = (e) => {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                const trimmed = inputValue.trim();
+                if (trimmed && !value.includes(trimmed)) {
+                    onChange([...value, trimmed]);
+                    setInputValue("");
+                }
+            }
+            if (e.key === "Backspace" && !inputValue && value.length > 0) {
+                onChange(value.slice(0, -1));
+            }
+        };
+
+        const removeTag = (indexToRemove) => {
+            onChange(value.filter((_, index) => index !== indexToRemove));
+        };
+
+        return (
+            <div className="w-full min-h-[46px] bg-slate-50 border border-slate-200 rounded-xl focus-within:ring-2 focus-within:ring-primary-500/40 focus-within:border-primary-500 transition-all flex flex-wrap items-center gap-2 p-2">
+                {value.map((tag, index) => (
+                    <span
+                        key={index}
+                        className="animate-fade-in inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-primary-100 text-primary-800 text-xs font-semibold"
+                    >
+                {tag}
+                        <button
+                            type="button"
+                            onClick={() => removeTag(index)}
+                            className="text-primary-500 hover:text-primary-700 focus:outline-none"
+                        >
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+              </span>
+                ))}
+                <input
+                    type="text"
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    placeholder={value.length === 0 ? placeholder : ""}
+                    className="flex-1 bg-transparent border-none outline-none text-sm placeholder:text-slate-400 min-w-[120px]"
+                />
+            </div>
+        );
+    };
+
+    const RadioGroup = ({ value, onChange, yesLabel = "Yes", noLabel = "No" }) => (
+        <div className="inline-flex rounded-full bg-slate-100 p-1 border border-slate-200 w-full sm:w-auto h-[46px] items-center">
             <button
                 type="button"
                 onClick={() => onChange(true)}
-                className={`flex-1 sm:flex-none px-4 sm:px-6 py-2 sm:py-1.5 text-xs sm:text-xs font-semibold rounded-full transition-all ${
+                className={`flex-1 sm:flex-none h-full px-4 sm:px-6 text-xs sm:text-xs font-semibold rounded-full transition-all flex items-center justify-center ${
                     value
                         ? "bg-primary-600 text-white shadow-sm"
                         : "text-slate-500 hover:text-slate-700"
@@ -344,7 +363,7 @@
             <button
                 type="button"
                 onClick={() => onChange(false)}
-                className={`flex-1 sm:flex-none px-4 sm:px-6 py-2 sm:py-1.5 text-xs sm:text-xs font-semibold rounded-full transition-all ${
+                className={`flex-1 sm:flex-none h-full px-4 sm:px-6 text-xs sm:text-xs font-semibold rounded-full transition-all flex items-center justify-center ${
                     !value
                         ? "bg-rose-500 text-white shadow-sm"
                         : "text-slate-500 hover:text-slate-700"
@@ -355,25 +374,32 @@
         </div>
     );
 
-    const Checkbox = ({label, checked, onChange}) => (
-        <label
-            className="flex items-center gap-2.5 sm:gap-3 p-2.5 sm:p-3 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer hover:border-primary-400 hover:bg-primary-50/50 transition-colors text-xs sm:text-sm active:scale-98">
+    const Checkbox = ({ label, checked, onChange }) => (
+        <label className="flex items-center gap-3 p-3 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer hover:border-primary-400 hover:bg-primary-50/50 transition-all active:scale-98 min-h-[46px] select-none group">
+            <div className={`
+             w-5 h-5 rounded flex-shrink-0 flex items-center justify-center border transition-colors
+             ${checked ? 'bg-primary-600 border-primary-600' : 'bg-white border-slate-300 group-hover:border-primary-400'}
+          `}>
+                {checked && (
+                    <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg>
+                )}
+            </div>
             <input
                 type="checkbox"
                 checked={checked}
                 onChange={(e) => onChange(e.target.checked)}
-                className="w-4 h-4 sm:w-4 sm:h-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500"
+                className="hidden"
             />
-            <span className="font-medium text-slate-700">{label}</span>
+            <span className="font-medium text-slate-700 text-xs sm:text-sm">{label}</span>
         </label>
     );
 
-    const Select = ({options, placeholder = "Select...", ...props}) => (
+    const Select = ({ options, placeholder = "Select...", ...props }) => (
         <div className="relative">
             <select
                 {...props}
                 autoComplete="off"
-                className={`w-full px-3 sm:px-3.5 py-2.5 sm:py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 appearance-none ${props.className || ""}`}
+                className={`${inputBaseClasses} ${props.className || ""}`}
             >
                 <option value="">{placeholder}</option>
                 {options.map((opt) => (
@@ -383,16 +409,51 @@
                 ))}
             </select>
             <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-slate-400 text-xs">
-                    ▼
-                </span>
+            ▼
+          </span>
         </div>
     );
 
-    /* ---------- Range List Picker ---------- */
-    const RangeListPicker = ({value = [], onChange}) => {
+    const MultiSelectToggle = ({ options, value = [], onChange }) => {
+        const handleToggle = (optValue) => {
+            if (value.includes(optValue)) {
+                onChange(value.filter(v => v !== optValue));
+            } else {
+                onChange([...value, optValue]);
+            }
+        };
+
+        return (
+            <div className="flex flex-wrap gap-2 sm:gap-3">
+                {options.map((opt) => {
+                    const isActive = value.includes(opt.value);
+                    return (
+                        <button
+                            key={opt.value}
+                            type="button"
+                            onClick={() => handleToggle(opt.value)}
+                            className={`
+                    px-4 py-2.5 rounded-xl border text-sm font-semibold transition-all active:scale-95 shadow-sm flex items-center gap-2
+                    ${isActive
+                                ? 'bg-primary-600 border-primary-600 text-white'
+                                : 'bg-white border-slate-200 text-slate-600 hover:border-primary-300 hover:text-primary-600 hover:bg-primary-50'
+                            }
+                  `}
+                        >
+                            {isActive && (
+                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg>
+                            )}
+                            {opt.label}
+                        </button>
+                    );
+                })}
+            </div>
+        );
+    };
+
+    const RangeListPicker = ({ value = [], onChange }) => {
         const pickerRef = useRef(null);
-        const [tempRange, setTempRange] = useState({start: "", end: ""});
-        const [displayVal, setDisplayVal] = useState("");
+        const [tempRange, setTempRange] = useState({ start: "", end: "" });
 
         useEffect(() => {
             if (!pickerRef.current) return;
@@ -401,12 +462,11 @@
                 dateFormat: "Y-m-d",
                 minDate: "today",
                 theme: "airbnb",
-                onChange: (selectedDates, dateStr, instance) => {
+                onChange: (selectedDates, dateStr) => {
                     if (selectedDates.length === 2) {
                         const start = selectedDates[0].toISOString().split("T")[0];
                         const end = selectedDates[1].toISOString().split("T")[0];
-                        setTempRange({start, end});
-                        setDisplayVal(dateStr);
+                        setTempRange({ start, end });
                     }
                 },
             });
@@ -415,42 +475,38 @@
 
         const handleAdd = () => {
             if (!tempRange.start || !tempRange.end) return;
-            const newIntervals = [...value, tempRange];
-            onChange(newIntervals);
-            setTempRange({start: "", end: ""});
-            setDisplayVal("");
+            onChange([...value, tempRange]);
+            setTempRange({ start: "", end: "" });
             if (pickerRef.current) {
                 pickerRef.current._flatpickr.clear();
             }
         };
 
         const handleRemove = (idx) => {
-            const newIntervals = value.filter((_, i) => i !== idx);
-            onChange(newIntervals);
+            onChange(value.filter((_, i) => i !== idx));
         };
 
         return (
             <div className="space-y-3">
                 <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 items-stretch sm:items-end">
                     <div className="flex-1 w-full relative">
-                            <span className="absolute left-3 top-3 text-slate-400 pointer-events-none">
-                                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                </svg>
-                            </span>
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none z-10">
+                  <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                  </svg>
+                </span>
                         <input
                             ref={pickerRef}
                             type="text"
                             placeholder="Select date range (e.g. Jan 1 to Jan 7)"
-                            className="w-full pl-10 pr-3 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 outline-none shadow-sm cursor-pointer"
+                            className="w-full pl-10 pr-3 h-[46px] bg-white border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 outline-none shadow-sm cursor-pointer appearance-none"
                         />
                     </div>
                     <button
                         type="button"
                         onClick={handleAdd}
                         disabled={!tempRange.start || !tempRange.end}
-                        className="w-full sm:w-auto px-4 sm:px-5 py-3 bg-slate-800 text-white text-sm font-medium rounded-xl hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm active:scale-98"
+                        className="w-full sm:w-auto px-4 sm:px-5 h-[46px] bg-slate-800 text-white text-sm font-medium rounded-xl hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm active:scale-98 flex items-center justify-center whitespace-nowrap"
                     >
                         Add Selection
                     </button>
@@ -462,25 +518,24 @@
                                 key={i}
                                 className="animate-fade-in flex items-center gap-2 bg-primary-50 border border-primary-100 text-primary-700 pl-3 pr-2 py-2 rounded-lg text-xs font-medium shadow-sm"
                             >
-                                    <span className="whitespace-nowrap">
-                                        {new Date(interval.start).toLocaleDateString(undefined, {
-                                            month: "short",
-                                            day: "numeric",
-                                        })}
-                                        <span className="text-primary-400 mx-1">→</span>
-                                        {new Date(interval.end).toLocaleDateString(undefined, {
-                                            month: "short",
-                                            day: "numeric",
-                                        })}
-                                    </span>
+                    <span className="whitespace-nowrap">
+                      {new Date(interval.start).toLocaleDateString(undefined, {
+                          month: "short",
+                          day: "numeric",
+                      })}
+                        <span className="text-primary-400 mx-1">→</span>
+                        {new Date(interval.end).toLocaleDateString(undefined, {
+                            month: "short",
+                            day: "numeric",
+                        })}
+                    </span>
                                 <button
                                     type="button"
                                     onClick={() => handleRemove(i)}
                                     className="p-1 hover:bg-primary-100 rounded text-primary-400 hover:text-rose-500 transition-colors"
                                 >
                                     <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                                              d="M6 18L18 6M6 6l12 12"></path>
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
                                     </svg>
                                 </button>
                             </div>
@@ -494,11 +549,13 @@
     /* ---------- Main Form ---------- */
     const PreAuditForm = () => {
         const [formData, setFormData] = useState({
-            audit_type: "",
+            audit_type: [],
             date_intervals: [],
             facility_name: "",
             facility_address: "",
-            is_affiliated: false,
+            is_affiliated: true,
+            has_findings: true,
+            has_tracking: true,
             system_name: "",
             trauma_level: "",
             contact_name: "",
@@ -507,7 +564,6 @@
             contact_email: "",
             accrediting_name: "",
             last_audit_date: "",
-            has_findings: false,
             findings: ["", "", "", ""],
             reporting_to: "",
             staff_ft_w_fmla: "",
@@ -522,8 +578,9 @@
             proc_arthroscopic: false,
             proc_robotic: false,
             proc_tee: false,
-            has_tracking: false,
             tracking_system_name: "",
+            /* NEW State Variable */
+            areas_of_focus: [],
             pain_points: "",
             additional_info: "",
             bot_check: "",
@@ -533,14 +590,20 @@
         const [isSubmitting, setIsSubmitting] = useState(false);
         const autosaveTimer = useRef(null);
 
-        // Success Modal
         const showSuccessModal = async () => {
+            const auditTypesDisplay = formData.audit_type.length > 0
+                ? formData.audit_type.join(" & ")
+                : "SPD";
+
             const result = await Swal.fire({
                 title: "Assessment Submitted!",
-                html: `<div class="text-center space-y-5 mt-5">
-                        <p class="text-slate-700 text-base">Your ${formData.audit_type || "SPD"} Pre-Audit Assessment for<br><strong>${formData.facility_name || "the facility"}</strong> has been successfully recorded.</p>
-                        <p class="text-sm text-slate-500">Thank you for your submission.<br>What would you like to do next?</p>
-                    </div>`,
+                html: `
+            <div class="text-center space-y-5 mt-5">
+              <p class="text-slate-700 text-base">
+                Your <strong>${auditTypesDisplay}</strong> Pre-Audit Assessment for<br>
+                <strong>${formData.facility_name || "the facility"}</strong> has been successfully recorded.
+              </p>
+            </div>`,
                 icon: "success",
                 iconColor: "#a855f7",
                 showConfirmButton: false,
@@ -563,13 +626,12 @@
             });
 
             if (result.isDenied) {
-                // Reset form
                 setFormData({
-                    audit_type: "",
+                    audit_type: [],
                     date_intervals: [],
                     facility_name: "",
                     facility_address: "",
-                    is_affiliated: false,
+                    is_affiliated: true,
                     system_name: "",
                     trauma_level: "",
                     contact_name: "",
@@ -578,7 +640,7 @@
                     contact_email: "",
                     accrediting_name: "",
                     last_audit_date: "",
-                    has_findings: false,
+                    has_findings: true,
                     findings: ["", "", "", ""],
                     reporting_to: "",
                     staff_ft_w_fmla: "",
@@ -593,16 +655,17 @@
                     proc_arthroscopic: false,
                     proc_robotic: false,
                     proc_tee: false,
-                    has_tracking: false,
+                    has_tracking: true,
                     tracking_system_name: "",
+                    areas_of_focus: [],
                     pain_points: "",
                     additional_info: "",
                     bot_check: "",
                 });
                 setErrors({});
                 localStorage.removeItem("preAuditDraft");
-                window.scrollTo({top: 0, behavior: "smooth"});
-                showSuccessToast("Form cleared—ready for new assessment");
+                window.scrollTo({ top: 0, behavior: "smooth" });
+                showSuccessToast("Form cleared");
             }
         };
 
@@ -611,39 +674,26 @@
             try {
                 const draft = localStorage.getItem("preAuditDraft");
                 if (draft) {
-                    setFormData((prev) => ({...prev, ...JSON.parse(draft)}));
+                    setFormData((prev) => ({ ...prev, ...JSON.parse(draft) }));
                     showSuccessToast("Draft loaded");
                 }
-            } catch (e) {
-                console.warn("No draft found", e);
-            }
+            } catch (e) { console.warn(e); }
         }, []);
 
         // Save Draft
         React.useEffect(() => {
-            if (autosaveTimer.current) {
-                clearTimeout(autosaveTimer.current);
-            }
+            if (autosaveTimer.current) clearTimeout(autosaveTimer.current);
             autosaveTimer.current = setTimeout(() => {
-                try {
-                    localStorage.setItem("preAuditDraft", JSON.stringify(formData));
-                } catch (e) {
-                    console.warn("Cannot save draft:", e);
-                }
+                try { localStorage.setItem("preAuditDraft", JSON.stringify(formData)); } catch (e) {}
             }, 600);
-            return () => {
-                if (autosaveTimer.current) clearTimeout(autosaveTimer.current);
-            };
+            return () => { if (autosaveTimer.current) clearTimeout(autosaveTimer.current); };
         }, [formData]);
 
         const saveDraftNow = useCallback(() => {
             try {
                 localStorage.setItem("preAuditDraft", JSON.stringify(formData));
                 showSuccessToast("Draft saved locally");
-            } catch (e) {
-                console.error(e);
-                showErrorToast("Failed to save draft");
-            }
+            } catch (e) { showErrorToast("Failed to save draft"); }
         }, [formData]);
 
         const clearDraft = useCallback(() => {
@@ -654,8 +704,8 @@
         const handleSubmit = async (e) => {
             e.preventDefault();
             setIsSubmitting(true);
-
             const result = auditSchema.safeParse(formData);
+
             if (!result.success) {
                 const fieldErrors = {};
                 result.error.issues.forEach((i) => {
@@ -663,36 +713,25 @@
                     if (!fieldErrors[key]) fieldErrors[key] = i.message;
                 });
                 setErrors(fieldErrors);
-                window.scrollTo({top: 0, behavior: "smooth"});
+                window.scrollTo({ top: 0, behavior: "smooth" });
                 setIsSubmitting(false);
                 return;
             }
-
             setErrors({});
             try {
+                console.log(JSON.stringify(result));
                 const response = await fetch("https://api.crownpointconsult.com/gatekeeper", {
                     method: "POST",
-                    headers: {"Content-Type": "application/json"},
-                    body: JSON.stringify(result.data),
+                    body: JSON.stringify(formData),
                 });
-
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.detail || "Server Error");
+                if(!response.ok) {
+                    throw new Error(`Response: ${response.statusText}`);
                 }
-
-                const data = response.json();
-                console.log(data);
-                localStorage.removeItem("preAuditDraft");
+                // localStorage.removeItem("preAuditDraft");
                 await showSuccessModal();
             } catch (error) {
-                console.error("Submission error:", error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Submission Failed',
-                    text: error.message || "We couldn't reach the server. Please try again or contact support.",
-                    confirmButtonColor: '#9333ea',
-                });
+                console.error(error);
+                showErrorToast(error);
             } finally {
                 setIsSubmitting(false);
             }
@@ -705,20 +744,22 @@
                         Crown Point Consulting
                     </p>
                     <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-slate-900 font-display tracking-tight px-4">
-                        SPD Pre‑Audit Operational Review
+                       Pre‑Audit Operational Review
                     </h1>
                     <p className="max-w-2xl mx-auto text-xs sm:text-sm text-slate-500 leading-relaxed px-4">
                         Capture a concise snapshot of processing operations, staffing, and survey readiness.
                     </p>
                 </header>
 
-                <form onSubmit={handleSubmit}
-                      className="form-card p-4 sm:p-6 md:p-10 space-y-8 sm:space-y-10 border border-primary-50">
+                <form
+                    onSubmit={handleSubmit}
+                    className="form-card p-4 sm:p-6 md:p-10 space-y-8 sm:space-y-10 border border-primary-50"
+                >
                     <input
                         type="text"
                         className="hp-field"
                         value={formData.bot_check}
-                        onChange={(e) => setFormData({...formData, bot_check: e.target.value})}
+                        onChange={(e) => setFormData({ ...formData, bot_check: e.target.value })}
                         tabIndex="-1"
                     />
 
@@ -728,16 +769,19 @@
                         title="Facility identity"
                         description="Confirm basic identifying information and preferred assessment timeline."
                     >
-                        <Field label="Assessment Type" error={errors.audit_type} helper="Select the primary focus">
-                            <Select
-                                value={formData.audit_type}
-                                onChange={(e) => setFormData({...formData, audit_type: e.target.value})}
-                                placeholder="Select audit type..."
+                        <Field
+                            label="Assessment Scope"
+                            error={errors.audit_type}
+                            helper="Select all that apply"
+                        >
+                            <MultiSelectToggle
                                 options={[
-                                    {label: "CSSD/SPD", value: "CSSD"},
-                                    {label: "Endoscopy", value: "Endoscopy"},
-                                    {label: "Dental", value: "Dental"}
+                                    { label: "CSSD / SPD", value: "CSSD" },
+                                    { label: "Endoscopy", value: "Endoscopy" },
+                                    { label: "Dental", value: "Dental" }
                                 ]}
+                                value={formData.audit_type}
+                                onChange={(newVal) => setFormData({...formData, audit_type: newVal})}
                             />
                         </Field>
 
@@ -749,49 +793,63 @@
                             >
                                 <RangeListPicker
                                     value={formData.date_intervals}
-                                    onChange={(intervals) => setFormData({...formData, date_intervals: intervals})}
+                                    onChange={(intervals) =>
+                                        setFormData({ ...formData, date_intervals: intervals })
+                                    }
                                 />
                             </Field>
-
-                            <Field label="Facility name" error={errors.facility_name} helper="As on accreditation docs">
+                            <Field
+                                label="Facility name"
+                                error={errors.facility_name}
+                                helper="As on accreditation docs"
+                            >
                                 <Input
                                     placeholder="e.g. Cedars-Sinai Medical Center"
                                     value={formData.facility_name}
-                                    onChange={(e) => setFormData({...formData, facility_name: e.target.value})}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, facility_name: e.target.value })
+                                    }
                                 />
                             </Field>
-
-                            <Field label="Facility Address" error={errors.facility_address}
-                                   helper="Street, city, state, zip">
+                            <Field
+                                label="Facility Address"
+                                error={errors.facility_address}
+                                helper="Street, city, state, zip"
+                            >
                                 <Input
                                     placeholder="Enter your address"
                                     autoComplete="address"
                                     name="address"
                                     value={formData.facility_address}
-                                    onChange={(e) => setFormData({...formData, facility_address: e.target.value})}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, facility_address: e.target.value })
+                                    }
                                 />
                             </Field>
                         </div>
 
-                        <div
-                            className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 items-end bg-slate-50/80 p-4 sm:p-5 rounded-2xl border border-slate-200">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 items-end bg-slate-50/80 p-4 sm:p-5 rounded-2xl border border-slate-200">
                             <Field label="Health system affiliation?">
                                 <RadioGroup
                                     value={formData.is_affiliated}
-                                    onChange={(v) => setFormData({...formData, is_affiliated: v})}
+                                    onChange={(v) => setFormData({ ...formData, is_affiliated: v })}
                                 />
                             </Field>
-
                             {formData.is_affiliated && (
-                                <Field label="System name" error={errors.system_name} className="md:col-span-2">
+                                <Field
+                                    label="System name"
+                                    error={errors.system_name}
+                                    className="md:col-span-2"
+                                >
                                     <Input
                                         placeholder="e.g. HCA Healthcare, Ascension, Tenet"
                                         value={formData.system_name}
-                                        onChange={(e) => setFormData({...formData, system_name: e.target.value})}
+                                        onChange={(e) =>
+                                            setFormData({ ...formData, system_name: e.target.value })
+                                        }
                                     />
                                 </Field>
                             )}
-
                             <Field
                                 label="Trauma level"
                                 error={errors.trauma_level}
@@ -800,14 +858,16 @@
                                 <Select
                                     value={formData.trauma_level}
                                     placeholder="Select level..."
-                                    onChange={(e) => setFormData({...formData, trauma_level: e.target.value})}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, trauma_level: e.target.value })
+                                    }
                                     options={[
-                                        {value: "Level I", label: "Level I (Comprehensive)"},
-                                        {value: "Level II", label: "Level II (Major)"},
-                                        {value: "Level III", label: "Level III (General)"},
-                                        {value: "Level IV", label: "Level IV (Basic)"},
-                                        {value: "Level V", label: "Level V (Critical Access)"},
-                                        {value: "N/A", label: "None/Non-Trauma Center"},
+                                        { value: "Level I", label: "Level I (Comprehensive)" },
+                                        { value: "Level II", label: "Level II (Major)" },
+                                        { value: "Level III", label: "Level III (General)" },
+                                        { value: "Level IV", label: "Level IV (Basic)" },
+                                        { value: "Level V", label: "Level V (Critical Access)" },
+                                        { value: "N/A", label: "None / Non-Trauma Center" },
                                     ]}
                                 />
                             </Field>
@@ -818,7 +878,7 @@
                     <SectionShell
                         kicker="Section 2"
                         title="Point of contact"
-                        description="Identify the primary leader who will coordinate the SPD review."
+                        description="Identify the primary leader who will coordinate the review."
                     >
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                             <Field label="Name" error={errors.contact_name}>
@@ -826,38 +886,42 @@
                                     placeholder="Jane Doe"
                                     autoComplete="name"
                                     value={formData.contact_name}
-                                    onChange={(e) => setFormData({...formData, contact_name: e.target.value})}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, contact_name: e.target.value })
+                                    }
                                 />
                             </Field>
-
                             <Field label="Title" error={errors.contact_title}>
                                 <Input
-                                    placeholder="SPD Manager/Director of Sterile Processing"
+                                    placeholder="SPD Manager / Director of Sterile Processing"
                                     value={formData.contact_title}
-                                    onChange={(e) => setFormData({...formData, contact_title: e.target.value})}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, contact_title: e.target.value })
+                                    }
                                 />
                             </Field>
-
                             <Field label="Phone" error={errors.contact_phone}>
                                 <Input
                                     type="tel"
                                     autoComplete="tel"
                                     placeholder="(555) 000-0000"
                                     value={formData.contact_phone}
-                                    onChange={(e) => setFormData({...formData, contact_phone: e.target.value})}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, contact_phone: e.target.value })
+                                    }
                                 />
                             </Field>
-
                             <Field label="Email" error={errors.contact_email}>
                                 <Input
                                     type="email"
                                     placeholder="manager@hospital.org"
                                     autoComplete="email"
                                     value={formData.contact_email}
-                                    onChange={(e) => setFormData({...formData, contact_email: e.target.value})}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, contact_email: e.target.value })
+                                    }
                                 />
                             </Field>
-
                             <div className="md:col-span-2">
                                 <Field
                                     label="Direct reporting line"
@@ -869,7 +933,9 @@
                                         autoComplete="organization-title"
                                         placeholder="e.g. Perioperative Director, Chief Nursing Officer"
                                         value={formData.reporting_to}
-                                        onChange={(e) => setFormData({...formData, reporting_to: e.target.value})}
+                                        onChange={(e) =>
+                                            setFormData({ ...formData, reporting_to: e.target.value })
+                                        }
                                     />
                                 </Field>
                             </div>
@@ -887,24 +953,28 @@
                                 <Input
                                     placeholder="e.g. The Joint Commission (TJC), DNV, AAAHC"
                                     value={formData.accrediting_name}
-                                    onChange={(e) => setFormData({...formData, accrediting_name: e.target.value})}
+                                    onChange={(e) =>
+                                        setFormData({
+                                            ...formData,
+                                            accrediting_name: e.target.value,
+                                        })
+                                    }
                                 />
                             </Field>
-
                             <Field label="Last survey/audit date" error={errors.last_audit_date}>
                                 <Input
                                     type="date"
                                     max={today}
                                     value={formData.last_audit_date}
-                                    onChange={(e) => setFormData({...formData, last_audit_date: e.target.value})}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, last_audit_date: e.target.value })
+                                    }
                                 />
                             </Field>
                         </div>
 
-                        <div
-                            className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 sm:p-6 transition-all">
-                            <div
-                                className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 sm:gap-6 mb-4 sm:mb-6">
+                        <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 sm:p-6 transition-all">
+                            <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 sm:gap-6 mb-4 sm:mb-6">
                                 <div className="space-y-1">
                                     <div className="flex items-center gap-2">
                                         <span className="h-2 w-2 rounded-full bg-primary-500"></span>
@@ -912,16 +982,19 @@
                                             Regulatory History
                                         </p>
                                     </div>
-                                    <h3 className="text-sm font-semibold text-slate-800">Recent SPD Findings</h3>
+                                    <h3 className="text-sm font-semibold text-slate-800">
+                                        Recent SPD Findings
+                                    </h3>
                                     <p className="text-xs text-slate-500 leading-relaxed max-w-md">
-                                        Indicate if the most recent accreditation or regulatory survey (e.g., TJC, CMS,
-                                        or State) cited processing deficiencies.
+                                        Indicate if the most recent accreditation or regulatory
+                                        survey (e.g., TJC, CMS, or State) cited processing
+                                        deficiencies.
                                     </p>
                                 </div>
                                 <div className="shrink-0 w-full md:w-auto">
                                     <RadioGroup
                                         value={formData.has_findings}
-                                        onChange={(v) => setFormData({...formData, has_findings: v})}
+                                        onChange={(v) => setFormData({ ...formData, has_findings: v })}
                                         yesLabel="Yes, cited"
                                         noLabel="No findings"
                                     />
@@ -939,17 +1012,16 @@
                                                 "e.g., Humidity/Temp excursions in Sterile Stores",
                                                 "e.g., Missing IFU-validated cleaning competencies",
                                                 "e.g., Immediate Use Steam Sterilization (IUSS) over-utilization",
-                                                "e.g., Improper pre-cleaning/transport of soiled peel packs"
+                                                "e.g., Improper pre-cleaning/transport of soiled peel packs",
                                             ].map((placeholder, idx) => (
                                                 <div key={idx} className="relative">
-                                                    <input
+                                                    <Input
                                                         placeholder={placeholder}
-                                                        className="w-full bg-white border border-slate-200 text-slate-700 placeholder:text-slate-400 p-2.5 pl-3 rounded-lg text-xs focus:outline-none focus:border-primary-400 focus:ring-2 focus:ring-primary-500/10 transition-all shadow-sm"
                                                         value={formData.findings[idx]}
                                                         onChange={(e) => {
                                                             const newFindings = [...formData.findings];
                                                             newFindings[idx] = e.target.value;
-                                                            setFormData({...formData, findings: newFindings});
+                                                            setFormData({ ...formData, findings: newFindings });
                                                         }}
                                                     />
                                                 </div>
@@ -965,67 +1037,65 @@
                     <SectionShell
                         kicker="Section 4"
                         title="Staffing & scope"
-                        description="Outline current personnel mix and perioperative footprint."
+                        description="Outline current staffing and perioperative footprint."
                     >
                         <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-3 sm:gap-4">
-                            <Field label="FTE w/FMLA" error={errors.staff_ft_w_fmla}>
+                            <Field label="FTE w/ FMLA" error={errors.staff_ft_w_fmla}>
                                 <Input
                                     type="number"
                                     value={formData.staff_ft_w_fmla}
-                                    onChange={(e) => setFormData({...formData, staff_ft_w_fmla: e.target.value})}
+                                    onChange={(e) => setFormData({ ...formData, staff_ft_w_fmla: e.target.value })}
                                 />
                             </Field>
-
                             <Field label="Part time" error={errors.staff_pt}>
                                 <Input
                                     type="number"
                                     value={formData.staff_pt}
-                                    onChange={(e) => setFormData({...formData, staff_pt: e.target.value})}
+                                    onChange={(e) => setFormData({ ...formData, staff_pt: e.target.value })}
                                 />
                             </Field>
-
                             <Field label="Per diem" error={errors.staff_pd}>
                                 <Input
                                     type="number"
                                     value={formData.staff_pd}
-                                    onChange={(e) => setFormData({...formData, staff_pd: e.target.value})}
+                                    onChange={(e) => setFormData({ ...formData, staff_pd: e.target.value })}
                                 />
                             </Field>
-
                             <Field label="Travelers" error={errors.staff_travelers}>
                                 <Input
                                     type="number"
                                     value={formData.staff_travelers}
-                                    onChange={(e) => setFormData({...formData, staff_travelers: e.target.value})}
+                                    onChange={(e) => setFormData({ ...formData, staff_travelers: e.target.value })}
                                 />
                             </Field>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
-                            <Field label="Hours of operation" error={errors.hours_operation}
-                                   helper="e.g. 24/7 or 06:30–23:00">
+                            <Field
+                                label="Hours of operation"
+                                error={errors.hours_operation}
+                                helper="e.g. 24/7 or 06:30–23:00"
+                            >
                                 <Input
                                     placeholder="e.g. 24/7 or 06:30–23:00"
                                     value={formData.hours_operation}
-                                    onChange={(e) => setFormData({...formData, hours_operation: e.target.value})}
+                                    onChange={(e) => setFormData({ ...formData, hours_operation: e.target.value })}
                                 />
                             </Field>
-
                             <Field label="Main OR count" error={errors.or_count}>
                                 <Input
                                     type="number"
-                                    placeholder="12"
+                                    placeholder="0"
                                     value={formData.or_count}
-                                    onChange={(e) => setFormData({...formData, or_count: e.target.value})}
+                                    onChange={(e) => setFormData({ ...formData, or_count: e.target.value })}
                                 />
                             </Field>
-
                             <Field label="Clinic/satellite areas" error={errors.clinic_count}>
                                 <Input
                                     type="number"
-                                    placeholder="4"
+                                    placeholder="0"
                                     value={formData.clinic_count}
-                                    onChange={(e) => setFormData({...formData, clinic_count: e.target.value})}
+                                    onChange={(e) => setFormData({ ...formData, clinic_count: e.target.value })}
                                 />
                             </Field>
                         </div>
@@ -1038,31 +1108,31 @@
                         description="Identify high-complexity items processed in SPD and current tracking tools."
                     >
                         <Field label="Specialized items processed in SPD">
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-2 sm:gap-3 mt-1">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-1">
                                 <Checkbox
                                     label="Flexible endoscopes"
                                     checked={formData.proc_endoscopes}
-                                    onChange={(v) => setFormData({...formData, proc_endoscopes: v})}
+                                    onChange={(v) => setFormData({ ...formData, proc_endoscopes: v })}
                                 />
                                 <Checkbox
-                                    label="Vascular/open heart"
+                                    label="Vascular / OH"
                                     checked={formData.proc_vascular}
-                                    onChange={(v) => setFormData({...formData, proc_vascular: v})}
+                                    onChange={(v) => setFormData({ ...formData, proc_vascular: v })}
                                 />
                                 <Checkbox
                                     label="Arthroscopic"
                                     checked={formData.proc_arthroscopic}
-                                    onChange={(v) => setFormData({...formData, proc_arthroscopic: v})}
+                                    onChange={(v) => setFormData({ ...formData, proc_arthroscopic: v })}
                                 />
                                 <Checkbox
-                                    label="Robotic (da Vinci)"
+                                    label="Robotic (DaVinci)"
                                     checked={formData.proc_robotic}
-                                    onChange={(v) => setFormData({...formData, proc_robotic: v})}
+                                    onChange={(v) => setFormData({ ...formData, proc_robotic: v })}
                                 />
                                 <Checkbox
                                     label="TEE probes"
                                     checked={formData.proc_tee}
-                                    onChange={(v) => setFormData({...formData, proc_tee: v})}
+                                    onChange={(v) => setFormData({ ...formData, proc_tee: v })}
                                 />
                             </div>
                         </Field>
@@ -1071,19 +1141,15 @@
                             <Field label="Instrument tracking system?">
                                 <RadioGroup
                                     value={formData.has_tracking}
-                                    onChange={(v) => setFormData({...formData, has_tracking: v})}
+                                    onChange={(v) => setFormData({ ...formData, has_tracking: v })}
                                 />
                             </Field>
-
                             {formData.has_tracking && (
                                 <Field label="Tracking system name">
                                     <Input
                                         placeholder="e.g. Censis, SPM, T-DOC, CaseTrack"
                                         value={formData.tracking_system_name}
-                                        onChange={(e) => setFormData({
-                                            ...formData,
-                                            tracking_system_name: e.target.value
-                                        })}
+                                        onChange={(e) => setFormData({ ...formData, tracking_system_name: e.target.value })}
                                     />
                                 </Field>
                             )}
@@ -1096,22 +1162,37 @@
                         title="Narrative context"
                         description="Highlight pain points and strategic considerations that should shape the review."
                     >
-                        <Field label="Major operational pain points" error={errors.pain_points}>
-                                <textarea
-                                    className="w-full p-3 sm:p-4 bg-slate-50 border border-slate-200 rounded-2xl min-h-[130px] sm:min-h-[150px] focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 outline-none transition-all text-sm placeholder:text-slate-400 resize-y"
-                                    placeholder="e.g. High turnover, backlogged sterilization, outdated washer-disinfectors..."
-                                    value={formData.pain_points}
-                                    onChange={(e) => setFormData({...formData, pain_points: e.target.value})}
-                                />
+                        <Field
+                            label="Major operational pain points"
+                            error={errors.pain_points}
+                        >
+                  <textarea
+                      className="w-full p-3 sm:p-4 bg-slate-50 border border-slate-200 rounded-2xl min-h-[130px] sm:min-h-[150px] focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 outline-none transition-all text-sm placeholder:text-slate-400 resize-y"
+                      placeholder="e.g. High turnover, backlogged sterilization, outdated washer-disinfectors..."
+                      value={formData.pain_points}
+                      onChange={(e) => setFormData({ ...formData, pain_points: e.target.value })}
+                  />
+                        </Field>
+
+                        {/* UPDATED: Keyword / Tag Input Area */}
+                        <Field
+                            label="Important Areas of Focus"
+                            helper="Type a keyword and press Enter (e.g. Staffing, Compliance)"
+                        >
+                            <TagInput
+                                value={formData.areas_of_focus}
+                                onChange={(val) => setFormData({ ...formData, areas_of_focus: val })}
+                                placeholder="Add keywords..."
+                            />
                         </Field>
 
                         <Field label="Additional strategic information">
-                                <textarea
-                                    className="w-full p-3 sm:p-4 bg-slate-50 border border-slate-200 rounded-2xl min-h-[90px] sm:min-h-[100px] focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 outline-none transition-all text-sm placeholder:text-slate-400 resize-y"
-                                    placeholder="Upcoming renovations, new service lines, capital planning, etc."
-                                    value={formData.additional_info}
-                                    onChange={(e) => setFormData({...formData, additional_info: e.target.value})}
-                                />
+                  <textarea
+                      className="w-full p-3 sm:p-4 bg-slate-50 border border-slate-200 rounded-2xl min-h-[90px] sm:min-h-[100px] focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 outline-none transition-all text-sm placeholder:text-slate-400 resize-y"
+                      placeholder="Upcoming renovations, new service lines, capital planning, etc."
+                      value={formData.additional_info}
+                      onChange={(e) => setFormData({ ...formData, additional_info: e.target.value })}
+                  />
                         </Field>
                     </SectionShell>
 
@@ -1120,26 +1201,25 @@
                         <button
                             type="button"
                             onClick={saveDraftNow}
-                            className="w-full sm:flex-1 py-3 px-4 border border-slate-200 rounded-2xl font-semibold text-sm text-slate-700 hover:bg-slate-50 transition-all active:scale-98"
+                            className="w-full sm:flex-1 py-3 px-4 h-[50px] border border-slate-200 rounded-2xl font-semibold text-sm text-slate-700 hover:bg-slate-50 transition-all active:scale-98 flex items-center justify-center"
                         >
                             Save Draft
                         </button>
                         <button
                             type="button"
                             onClick={clearDraft}
-                            className="w-full sm:w-auto px-4 py-3 border border-rose-200 rounded-2xl font-semibold text-sm text-rose-600 hover:bg-rose-50 transition-all active:scale-98"
+                            className="w-full sm:w-auto px-4 py-3 h-[50px] border border-rose-200 rounded-2xl font-semibold text-sm text-rose-600 hover:bg-rose-50 transition-all active:scale-98 flex items-center justify-center"
                         >
                             Clear Form
                         </button>
                         <button
                             type="submit"
                             disabled={isSubmitting}
-                            className="w-full sm:flex-1 py-3.5 bg-primary-600 text-white rounded-2xl font-semibold text-sm tracking-wide shadow-soft hover:bg-primary-700 hover:-translate-y-[1px] transition-all active:translate-y-0 active:shadow-md flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none disabled:transform-none"
+                            className="w-full sm:flex-1 h-[50px] bg-primary-600 text-white rounded-2xl font-semibold text-sm tracking-wide shadow-soft hover:bg-primary-700 hover:-translate-y-[1px] transition-all active:translate-y-0 active:shadow-md flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none disabled:transform-none"
                         >
                             <span>{isSubmitting ? "Submitting..." : "Submit operational review"}</span>
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                                      d="M13 5l7 7-7 7M5 12h14"/>
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 5l7 7-7 7M5 12h14"/>
                             </svg>
                         </button>
                     </div>
@@ -1149,7 +1229,7 @@
     };
 
     const root = ReactDOM.createRoot(document.getElementById("root"));
-    root.render(<PreAuditForm/>);
+    root.render(<PreAuditForm />);
 </script>
 </body>
 </html>

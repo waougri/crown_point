@@ -10,7 +10,7 @@ export const parseAuditExcel = async (file: File, category: AuditCategory): Prom
             try {
                 const data = new Uint8Array(e.target?.result as ArrayBuffer);
                 const workbook = xlsx.read(data, { type: 'array' });
-                
+
                 const report: AuditReport = {
                     // Fix: Added missing required 'category' property to comply with the AuditReport interface.
                     category,
@@ -22,7 +22,7 @@ export const parseAuditExcel = async (file: File, category: AuditCategory): Prom
                 workbook.SheetNames.forEach(sheetName => {
                     const ws = workbook.Sheets[sheetName];
                     const rawData = xlsx.utils.sheet_to_json(ws, { defval: "" });
-                    
+
                     // Map raw data to AuditFinding interface
                     const findings: AuditFinding[] = rawData.map((row: any, index: number) => ({
                         // Fix: Using category prefix in ID ensures uniqueness across different audit standards.
@@ -49,4 +49,4 @@ export const parseAuditExcel = async (file: File, category: AuditCategory): Prom
         reader.onerror = reject;
         reader.readAsArrayBuffer(file);
     });
-};
+}

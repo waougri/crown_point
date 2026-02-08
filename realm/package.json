@@ -12,7 +12,9 @@
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "lucide-react": "0.460.0",
-    "xlsx": "0.18.5"
+    "xlsx": "0.18.5",
+    "framer-motion": "11.11.11",
+    "@react-buddy/ide-toolbox": "^2.4.0"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",

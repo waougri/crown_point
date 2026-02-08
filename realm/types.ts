@@ -6,6 +6,7 @@ export interface AuditFinding {
     rationale: string;
     recommendation: string;
     aamiReference: string;
+    riskLevel?: 'Critical' | 'Major' | 'Minor';
 }
 
 export type AuditSection =
@@ -33,18 +34,20 @@ export interface AuditResponse {
     findingId: string;
     status: ResponseStatus;
     notes: string;
-    images: string[]; // Base64 strings
+    images: string[];
+    riskLevel?: 'Critical' | 'Major' | 'Minor';
+    capaRequired?: boolean; // Corrective Action Preventive Action
 }
 
 export interface AuditInstance {
     id: string;
     facilityName: string;
     category: AuditCategory;
-    status: 'draft' | 'submitted';
+    status: 'draft' | 'submitted' | 'under-review';
     createdAt: number;
     updatedAt: number;
     completedBy: string[];
-    // Keyed by findingId globally across sections
+    engagementPartner: string;
     responses: Record<string, AuditResponse>;
 }
 
